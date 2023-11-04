@@ -6,7 +6,7 @@ def matrixGLCM(image, d=1, angle=0):
     levels = np.max(image) + 1
 
     # inisialisasi matrix dengan 0
-    framework_matrix = np.zeros((levels, levels), dtype=np.uint32)
+    framework_matrix = np.zeros((levels, levels))
 
     # dimensi dari gambarnya
     rows, cols = image.shape
@@ -57,14 +57,14 @@ glcm_matrix = matrixGLCM(image, d=1, angle=135)
 symmetric_glcm = symmetricGLCM(glcm_matrix)
 normalized_glcm = normalizeGLCM(symmetric_glcm)
 
-# glcm = graycomatrix(image, 
-#                     distances=[1], 
-#                     angles=[135], 
-#                     levels=4,
-#                     symmetric=True, 
-#                     normed=True)
+glcm = graycomatrix(image, 
+                    distances=[1], 
+                    angles=[135], 
+                    levels=4,
+                    symmetric=True, 
+                    normed=True)
 
-# print(glcm[:,:,0,0])
+print(glcm[:,:,0,0])
 
 print("GLCM Matrix:")
 print(glcm_matrix)
