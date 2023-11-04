@@ -79,48 +79,72 @@ def entropy(glcm_matrix):
 
     return (-1*hasil)
 
-# tes
-image = np.array([[0, 0, 1],
+########## COSINE SIMILARITY ##########
+def cosine_similarity(vector1, vector2):
+    pembilang = 0
+    # buat pembilang
+    for i in range (3):
+        pembilang += vector1[i]*vector2[i]
+
+    penyebut1 = 0
+    # buat penyebut 1
+    for i in range (3):
+        penyebut1 += vector1[i]**2
+    
+    penyebut2 = 0
+    # buat penyebut 2
+    for i in range (3):
+        penyebut2 += vector2[i]**2
+
+    penyebut = penyebut1*penyebut2
+
+    cos_value = pembilang/penyebut
+
+    return cos_value;
+
+#******** TES ********#
+image1 = np.array([[0, 0, 1],
+                  [1, 2, 3],
+                  [2, 3, 2]])
+                  
+image2 = np.array([[0, 0, 1],
                   [1, 2, 3],
                   [2, 3, 2]])
 
-# image = np.array([[1, 1, 5, 6, 8],
-#                   [2, 3, 5, 7, 1],
-#                   [4, 5, 7, 1, 2],
-#                   [8, 5, 1, 2, 5]])
+glcm_matrix1 = matrixGLCM(image1, d=1, angle=0)
+symmetric_glcm1 = symmetricGLCM(glcm_matrix1)
+normalized_glcm1 = normalizeGLCM(symmetric_glcm1)
+contrast1 = contrast(normalized_glcm1)
+homogeneity1 = homogeneity(normalized_glcm1)
+entropy1 = entropy(normalized_glcm1)
 
-glcm_matrix = matrixGLCM(image, d=1, angle=0)
-symmetric_glcm = symmetricGLCM(glcm_matrix)
-normalized_glcm = normalizeGLCM(symmetric_glcm)
-contrast = contrast(normalized_glcm)
-homogeneity = homogeneity(normalized_glcm)
-entropy = entropy(normalized_glcm)
+glcm_matrix2 = matrixGLCM(image2, d=1, angle=0)
+symmetric_glcm2 = symmetricGLCM(glcm_matrix2)
+normalized_glcm2 = normalizeGLCM(symmetric_glcm2)
+contrast2 = contrast(normalized_glcm2)
+homogeneity2 = homogeneity(normalized_glcm2)
+entropy2 = entropy(normalized_glcm2)
 
-# glcm = graycomatrix(image, 
-#                     distances=[1], 
-#                     angles=[0], 
-#                     levels=4,
-#                     symmetric=True, 
-#                     normed=True)
+vector1 = np.array([contrast1, homogeneity1, entropy1])
+vector2 = np.array([contrast2, homogeneity2, entropy2])
 
-# print(glcm[:,:,0,0])
+print(vector1)
+print(vector2)
+print("Cos theta:")
+print(cosine_similarity(vector1, vector2))
 
-# contrast_test = graycoprops(glcm, prop='contrast')
-# homogeneity_test = graycoprops(glcm, prop='homogeneity')
-# print("Contrast:", contrast_test)
-# print("Homogeneity:", homogeneity_test)
+# print("GLCM Matrix:")
+# print(glcm_matrix1)
+# print("Symmetric GLCM Matrix:")
+# print(symmetric_glcm1)
+# print("Normalized GLCM Matrix:")
+# print(normalized_glcm1)
+# print("Contrast:")
+# print(contrast1)
+# print("Homogeneity:")
+# print(homogeneity1)
+# print("Entropy:")
+# print(entropy1)
 
-print("GLCM Matrix:")
-print(glcm_matrix)
-print("Symmetric GLCM Matrix:")
-print(symmetric_glcm)
-print("Normalized GLCM Matrix:")
-print(normalized_glcm)
-print("Contrast:")
-print(contrast)
-print("Homogeneity:")
-print(homogeneity)
-print("Entropy:")
-print(entropy)
 
 
