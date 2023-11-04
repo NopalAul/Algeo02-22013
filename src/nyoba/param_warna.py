@@ -1,5 +1,3 @@
-import colorsys
-
 def rgbToHSV(r,g,b):
     # normalisasi
     r = r/255
@@ -31,27 +29,6 @@ def rgbToHSV(r,g,b):
 
     return h,s,v
 
-def rgbhsv_stackover(r, g, b):
-    r /= 255
-    g /= 255
-    b /= 255
-    maxc = max(r, g, b)
-    minc = min(r, g, b)
-    v = maxc
-    if minc == maxc:
-        return 0.0, 0.0, v
-    s = (maxc-minc) / maxc
-    rc = (maxc-r) / (maxc-minc)
-    gc = (maxc-g) / (maxc-minc)
-    bc = (maxc-b) / (maxc-minc)
-    if r == maxc:
-        h = 0.0+bc-gc
-    elif g == maxc:
-        h = 2.0+rc-bc
-    else:
-        h = 4.0+gc-rc
-    h = (h/6.0) % 1.0
-    return h * 360, s * 100, v * 100
 
 r = 142
 g = 244
@@ -60,9 +37,4 @@ print(f"{r}, {g}, {b}")
 print(f"{rgbToHSV(r,g,b)[0]}, ", end="")
 print(f"{rgbToHSV(r,g,b)[1]}, ", end="")
 print(f"{rgbToHSV(r,g,b)[2]}\n")
-
-print("stackover method:")
-print(f"{rgbhsv_stackover(r,g,b)[0]}, ", end="")
-print(f"{rgbhsv_stackover(r,g,b)[1]}, ", end="")
-print(f"{rgbhsv_stackover(r,g,b)[2]}")
 
