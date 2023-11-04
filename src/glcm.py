@@ -1,5 +1,5 @@
 import numpy as np
-from skimage.feature import graycomatrix
+from skimage.feature import graycomatrix # buat ngecek aja
 
 def matrixGLCM(image, d=1, angle=0):
     # quantization levels
@@ -57,14 +57,14 @@ glcm_matrix = matrixGLCM(image, d=1, angle=135)
 symmetric_glcm = symmetricGLCM(glcm_matrix)
 normalized_glcm = normalizeGLCM(symmetric_glcm)
 
-glcm = graycomatrix(image, 
-                    distances=[1], 
-                    angles=[135], 
-                    levels=4,
-                    symmetric=True, 
-                    normed=True)
+# glcm = graycomatrix(image, 
+#                     distances=[1], 
+#                     angles=[135], 
+#                     levels=4,
+#                     symmetric=True, 
+#                     normed=True)
 
-print(glcm[:,:,0,0])
+# print(glcm[:,:,0,0])
 
 print("GLCM Matrix:")
 print(glcm_matrix)
