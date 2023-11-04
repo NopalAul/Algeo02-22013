@@ -81,27 +81,10 @@ def entropy(glcm_matrix):
     return (-1*hasil)
 
 ########## COSINE SIMILARITY ##########
-def cosine_similarity(vector1, vector2):
-    pembilang = 0
-    # buat pembilang
-    for i in range (3):
-        pembilang += vector1[i]*vector2[i]
+def createVector(contrast, homogeneity, entropy):
+    vector = np.array([contrast, homogeneity, entropy])
 
-    penyebut1 = 0
-    # buat penyebut 1
-    for i in range (3):
-        penyebut1 += vector1[i]**2
-    
-    penyebut2 = 0
-    # buat penyebut 2
-    for i in range (3):
-        penyebut2 += vector2[i]**2
-
-    penyebut = penyebut1*penyebut2
-
-    cos_value = pembilang/penyebut
-
-    return cos_value;
+    return vector
 
 #******** TES ********#
 image1 = np.array([[0, 0, 1],
@@ -126,13 +109,8 @@ contrast2 = contrast(normalized_glcm2)
 homogeneity2 = homogeneity(normalized_glcm2)
 entropy2 = entropy(normalized_glcm2)
 
-vector1 = np.array([contrast1, homogeneity1, entropy1])
-vector2 = np.array([contrast2, homogeneity2, entropy2])
-
-print(vector1)
-print(vector2)
-print("Cos theta:")
-print(cosine_sim(vector1, vector2))
+vector1 = createVector(contrast1, homogeneity1, entropy1)
+vector2 = createVector(contrast2, homogeneity2, entropy2)
 
 # print("GLCM Matrix:")
 # print(glcm_matrix1)
