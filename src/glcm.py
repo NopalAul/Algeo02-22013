@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from skimage.feature import graycomatrix, graycoprops # buat ngecek aja
+from nyoba.cosine_similarity import cosine_sim
 
 ########## FRAMEWORK MATRIKS ##########
 def matrixGLCM(image, d=1, angle=0):
@@ -131,7 +132,7 @@ vector2 = np.array([contrast2, homogeneity2, entropy2])
 print(vector1)
 print(vector2)
 print("Cos theta:")
-print(cosine_similarity(vector1, vector2))
+print(cosine_sim(vector1, vector2))
 
 # print("GLCM Matrix:")
 # print(glcm_matrix1)
