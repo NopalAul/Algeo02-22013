@@ -2,6 +2,7 @@ import numpy as np
 import math
 from skimage.feature import graycomatrix, graycoprops # buat ngecek aja
 
+########## FRAMEWORK MATRIKS ##########
 def matrixGLCM(image, d=1, angle=0):
     # quantization levels
     levels = np.max(image) + 1
@@ -36,17 +37,17 @@ def matrixGLCM(image, d=1, angle=0):
 
     return framework_matrix
 
-# bikin matriks simetriknya
+########## MATRIKS SIMETRIK ##########
 def symmetricGLCM(glcm_matrix):
     symmetric_glcm = glcm_matrix + glcm_matrix.T
     return symmetric_glcm
 
-# normalisasi matriks
+########## MATRIKS NORMALISASI ##########
 def normalizeGLCM(glcm_matrix):
     normalized_glcm = glcm_matrix / np.sum(glcm_matrix)
     return normalized_glcm
 
-# ekstraksi tekstur
+########## EKSTRAKSI TEKSTUR ##########
 # 1. contrast
 def contrast(glcm_matrix):
     rows = glcm_matrix.shape[0]
@@ -106,7 +107,6 @@ entropy = entropy(normalized_glcm)
 
 # contrast_test = graycoprops(glcm, prop='contrast')
 # homogeneity_test = graycoprops(glcm, prop='homogeneity')
-
 # print("Contrast:", contrast_test)
 # print("Homogeneity:", homogeneity_test)
 
