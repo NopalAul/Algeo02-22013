@@ -1,4 +1,20 @@
 import colorsys
+from PIL import Image
+
+from numpy import array
+img = Image.open(r'../../src/nyoba/aww.jpg')
+ar = array(img)
+
+print(ar[3000][3000])
+
+def cara1(m1, m2, row, col):
+    row -= row % 3
+    col -= col % 3
+    for i in range(row):
+        for j in range(col):
+            l = rgbToHSV(m1[i][j][0],m1[i][j][1],m1[i][j][2])
+            l1 = rgbToHSV(m2[i][j][0],m2[i][j][1],m2[i][j][2])
+            
 
 def rgbToHSV(r,g,b):
     # normalisasi
@@ -30,6 +46,8 @@ def rgbToHSV(r,g,b):
     v = cmax*100
 
     return h,s,v
+
+
 
 def rgbhsv_stackover(r, g, b):
     r /= 255
