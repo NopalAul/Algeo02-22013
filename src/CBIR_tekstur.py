@@ -8,7 +8,11 @@ def CBIR_tekstur(image1, image2):
     contrast1 = contrast(normalized_glcm1)
     homogeneity1 = homogeneity(normalized_glcm1)
     entropy1 = entropy(normalized_glcm1)
-    vector1 = createVector(contrast1, homogeneity1, entropy1)
+    dissimilarity1 = dissimilarity(normalized_glcm1)
+    energy1 = energy(normalized_glcm1)
+    correlation1 = correlation(normalized_glcm1)
+
+    vector1 = createVector(contrast1, homogeneity1, entropy1, dissimilarity1, energy1, correlation1)
 
     ## BUAT VECTOR BERISI CONTRAST, HOMOGENEITY, DAN ENTROPY DARI IMAGE 2
     glcm_matrix2 = matrixGLCM(image2, d=1, angle=0)
@@ -17,7 +21,10 @@ def CBIR_tekstur(image1, image2):
     contrast2 = contrast(normalized_glcm2)
     homogeneity2 = homogeneity(normalized_glcm2)
     entropy2 = entropy(normalized_glcm2)
-    vector2 = createVector(contrast2, homogeneity2, entropy2)
+    dissimilarity2 = dissimilarity(normalized_glcm2)
+    energy2 = energy(normalized_glcm2)
+    correlation2 = correlation(normalized_glcm2)
+    vector2 = createVector(contrast2, homogeneity2, entropy2, dissimilarity2, energy2, correlation2)
 
     ## CARI NILAI COS THETA UNTUK TAU KEMIRIPAN
     cos_theta = cosine_sim(vector1, vector2)
