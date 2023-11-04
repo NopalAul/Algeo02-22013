@@ -1,5 +1,6 @@
 import numpy as np
-from skimage.feature import graycomatrix # buat ngecek aja
+import math
+from skimage.feature import graycomatrix, graycoprops # buat ngecek aja
 
 def matrixGLCM(image, d=1, angle=0):
     # quantization levels
@@ -30,6 +31,8 @@ def matrixGLCM(image, d=1, angle=0):
                     pixel1 = image[x1, y1]
                     pixel2 = image[x2, y2]
                     framework_matrix[pixel1, pixel2] += 1
+                    # print("framework matrix:")
+                    # print(framework_matrix)
 
     return framework_matrix
 
@@ -43,6 +46,38 @@ def normalizeGLCM(glcm_matrix):
     normalized_glcm = glcm_matrix / np.sum(glcm_matrix)
     return normalized_glcm
 
+# ekstraksi tekstur
+# 1. contrast
+def contrast(glcm_matrix):
+    rows = glcm_matrix.shape[0]
+    hasil = 0
+    for i in range(rows):
+        for j in range(rows):
+            hasil += (i - j)**2 * glcm_matrix[i, j]
+
+    return hasil
+
+# 2. homogeneity
+def homogeneity(glcm_matrix):
+    rows = glcm_matrix.shape[0]
+    hasil = 0
+    for i in range(rows):
+        for j in range(rows):
+            hasil += (glcm_matrix[i, j] / (1 + (i - j)**2))
+
+    return hasil
+
+# 3. entropy
+def entropy(glcm_matrix):
+    rows = glcm_matrix.shape[0]
+    hasil = 0
+    for i in range(rows):
+        for j in range(rows):
+            if (glcm_matrix[i][j] != 0):
+                hasil += (glcm_matrix[i, j] * math.log(glcm_matrix[i, j]))
+
+    return (-1*hasil)
+
 # tes
 image = np.array([[0, 0, 1],
                   [1, 2, 3],
@@ -53,18 +88,27 @@ image = np.array([[0, 0, 1],
 #                   [4, 5, 7, 1, 2],
 #                   [8, 5, 1, 2, 5]])
 
-glcm_matrix = matrixGLCM(image, d=1, angle=135)
+glcm_matrix = matrixGLCM(image, d=1, angle=0)
 symmetric_glcm = symmetricGLCM(glcm_matrix)
 normalized_glcm = normalizeGLCM(symmetric_glcm)
+contrast = contrast(normalized_glcm)
+homogeneity = homogeneity(normalized_glcm)
+entropy = entropy(normalized_glcm)
 
 # glcm = graycomatrix(image, 
 #                     distances=[1], 
-#                     angles=[135], 
+#                     angles=[0], 
 #                     levels=4,
 #                     symmetric=True, 
 #                     normed=True)
 
 # print(glcm[:,:,0,0])
+
+# contrast_test = graycoprops(glcm, prop='contrast')
+# homogeneity_test = graycoprops(glcm, prop='homogeneity')
+
+# print("Contrast:", contrast_test)
+# print("Homogeneity:", homogeneity_test)
 
 print("GLCM Matrix:")
 print(glcm_matrix)
@@ -72,3 +116,11 @@ print("Symmetric GLCM Matrix:")
 print(symmetric_glcm)
 print("Normalized GLCM Matrix:")
 print(normalized_glcm)
+print("Contrast:")
+print(contrast)
+print("Homogeneity:")
+print(homogeneity)
+print("Entropy:")
+print(entropy)
+
+
