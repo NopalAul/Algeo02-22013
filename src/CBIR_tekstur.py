@@ -22,10 +22,7 @@ def CBIR_tekstur(image1, image2):
     ## CARI NILAI COS THETA UNTUK TAU KEMIRIPAN
     cos_theta = cosine_sim(vector1, vector2)
 
-    ## HITUNG PERSENTASE KEMIRIPAN
-    similarity = cos_theta*100
-
-    return similarity
+    return cos_theta
 
 image1 = np.array([[0, 0, 1],
                   [1, 2, 3],
