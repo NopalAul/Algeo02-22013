@@ -4,6 +4,10 @@ def cosine_sim(vector1,vector2):
     # dot product
     dot_prod = 0
     for i in range(len(vector1)):
+        if vector1[i] == 0:
+            vector1[i] = 1
+        if vector2[i] == 0:
+            vector2[i] = 1
         dot_prod += vector1[i]*vector2[i]
     # vector magnitude
     mag_vector1 = 0
@@ -14,6 +18,7 @@ def cosine_sim(vector1,vector2):
         mag_vector2 += pow(vector2[i],2)
     mag_total = sqrt(mag_vector1)*sqrt(mag_vector2)
     # result
+    
     return dot_prod/mag_total
 
 # usage:

@@ -1,20 +1,44 @@
 import colorsys
 from PIL import Image
+from cosine_similarity import *
 
 from numpy import array
-img = Image.open(r'../../src/nyoba/aww.jpg')
+img = Image.open(r'../../src/nyoba/mobilmerah.jpg')
+img1 = Image.open(r'../../src/nyoba/160.jpg')
+if img.width*img.height > img1.height*img1.width:
+    img = img.resize((img1.size[0], img1.size[1]))
+else:
+    img1 = img1.resize((img.size[0], img.size[1]))
+
 ar = array(img)
+ar1 = array(img1)
 
-print(ar[3000][3000])
-
+print(ar[0][0], ar1[0][0])
 def cara1(m1, m2, row, col):
-    row -= row % 3
-    col -= col % 3
-    for i in range(row):
-        for j in range(col):
+    sum = 0
+    c = 0
+    for i in range(10):
+        for j in range(10):
             l = rgbToHSV(m1[i][j][0],m1[i][j][1],m1[i][j][2])
             l1 = rgbToHSV(m2[i][j][0],m2[i][j][1],m2[i][j][2])
-            
+            print(l,l1, cosine_sim(l,l1))
+            sum += cosine_sim(l,l1)
+            c += 1
+    return sum/c
+
+def cara2(m1, m2, row, col):
+    sum = 0
+    c = 0
+    # row -= row % 3
+    # col -= col % 3
+    for i in range(0,row,3):
+        for j in range(0,col,3):
+            l = rgbToHSV(m1[i][j][0],m1[i][j][1],m1[i][j][2])
+            l1 = rgbToHSV(m2[i][j][0],m2[i][j][1],m2[i][j][2])
+            sum += cosine_sim(l,l1)
+            c += 1
+    print("c: ", c) #########
+    return sum/c
 
 def rgbToHSV(r,g,b):
     # normalisasi
@@ -44,43 +68,6 @@ def rgbToHSV(r,g,b):
         s = 0
     ## V
     v = cmax*100
+    return [h,s,v]
 
-    return h,s,v
-
-
-
-def rgbhsv_stackover(r, g, b):
-    r /= 255
-    g /= 255
-    b /= 255
-    maxc = max(r, g, b)
-    minc = min(r, g, b)
-    v = maxc
-    if minc == maxc:
-        return 0.0, 0.0, v
-    s = (maxc-minc) / maxc
-    rc = (maxc-r) / (maxc-minc)
-    gc = (maxc-g) / (maxc-minc)
-    bc = (maxc-b) / (maxc-minc)
-    if r == maxc:
-        h = 0.0+bc-gc
-    elif g == maxc:
-        h = 2.0+rc-bc
-    else:
-        h = 4.0+gc-rc
-    h = (h/6.0) % 1.0
-    return h * 360, s * 100, v * 100
-
-r = 142
-g = 244
-b = 85
-print(f"{r}, {g}, {b}")
-print(f"{rgbToHSV(r,g,b)[0]}, ", end="")
-print(f"{rgbToHSV(r,g,b)[1]}, ", end="")
-print(f"{rgbToHSV(r,g,b)[2]}\n")
-
-print("stackover method:")
-print(f"{rgbhsv_stackover(r,g,b)[0]}, ", end="")
-print(f"{rgbhsv_stackover(r,g,b)[1]}, ", end="")
-print(f"{rgbhsv_stackover(r,g,b)[2]}")
-
+print(f"cosine similarity : {cara1(ar,ar1, img.height, img.width)}")
