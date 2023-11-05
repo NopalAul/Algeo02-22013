@@ -5,8 +5,8 @@ from PIL import Image
 from cosine_similarity import *
 
 from numpy import array
-img = Image.open(r'src/nyoba/hitamdoang.jpg')
-img1 = Image.open(r'src/nyoba/mobilmerah.jpg')
+img = Image.open(r'../../src/nyoba/0.jpg')
+img1 = Image.open(r'../../src/nyoba/mobilmerah.jpg')
 if img.width*img.height > img1.height*img1.width:
     img = img.resize((img1.size[0], img1.size[1]))
 else:
