@@ -17,10 +17,10 @@ if __name__ == '__main__':
     start_time = time.time()
 
     # load gambar referensi
-    reference_image = cv2.imread('img/contoh/1000.jpg')
+    reference_image = cv2.imread('img/dataset/1000.jpg')
 
     # list gambar target yang akan dibandingkan
-    target_folder = 'img/contoh/'
+    target_folder = 'img/dataset/'
     target_images = imageInFolder(target_folder)
 
     # baca semua gambar langsung terus simpen ke list, jadi ga ulang ulang cv2 imreadnya
