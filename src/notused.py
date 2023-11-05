@@ -1,6 +1,21 @@
 import numpy as np
 import math
 
+# convert warna to grayscale
+def toGrayscale(image):
+    height, width, _ = image.shape
+
+    grayscale_image = np.zeros((height, width), dtype=np.uint8)
+
+    for i in range(height):
+        for j in range(width):
+            # extract warna
+            B, G, R = image[i, j]
+            gray_value = int(0.29 * R + 0.587 * G + 0.114 * B)
+            grayscale_image[i, j] = gray_value
+
+    return grayscale_image
+
 # buat extract texture, tp ini lama
 def extract_texture(glcm_matrix):
     rows = glcm_matrix.shape[0]

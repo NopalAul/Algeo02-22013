@@ -5,17 +5,7 @@ from nyoba.cosine_similarity import cosine_sim
 
 ########## CONVERT WARNA TO GRAYSCALE ##########
 def toGrayscale(image):
-    height, width, _ = image.shape
-
-    grayscale_image = np.zeros((height, width), dtype=np.uint8)
-
-    for i in range(height):
-        for j in range(width):
-            # extract warna
-            B, G, R = image[i, j]
-            gray_value = int(0.29 * R + 0.587 * G + 0.114 * B)
-            grayscale_image[i, j] = gray_value
-
+    grayscale_image = np.dot(image[..., :3], [0.29, 0.587, 0.114]).astype(np.uint8)
     return grayscale_image
 
 ########## FRAMEWORK MATRIKS ##########
