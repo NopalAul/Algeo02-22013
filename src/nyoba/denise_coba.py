@@ -1,22 +1,6 @@
-import colorsys
 import cv2
-import numpy as np
-from PIL import Image
-from cosine_similarity import *
-
 from numpy import array
-img = Image.open(r'src/nyoba/hitamdoang.jpg')
-img1 = Image.open(r'src/nyoba/mobilmerah.jpg')
-if img.width*img.height > img1.height*img1.width:
-    img = img.resize((img1.size[0], img1.size[1]))
-else:
-    img1 = img1.resize((img.size[0], img.size[1]))
-
-ar = array(img)
-ar1 = array(img1)
-
-print("ar, ar1")
-print(ar[0][0], ar1[0][1])
+from cosine_similarity import *
 
 def cara1(m1, m2, row, col):
     sum = 0
@@ -29,7 +13,7 @@ def cara1(m1, m2, row, col):
             sum += cosine_sim(l,l1)
             c += 1
     return sum/c
-    
+
 def cara2(m1, m2, row, col):
     x = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     y = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -73,7 +57,6 @@ def hsvtohistogram(h,s,v,l):
         l[13] += 1
     return l
 
-
 def rgbToHistogram(r,g,b,l):
     # normalisasi
     r = r/255
@@ -104,30 +87,27 @@ def rgbToHistogram(r,g,b,l):
     v = cmax
     return hsvtohistogram(h,s,v,l)
 
-print(f"cosine similarity : {cara2(ar,ar1, img.height, img.width)}")
-# def hsvtohistogram2(imgg):
-#     row = imgg.height
-#     col = imgg.width
-#     img = array(imgg)
-#     for i in range(0,row,3):
-#         for j in range(0,col,3):
-#             img[i][j] = rgbToHistogram(img[i][j][0],img[i][j][1],img[i][j][2])
-#     hist = cv2.calcHist(img, [0, 1, 2], None, [180,256,256], [0, 180, 0, 256, 0, 256])
-#     hist = cv2.normalize(hist, hist)
-#     return hist.flatten()
+def bgr_to_rgb(image):
+    image_rgb = image.copy()
+    image_rgb[:, :, 0] = image[:, :, 2]
+    image_rgb[:, :, 2] = image[:, :, 0]
+    return image_rgb
 
-# def cara3(m1):
-#     for i in range(len(m1)):
-#         for j in range(len(m1)):
-#             m1[i][j] = rgbToHistogram(m1[i][j][0],m1[i][j][1],m1[i][j][2])
-#     return m1
+img = cv2.imread('src/nyoba/hitamdoang.jpg')
+img = bgr_to_rgb(img)
+img1 = cv2.imread('src/nyoba/mobilmerah.jpg')
+img1 = bgr_to_rgb(img1)
 
-# def cara4(ar):
-#     hsv_histogram = HSVColorHistogram([8, 8, 8])
-#     source_color_features = hsv_histogram.describe(ar)
-#     source_color_features = np.around(np.array(source_color_features, dtype=np.float32), decimals=8)
-#     return source_color_features
+# resize image
+if img.shape[0] * img.shape[1] > img1.shape[0] * img1.shape[1]:
+    img = cv2.resize(img, (img1.shape[1], img1.shape[0]))
+else:
+    img1 = cv2.resize(img1, (img.shape[1], img.shape[0]))
 
-# print(cosine_sim(cara4(ar), cara4(ar1)))
+ar = array(img)
+ar1 = array(img1)
 
-# print(cara3(hsvtohistogram2(img), hsvtohistogram2(img1)))
+print("ar, ar1")
+print(ar[0][0], ar1[0][1])
+
+print(f"cosine similarity: {cara2(img, img1, img.shape[0], img.shape[1])}")
