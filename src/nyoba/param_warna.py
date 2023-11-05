@@ -31,6 +31,8 @@ def cara2(m1, m2, row, col):
     x = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     y = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
+    print(row)
+    print(col)
     for i in range(0,row,3):
         for j in range(0,col,3):
             x = rgbToHistogram(m1[i][j][0],m1[i][j][1],m1[i][j][2],x)
