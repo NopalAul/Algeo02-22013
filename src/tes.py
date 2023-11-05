@@ -8,16 +8,11 @@ from multiprocessing import Pool
 def compareImages(image1, image2):
     return CBIR_tekstur(image1, image2)
 
-# memuat gambar dari path file
-def loadImage(image_path):
-    return cv2.imread(image_path)
-
 # mendapatkan semua gambar dalam folder
 def imageInFolder(folder_path):
     image_files = [os.path.join(folder_path, filename) for filename in os.listdir(folder_path) if filename.endswith('.jpg')]
     return image_files
 
-# TES
 if __name__ == '__main__':
     start_time = time.time()
 
@@ -28,12 +23,15 @@ if __name__ == '__main__':
     target_folder = 'img/contoh/'
     target_images = imageInFolder(target_folder)
 
+    # baca semua gambar langsung terus simpen ke list, jadi ga ulang ulang cv2 imreadnya
+    target_images_list = [cv2.imread(image_path) for image_path in target_images]
+
     # inisialisasi pool multiprocessing dengan jumlah prosesor yang tersedia
-    num_processors = 8 # prosesor denise
+    num_processors = 8 # sesuaikan dengan jumlah prosesor yang tersedia
     pool = Pool(processes=num_processors)
 
     # bandingkan gambar referensi dengan gambar target secara paralel
-    similarities = pool.starmap(compareImages, [(reference_image, loadImage(image_path)) for image_path in target_images])
+    similarities = pool.starmap(compareImages, [(reference_image, image) for image in target_images_list])
 
     # close pool multiprocessing
     pool.close()
