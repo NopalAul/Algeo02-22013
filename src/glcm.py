@@ -3,8 +3,26 @@ import math
 from skimage.feature import graycomatrix, graycoprops # buat ngecek aja
 from nyoba.cosine_similarity import cosine_sim
 
+########## CONVERT WARNA TO GRAYSCALE ##########
+def toGrayscale(image):
+    height, width, _ = image.shape
+
+    grayscale_image = np.zeros((height, width), dtype=np.uint8)
+
+    for i in range(height):
+        for j in range(width):
+            # extract warna
+            B, G, R = image[i, j]
+            gray_value = int(0.29 * R + 0.587 * G + 0.114 * B)
+            grayscale_image[i, j] = gray_value
+
+    return grayscale_image
+
 ########## FRAMEWORK MATRIKS ##########
 def matrixGLCM(image, d=1, angle=0):
+    # ubah jadi grayscale dulu
+    image = toGrayscale(image)
+
     # quantization levels
     levels = np.max(image) + 1
 
@@ -49,64 +67,46 @@ def normalizeGLCM(glcm_matrix):
     return normalized_glcm
 
 ########## EKSTRAKSI TEKSTUR ##########
-# 1. contrast
-def contrast(glcm_matrix):
+def extract_texture(glcm_matrix):
     rows = glcm_matrix.shape[0]
-    hasil = 0
+
+    # 1. contrast
+    contrast_result = 0
     for i in range(rows):
         for j in range(rows):
-            hasil += (i - j)**2 * glcm_matrix[i, j]
+            contrast_result += (i - j) ** 2 * glcm_matrix[i, j]
 
-    return hasil
-
-# 2. homogeneity
-def homogeneity(glcm_matrix):
-    rows = glcm_matrix.shape[0]
-    hasil = 0
+    # 2. homogeneity
+    homogeneity_result = 0
     for i in range(rows):
         for j in range(rows):
-            hasil += (glcm_matrix[i, j] / (1 + (i - j)**2))
-
-    return hasil
-
-# 3. entropy
-def entropy(glcm_matrix):
-    rows = glcm_matrix.shape[0]
-    hasil = 0
-    for i in range(rows):
-        for j in range(rows):
-            if (glcm_matrix[i][j] != 0):
-                hasil += (glcm_matrix[i, j] * math.log(glcm_matrix[i, j]))
-
-    return (-1*hasil)
-
-# 4. dissimilarity
-def dissimilarity(glcm_matrix):
-    rows = glcm_matrix.shape[0]
-    hasil = 0
-    for i in range(rows):
-        for j in range(rows):
-            selisih = i-j
-            if ((selisih) < 0):
-                selisih *= -1
-            hasil += (glcm_matrix[i, j] * selisih)
-
-    return hasil
-
-# 5. energy
-def energy(glcm_matrix):
-    rows = glcm_matrix.shape[0]
-    hasil = 0
-    for i in range(rows):
-        for j in range(rows):
-            hasil += (glcm_matrix[i, j]**2)
-
-    return math.sqrt(hasil)
-
-# 6. correlation
-def correlation(glcm_matrix):
-    rows = glcm_matrix.shape[0]
+            homogeneity_result += (glcm_matrix[i, j] / (1 + (i - j) ** 2))
     
+    # 3. entropy
+    entropy_result = 0
+    for i in range(rows):
+        for j in range(rows):
+            if glcm_matrix[i][j] != 0:
+                entropy_result += (glcm_matrix[i, j] * math.log(glcm_matrix[i, j]))
+    entropy_result *= -1
+
+    # 4. dissimilarity
+    dissimilarity_result = 0
+    for i in range(rows):
+        for j in range(rows):
+            selisih = i - j
+            if (selisih < 0):
+                selisih *= -1
+            dissimilarity_result += (glcm_matrix[i, j] * selisih)
+
+    # 5. energy
+    energy_result = 0
+    for i in range(rows):
+        for j in range(rows):
+            energy_result += (glcm_matrix[i, j] ** 2)
+    energy_result = math.sqrt(energy_result)
+
+    # 6. correlation
     sum_i = 0
     sum_j = 0
     for i in range(rows):
@@ -131,16 +131,16 @@ def correlation(glcm_matrix):
 
     sd_j = math.sqrt(sum_temp_j / np.sum(glcm_matrix))
 
-    hasil = 0
+    correlation_result = 0
     for i in range(rows):
         for j in range(rows):
-            hasil += (glcm_matrix[i][j] * ((i - rata_rata_i) * (j - rata_rata_j) / (sd_i * sd_j)))
+            correlation_result += (glcm_matrix[i][j] * ((i - rata_rata_i) * (j - rata_rata_j) / (sd_i * sd_j)))
 
-    return hasil
+    return contrast_result, homogeneity_result, entropy_result, dissimilarity_result, energy_result, correlation_result
 
 ########## COSINE SIMILARITY ##########
-def createVector(contrast, homogeneity, entropy, dissimilarity, energy, correlation):
-    vector = np.array([contrast, homogeneity, entropy, dissimilarity, energy, correlation])
+def createVector(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x):
+    vector = np.array([a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x])
 
     return vector
 
