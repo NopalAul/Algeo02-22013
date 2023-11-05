@@ -87,3 +87,71 @@ def extract_texture(glcm_matrix):
             correlation_result += (glcm_matrix[i][j] * ((i - rata_rata_i) * (j - rata_rata_j) / (sd_i * sd_j)))
 
     return contrast_result, homogeneity_result, entropy_result, dissimilarity_result, energy_result, correlation_result
+
+
+#******** TES HITUNGAN/RUMUS BENER OR GA W/ BUILT-IN FUNCTIONS ********#
+# image1 = np.array([[0, 0, 1],
+#                   [1, 2, 3],
+#                   [2, 3, 2]])
+                  
+# image2 = np.array([[0, 0, 1],
+#                   [1, 2, 3],
+#                   [2, 3, 2]])
+
+# glcm_matrix1 = matrixGLCM(image1, d=1, angle=0)
+# symmetric_glcm1 = symmetricGLCM(glcm_matrix1)
+# normalized_glcm1 = normalizeGLCM(symmetric_glcm1)
+# contrast1 = contrast(normalized_glcm1)
+# homogeneity1 = homogeneity(normalized_glcm1)
+# entropy1 = entropy(normalized_glcm1)
+
+# glcm_matrix2 = matrixGLCM(image2, d=1, angle=0)
+# symmetric_glcm2 = symmetricGLCM(glcm_matrix2)
+# normalized_glcm2 = normalizeGLCM(symmetric_glcm2)
+# contrast2 = contrast(normalized_glcm2)
+# homogeneity2 = homogeneity(normalized_glcm2)
+# entropy2 = entropy(normalized_glcm2)
+
+# vector1 = createVector(contrast1, homogeneity1, entropy1)
+# vector2 = createVector(contrast2, homogeneity2, entropy2)
+
+# correlation = correlation(normalized_glcm1)
+# print("Correlation:", correlation)
+# dissimilarity = dissimilarity(normalized_glcm1)
+# print("Dissimilarity:", dissimilarity)
+# energy = energy(normalized_glcm1)
+# print("Energy:", energy)
+
+# glcm = graycomatrix(image1, 
+#                     distances=[1], 
+#                     angles=[0], 
+#                     levels=4,
+#                     symmetric=True, 
+#                     normed=True)
+
+# print(glcm[:,:,0,0])
+
+# contrast_test = graycoprops(glcm, prop='correlation')
+# dissimilarity_test = graycoprops(glcm, prop='dissimilarity')
+# energy_test = graycoprops(glcm, prop='energy')
+# print("Correlation:", contrast_test)
+# print("Dissimilarity:", dissimilarity_test)
+# print("Energy:", energy_test)
+
+# contrast_test = graycoprops(glcm, prop='contrast')
+# homogeneity_test = graycoprops(glcm, prop='homogeneity')
+# print("Contrast:", contrast_test)
+# print("Homogeneity:", homogeneity_test)
+
+# print("GLCM Matrix:")
+# print(glcm_matrix1)
+# print("Symmetric GLCM Matrix:")
+# print(symmetric_glcm1)
+# print("Normalized GLCM Matrix:")
+# print(normalized_glcm1)
+# print("Contrast:")
+# print(contrast1)
+# print("Homogeneity:")
+# print(homogeneity1)
+# print("Entropy:")
+# print(entropy1)
