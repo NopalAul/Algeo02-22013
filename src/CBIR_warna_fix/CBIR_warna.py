@@ -4,7 +4,9 @@ from cosine_similarity import *
 from numpy import array
 
 
-gambar1 = cv2.imread('hitamdoang.jpg')
+# gambar1 = cv2.imread('hitamdoang.jpg')
+# gambar2 = cv2.imread('mobilmerah.jpg')
+gambar1 = cv2.imread('0.jpg')
 gambar2 = cv2.imread('mobilmerah.jpg')
 
 def CBIR_warna(image1,image2):
@@ -13,10 +15,10 @@ def CBIR_warna(image1,image2):
     
     row1, col1 = image1.shape[0], image1.shape[1]
     row2, col2 = image2.shape[0], image2.shape[1]
-    print(image1.shape[0])
-    print(image1.shape[1])
-    print(image2.shape[0])
-    print(image2.shape[1])
+    # print(image1.shape[0])
+    # print(image1.shape[1])
+    # print(image2.shape[0])
+    # print(image2.shape[1])
 
     if col1*row1 > col2*row2:
         image1 = cv2.resize(image1, (row2, col2))
@@ -36,18 +38,18 @@ def CBIR_warna(image1,image2):
     histogram2 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
     # Pencarian histogram per 3x3 blok gambar
-    print(row1)
-    print(col1)
-    i = 0
-    j = 0
-    while i < row1:
-        while j < col1:
-    # for i in range(0,row1,3):
-    #     for j in range(0,col1,3):
+    # print(row1)
+    # print(col1)
+    # i = 0
+    # j = 0
+    # while i < row1:
+    #     while j < col1:
+    for i in range(0,row1,3):
+        for j in range(0,col1,3):
             histogram1 = rgb_to_histogram(RGBimage1[i][j][0],RGBimage1[i][j][1],RGBimage1[i][j][2],histogram1)
             histogram2 = rgb_to_histogram(RGBimage2[i][j][0],RGBimage2[i][j][1],RGBimage2[i][j][2],histogram2)
-            j += 3
-        i += 3
+        #     j += 3
+        # i += 3
     
     # Komparasi cosine similarity kedua vektor histogram HSV
     return cosine_sim(histogram1,histogram2)
