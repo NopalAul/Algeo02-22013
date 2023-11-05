@@ -1,13 +1,9 @@
 import cv2
-from PIL import Image
 from cosine_similarity import *
 from numpy import array
 
-
-# gambar1 = cv2.imread('hitamdoang.jpg')
-# gambar2 = cv2.imread('mobilmerah.jpg')
-gambar1 = cv2.imread('0.jpg')
-gambar2 = cv2.imread('mobilmerah.jpg')
+gambar1 = cv2.imread('src/nyoba/9999999.jpg')
+gambar2 = cv2.imread('src/nyoba/mobilmerah.jpg')
 
 def CBIR_warna(image1,image2):
     # Resize image ke ukuran terkecil (for performance purpose)

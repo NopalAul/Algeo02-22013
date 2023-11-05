@@ -5,10 +5,8 @@ from PIL import Image
 from cosine_similarity import *
 
 from numpy import array
-# img = Image.open(r'../../src/nyoba/hitamdoang.jpg')
-# img1 = Image.open(r'../../src/nyoba/mobilmerah.jpg')
-img = Image.open(r'../../src/nyoba/hitamdoang.jpg')
-img1 = Image.open(r'../../src/nyoba/hitamsmile.jpg')
+img = Image.open(r'src/nyoba/hitamdoang.jpg')
+img1 = Image.open(r'src/nyoba/mobilmerah.jpg')
 if img.width*img.height > img1.height*img1.width:
     img = img.resize((img1.size[0], img1.size[1]))
 else:
@@ -16,6 +14,9 @@ else:
 
 ar = array(img)
 ar1 = array(img1)
+
+print("ar, ar1")
+print(ar[0][0], ar1[0][1])
 
 def cara1(m1, m2, row, col):
     sum = 0
