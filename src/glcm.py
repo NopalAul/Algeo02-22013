@@ -70,71 +70,35 @@ def normalizeGLCM(glcm_matrix):
 def extract_texture(glcm_matrix):
     rows = glcm_matrix.shape[0]
 
+    # buat cari i - j (untuk contrast, homogeneity, dissimilarity)
+    diff_matrix = np.abs(np.arange(rows) - np.arange(rows)[:, np.newaxis])
+
     # 1. contrast
-    contrast_result = 0
-    for i in range(rows):
-        for j in range(rows):
-            contrast_result += (i - j) ** 2 * glcm_matrix[i, j]
+    contrast_result = np.sum(diff_matrix ** 2 * glcm_matrix)
 
     # 2. homogeneity
-    homogeneity_result = 0
-    for i in range(rows):
-        for j in range(rows):
-            homogeneity_result += (glcm_matrix[i, j] / (1 + (i - j) ** 2))
+    homogeneity_result = np.sum(glcm_matrix / (1 + diff_matrix ** 2))
     
     # 3. entropy
-    entropy_result = 0
-    for i in range(rows):
-        for j in range(rows):
-            if glcm_matrix[i][j] != 0:
-                entropy_result += (glcm_matrix[i, j] * math.log(glcm_matrix[i, j]))
-    entropy_result *= -1
+    # cari elemen tidak nol, handle kasus log(0) di entropy
+    non_zero_elements = glcm_matrix[glcm_matrix > 0]
+    entropy_result = -np.sum(non_zero_elements * np.log(non_zero_elements))
 
     # 4. dissimilarity
-    dissimilarity_result = 0
-    for i in range(rows):
-        for j in range(rows):
-            selisih = i - j
-            if (selisih < 0):
-                selisih *= -1
-            dissimilarity_result += (glcm_matrix[i, j] * selisih)
+    dissimilarity_result = np.sum(diff_matrix * glcm_matrix)
 
     # 5. energy
-    energy_result = 0
-    for i in range(rows):
-        for j in range(rows):
-            energy_result += (glcm_matrix[i, j] ** 2)
-    energy_result = math.sqrt(energy_result)
+    energy_result = np.sqrt(np.sum(glcm_matrix ** 2))
 
     # 6. correlation
-    sum_i = 0
-    sum_j = 0
-    for i in range(rows):
-        for j in range(rows):
-            sum_i += i * glcm_matrix[i][j]
-            sum_j += j * glcm_matrix[i][j]
-
-    rata_rata_i = sum_i / np.sum(glcm_matrix)
-    rata_rata_j = sum_j / np.sum(glcm_matrix)
-
-    sum_temp_i = 0
-    for i in range(rows):
-        for j in range(rows):
-            sum_temp_i += ((i - rata_rata_i) ** 2) * glcm_matrix[i][j]
-
-    sd_i = math.sqrt(sum_temp_i / np.sum(glcm_matrix))
-
-    sum_temp_j = 0
-    for i in range(rows):
-        for j in range(rows):
-            sum_temp_j += ((j - rata_rata_j) ** 2) * glcm_matrix[i][j]
-
-    sd_j = math.sqrt(sum_temp_j / np.sum(glcm_matrix))
-
-    correlation_result = 0
-    for i in range(rows):
-        for j in range(rows):
-            correlation_result += (glcm_matrix[i][j] * ((i - rata_rata_i) * (j - rata_rata_j) / (sd_i * sd_j)))
+    i, j = np.meshgrid(np.arange(rows), np.arange(rows), indexing='ij')
+    rata_rata_i = np.sum(i * glcm_matrix) / np.sum(glcm_matrix)
+    rata_rata_j = np.sum(j * glcm_matrix) / np.sum(glcm_matrix)
+    
+    sd_i = np.sqrt(np.sum(((i - rata_rata_i) ** 2) * glcm_matrix) / np.sum(glcm_matrix))
+    sd_j = np.sqrt(np.sum(((j - rata_rata_j) ** 2) * glcm_matrix) / np.sum(glcm_matrix))
+    
+    correlation_result = np.sum(glcm_matrix * ((i - rata_rata_i) * (j - rata_rata_j) / (sd_i * sd_j)))
 
     return contrast_result, homogeneity_result, entropy_result, dissimilarity_result, energy_result, correlation_result
 
