@@ -19,8 +19,8 @@ def cara1(m1, m2, row, col):
     c = 0
     for i in range(10):
         for j in range(10):
-            l = rgbToHSV(m1[i][j][0],m1[i][j][1],m1[i][j][2])
-            l1 = rgbToHSV(m2[i][j][0],m2[i][j][1],m2[i][j][2])
+            l = rgbToHistogram(m1[i][j][0],m1[i][j][1],m1[i][j][2])
+            l1 = rgbToHistogram(m2[i][j][0],m2[i][j][1],m2[i][j][2])
             print(l,l1, cosine_sim(l,l1))
             sum += cosine_sim(l,l1)
             c += 1
@@ -33,14 +33,45 @@ def cara2(m1, m2, row, col):
     # col -= col % 3
     for i in range(0,row,3):
         for j in range(0,col,3):
-            l = rgbToHSV(m1[i][j][0],m1[i][j][1],m1[i][j][2])
-            l1 = rgbToHSV(m2[i][j][0],m2[i][j][1],m2[i][j][2])
+            l = rgbToHistogram(m1[i][j][0],m1[i][j][1],m1[i][j][2])
+            l1 = rgbToHistogram(m2[i][j][0],m2[i][j][1],m2[i][j][2])
             sum += cosine_sim(l,l1)
             c += 1
     print("c: ", c) #########
     return sum/c
 
-def rgbToHSV(r,g,b):
+def hsvtohistogram(h,s,v):
+    if h >= 316:
+        h = 0
+    elif h <= 25:
+        h = 1
+    elif h <= 40:
+        h = 2
+    elif h <= 120:
+        h = 3
+    elif h <= 190:
+        h = 4
+    elif h <= 270:
+        h = 5
+    elif h <= 295:
+        h = 6
+    elif h <= 315:
+        h = 6
+    if s < 0.2:
+        s = 0
+    elif s < 0.7:
+        s = 1
+    elif s >= 0.7:
+        s = 2
+    if v < 0.2:
+        v = 0
+    elif v < 0.7:
+        v = 1
+    elif v >= 0.7:
+        v = 2
+    return [h,s,v]
+
+def rgbToHistogram(r,g,b):
     # normalisasi
     r = r/255
     g = g/255
@@ -63,11 +94,11 @@ def rgbToHSV(r,g,b):
         h = 60*(((r-g)/delta) + 4)
     ## S
     if cmax != 0 :
-        s = (delta/cmax)*100
+        s = (delta/cmax)
     else :
         s = 0
     ## V
-    v = cmax*100
-    return [h,s,v]
+    v = cmax
+    return hsvtohistogram(h,s,v)
 
-print(f"cosine similarity : {cara1(ar,ar1, img.height, img.width)}")
+print(f"cosine similarity : {cara2(ar,ar1, img.height, img.width)}")
