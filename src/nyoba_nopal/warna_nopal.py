@@ -2,8 +2,8 @@ import cv2
 from cosine_similarity import *
 from numpy import array
 
-gambar1 = cv2.imread('../../src/nyoba_nopal/1000.jpg')
-gambar2 = cv2.imread('../../src/nyoba_nopal/4672.jpg')
+# gambar1 = cv2.imread('../../src/nyoba_nopal/1000.jpg')
+# gambar2 = cv2.imread('../../src/nyoba_nopal/4672.jpg')
 
 def CBIR_warna(image1,image2):
     # Resize image ke ukuran terkecil (for performance purpose)
@@ -36,8 +36,9 @@ def CBIR_warna(image1,image2):
             histogram1 = rgb_to_histogram(RGBimage1[i][j][0],RGBimage1[i][j][1],RGBimage1[i][j][2],histogram1)
             histogram2 = rgb_to_histogram(RGBimage2[i][j][0],RGBimage2[i][j][1],RGBimage2[i][j][2],histogram2)
         
-    print(histogram1)
-    print(histogram2)
+    # print(histogram1)
+    # print(histogram2)
+    
     # Komparasi cosine similarity kedua vektor histogram HSV
     return cosine_sim(histogram1,histogram2)
 
@@ -113,5 +114,5 @@ def hsvtohistogram(h,s,v,l):
     return l
 
 
-print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
+# print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
 # print(f"cosine similarity 2: {CBIR_warna_noresize(gambar1,gambar2)}")
