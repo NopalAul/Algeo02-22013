@@ -2,8 +2,8 @@ import cv2
 from cosine_similarity import *
 from numpy import array
 
-# gambar1 = cv2.imread('../../src/nyoba/0.jpg')
-# gambar2 = cv2.imread('../../src/nyoba/mobilmerah.jpg')
+gambar1 = cv2.imread('../../src/nyoba_nopal/1000.jpg')
+gambar2 = cv2.imread('../../src/nyoba_nopal/4672.jpg')
 
 def CBIR_warna(image1,image2):
     # Resize image ke ukuran terkecil (for performance purpose)
@@ -25,20 +25,19 @@ def CBIR_warna(image1,image2):
     # print(RGBimage1)
 
     # Inisialisasi histogram
-    histogram1 = [0 for i in range(72)]
-    histogram2 = [0 for i in range(72)]
+    histogram1 = [0 for i in range(74)]
+    histogram2 = [0 for i in range(74)]
 
     # Pencarian histogram per 3x3 blok gambar
     i = 0
     j = 0
-    while i < row1:
-        while j < col1:
+    for i in range(0,row1):
+        for j in range(0,col1):
             histogram1 = rgb_to_histogram(RGBimage1[i][j][0],RGBimage1[i][j][1],RGBimage1[i][j][2],histogram1)
             histogram2 = rgb_to_histogram(RGBimage2[i][j][0],RGBimage2[i][j][1],RGBimage2[i][j][2],histogram2)
-            j += 3
-        i += 3
         
-    
+    print(histogram1)
+    print(histogram2)
     # Komparasi cosine similarity kedua vektor histogram HSV
     return cosine_sim(histogram1,histogram2)
 
@@ -75,7 +74,7 @@ def rgb_to_histogram(r,g,b,l):
 
 # Kuantifikasi nilai HSV
 def quantify_hsv(h,s,v):
-    if h >= 316:
+    if 360 >= h >= 316:
         h = 0
     elif h <= 25:
         h = 1
@@ -89,7 +88,7 @@ def quantify_hsv(h,s,v):
         h = 5
     elif h <= 295:
         h = 6
-    elif h <= 315:
+    elif h < 316:
         h = 7
     if s < 0.2:
         s = 0
@@ -107,34 +106,12 @@ def quantify_hsv(h,s,v):
 
 # Simpan HSV terkuantifikasi ke list l sebagai histogram HSV
 def hsvtohistogram(h,s,v,l):
+    [h,s,v] = quantify_hsv(h,s,v)
     index = 24*v + 8*s + h
     l[index] += 1
     
     return l
 
-def imagetohistogram(image):
-    RGBimage = array(image)
-    # print("noresize: ",RGBimage)
-    # Inisialisasi histogram
-    histogram = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-    # Pencarian histogram per 3x3 blok gambar
-    i = 0
-    j = 0
-    row,col = image.shape[0], image.shape[1]
-    while i < row:
-        while j < col:
-    # for i in range(0,row1,3):
-    #     for j in range(0,col1,3):
-            histogram = rgb_to_histogram(RGBimage[i][j][0],RGBimage[i][j][1],RGBimage[i][j][2],histogram)
-            j += 3
-        i += 3
-    
-    # Komparasi cosine similarity kedua vektor histogram HSV
-    return histogram
-
-def CBIR_warna_noresize(image1,image2):
-    return cosine_sim(imagetohistogram(image1),imagetohistogram(image2))
-
-# print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
+print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
 # print(f"cosine similarity 2: {CBIR_warna_noresize(gambar1,gambar2)}")
