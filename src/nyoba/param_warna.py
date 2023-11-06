@@ -29,7 +29,7 @@ def cara1(m1, m2, row, col):
             sum += cosine_sim(l,l1)
             c += 1
     return sum/c
-    
+
 def cara2(m1, m2, row, col):
     x = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     y = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
