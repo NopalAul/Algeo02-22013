@@ -15,7 +15,6 @@ else:
 ar = array(img)
 ar1 = array(img1)
 
-print(ar)
 def cara1(m1, m2, row, col):
     sum = 0
     c = 0
