@@ -29,23 +29,23 @@ def CBIR_warna(image1,image2):
     print(RGBimage1)
 
     # Inisialisasi histogram
-    histogram1 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    histogram2 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
+    sum = 0
+    c = 0
     # Pencarian histogram per 3x3 blok gambar
-    i = 0
-    j = 0
-    while i < row1:
-        while j < col1:
-    # for i in range(0,row1,3):
-    #     for j in range(0,col1,3):
-            histogram1 = rgb_to_histogram(RGBimage1[i][j][2],RGBimage1[i][j][1],RGBimage1[i][j][0],histogram1)
-            histogram2 = rgb_to_histogram(RGBimage2[i][j][2],RGBimage2[i][j][1],RGBimage2[i][j][0],histogram2)
-            j += 3
-        i += 3
+    for i in range(0,row1,3):
+        for j in range(0,col1,3):
+            histogram1 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            histogram2 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            for k in range(i,3+i):
+                for l in range(j,3+j):
+                    histogram1 = rgb_to_histogram(RGBimage1[k][l][2],RGBimage1[k][l][1],RGBimage1[k][l][0],histogram1)
+                    histogram2 = rgb_to_histogram(RGBimage2[k][l][2],RGBimage2[k][l][1],RGBimage2[k][l][0],histogram2)
+            sum += cosine_sim(histogram1,histogram2)
+            c += 1
     
     # Komparasi cosine similarity kedua vektor histogram HSV
-    return cosine_sim(histogram1,histogram2)
+    return sum/c
 
 # Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
 def rgb_to_histogram(r,g,b,l):
@@ -117,16 +117,10 @@ def imagetohistogram(image):
     histogram = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
     # Pencarian histogram per 3x3 blok gambar
-    i = 0
-    j = 0
     row,col = image.shape[0], image.shape[1]
-    while i < row:
-        while j < col:
-    # for i in range(0,row1,3):
-    #     for j in range(0,col1,3):
+    for i in range(0,row,3):
+        for j in range(0,col,3):
             histogram = rgb_to_histogram(RGBimage[i][j][2],RGBimage[i][j][1],RGBimage[i][j][0],histogram)
-            j += 3
-        i += 3
     
     # Komparasi cosine similarity kedua vektor histogram HSV
     return histogram
