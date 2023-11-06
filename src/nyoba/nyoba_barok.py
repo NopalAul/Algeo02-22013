@@ -26,7 +26,6 @@ def CBIR_warna(image1,image2):
     # Ekstraksi image ke komponen RGB-nya
     RGBimage1 = array(image1)
     RGBimage2 = array(image2)
-    print(RGBimage1)
 
     # Inisialisasi histogram
 
@@ -37,8 +36,14 @@ def CBIR_warna(image1,image2):
         for j in range(0,col1,3):
             histogram1 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             histogram2 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-            for k in range(i,3+i):
-                for l in range(j,3+j):
+            k = i + 3
+            l = j + 3
+            if i + 3 > row1:
+                k = row1
+            if j + 3 > row1:
+                l = col1
+            for k in range(i,k):
+                for l in range(j,l):
                     histogram1 = rgb_to_histogram(RGBimage1[k][l][2],RGBimage1[k][l][1],RGBimage1[k][l][0],histogram1)
                     histogram2 = rgb_to_histogram(RGBimage2[k][l][2],RGBimage2[k][l][1],RGBimage2[k][l][0],histogram2)
             sum += cosine_sim(histogram1,histogram2)
@@ -126,4 +131,4 @@ def imagetohistogram(image):
     return histogram
 
 print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
-print(f"cosine similarity 2: {cosine_sim(imagetohistogram(gambar1),imagetohistogram(gambar2))}")
+# print(f"cosine similarity 2: {cosine_sim(imagetohistogram(gambar1),imagetohistogram(gambar2))}")
