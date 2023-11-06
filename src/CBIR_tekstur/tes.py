@@ -31,8 +31,7 @@ def matrixGLCM(image, d=1):
         for j in range(cols):
                 x1, y1 = i, j
                 # perpindahan vektor berdasarkan sudut
-                # sudut 45:
-                x2, y2 = i + d, j + d
+                x2, y2 = i + 0, j + d
 
                 if 0 <= x1 < rows and 0 <= y1 < cols and 0 <= x2 < rows and 0 <= y2 < cols:
                     pixel1 = image[x1, y1]
@@ -98,67 +97,65 @@ def createVector(a, b, c, d, e, f,):
 ########## CBIR-TEKSTUR ##########
 def CBIR_tekstur(image1, image2):
     ## BUAT VECTOR BERISI CONTRAST, HOMOGENEITY, DAN ENTROPY DARI IMAGE 1
-    # sudut 45
-    glcm_matrix1_sudut45 = matrixGLCM(image1, d=1)
-    symmetric_glcm1_sudut45 = symmetricGLCM(glcm_matrix1_sudut45)
-    normalized_glcm1_sudut45 = normalizeGLCM(symmetric_glcm1_sudut45)
-    contrast1_sudut45, homogeneity1_sudut45, entropy1_sudut45, dissimilarity1_sudut45, energy1_sudut45, correlation1_sudut45 = extract_texture(normalized_glcm1_sudut45)
+    # sudut 0
+    glcm_matrix1_sudut0 = matrixGLCM(image1, d=1)
+    symmetric_glcm1_sudut0 = symmetricGLCM(glcm_matrix1_sudut0)
+    normalized_glcm1_sudut0 = normalizeGLCM(symmetric_glcm1_sudut0)
+    contrast1_sudut0, homogeneity1_sudut0, entropy1_sudut0, dissimilarity1_sudut0, energy1_sudut0, correlation1_sudut0 = extract_texture(normalized_glcm1_sudut0)
 
-    vector1 = createVector(contrast1_sudut45, homogeneity1_sudut45, entropy1_sudut45, dissimilarity1_sudut45, energy1_sudut45, correlation1_sudut45)
+    vector1 = createVector(contrast1_sudut0, homogeneity1_sudut0, entropy1_sudut0, dissimilarity1_sudut0, energy1_sudut0, correlation1_sudut0)
 
     ## BUAT VECTOR BERISI CONTRAST, HOMOGENEITY, DAN ENTROPY DARI IMAGE 2
-    # sudut 45
-    glcm_matrix2_sudut45 = matrixGLCM(image2, d=1)
-    symmetric_glcm2_sudut45 = symmetricGLCM(glcm_matrix2_sudut45)
-    normalized_glcm2_sudut45 = normalizeGLCM(symmetric_glcm2_sudut45)
-    contrast2_sudut45, homogeneity2_sudut45, entropy2_sudut45, dissimilarity2_sudut45, energy2_sudut45, correlation2_sudut45 = extract_texture(normalized_glcm2_sudut45)
+    # sudut 0
+    glcm_matrix2_sudut0 = matrixGLCM(image2, d=1)
+    symmetric_glcm2_sudut0 = symmetricGLCM(glcm_matrix2_sudut0)
+    normalized_glcm2_sudut0 = normalizeGLCM(symmetric_glcm2_sudut0)
+    contrast2_sudut0, homogeneity2_sudut0, entropy2_sudut0, dissimilarity2_sudut0, energy2_sudut0, correlation2_sudut0 = extract_texture(normalized_glcm2_sudut0)
 
-    vector2 = createVector(contrast2_sudut45, homogeneity2_sudut45, entropy2_sudut45, dissimilarity2_sudut45, energy2_sudut45, correlation2_sudut45)
+    vector2 = createVector(contrast2_sudut0, homogeneity2_sudut0, entropy2_sudut0, dissimilarity2_sudut0, energy2_sudut0, correlation2_sudut0)
    
     ## CARI NILAI COS THETA UNTUK TAU KEMIRIPAN
     cos_theta = cosine_sim(vector1, vector2)
 
     return cos_theta
 
-########## MENGAMBIL SEMUA GAMBAR DALAM SATU FOLDER ##########
-def imageInFolder(folder_path):
-    image_files = [os.path.join(folder_path, filename) for filename in os.listdir(folder_path) if filename.endswith('.jpg')]
-    return image_files
+#******** TES HITUNGAN/RUMUS BENER OR GA W/ BUILT-IN FUNCTIONS ********#
 
-##########***** TES *****##########
+image2 = cv2.imread('img/contoh2/4478.jpg')
 
-if __name__ == '__main__':
-    start_time = time.time()
+glcm_matrix2_sudut0 = matrixGLCM(image2, d=1)
+symmetric_glcm2_sudut0 = symmetricGLCM(glcm_matrix2_sudut0)
+normalized_glcm2_sudut0 = normalizeGLCM(symmetric_glcm2_sudut0)
+contrast2_sudut0, homogeneity2_sudut0, entropy2_sudut0, dissimilarity2_sudut0, energy2_sudut0, correlation2_sudut0 = extract_texture(normalized_glcm2_sudut0)
 
-    # load gambar referensi
-    reference_image = cv2.imread('img/contoh2/4479.jpg')
+print("FUNCTION BIKIN SENDIRI")
+print("Contrast:", contrast2_sudut0)
+print("Homogeneity:", homogeneity2_sudut0)
+print("Dissimilarity:", dissimilarity2_sudut0)
+print("Energy:", energy2_sudut0)
+print("Correlation:", correlation2_sudut0)
+print(" ")
 
-    # list gambar target yang akan dibandingkan
-    target_folder = 'img/contoh/'
-    target_images = imageInFolder(target_folder)
+image2x = cv2.imread('img/contoh2/4478.jpg', cv2.IMREAD_GRAYSCALE)
+num_levels = np.max(image2x) + 1
 
-    # baca semua gambar langsung terus simpen ke list, jadi ga ulang ulang cv2 imreadnya
-    target_images_list = [cv2.imread(image_path) for image_path in target_images]
+glcm = graycomatrix(image2x, 
+                    distances=[1], 
+                    angles=[135], 
+                    levels=num_levels,
+                    symmetric=True, 
+                    normed=True)
 
-    # inisialisasi pool multiprocessing dengan jumlah prosesor yang tersedia
-    num_processors = 8 # sesuaikan dengan jumlah prosesor yang tersedia
-    pool = Pool(processes=num_processors)
+# print(glcm[:,:,0,0])
 
-    # bandingkan gambar referensi dengan gambar target secara paralel
-    similarities = pool.starmap(CBIR_tekstur, [(reference_image, image) for image in target_images_list])
-
-    # close pool multiprocessing
-    pool.close()
-    pool.join()
-
-    # Hasil kesamaan citra
-    for i, similarity in enumerate(similarities):
-        print(f"Kesamaan dengan gambar-{i+1}: {similarity * 100:.5f}%")
-
-    end_time = time.time()
-
-    execution_time = end_time - start_time
-    print(f"Program selesai dalam {execution_time:.2f} detik")
-
-
-
+print("FUNCTION BUILD-IN")
+correlation_test = graycoprops(glcm, prop='correlation')
+dissimilarity_test = graycoprops(glcm, prop='dissimilarity')
+energy_test = graycoprops(glcm, prop='energy')
+contrast_test = graycoprops(glcm, prop='contrast')
+homogeneity_test = graycoprops(glcm, prop='homogeneity')
+print("Contrast:", contrast_test)
+print("Homogeneity:", homogeneity_test)
+print("Dissimilarity:", dissimilarity_test)
+print("Energy:", energy_test)
+print("Correlation:", correlation_test)
