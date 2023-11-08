@@ -1,0 +1,24 @@
+.skeleton {
+    width: 100px; /* Adjust the width as needed for a smaller skeleton */
+    height: 100px; /* Adjust the height as needed for a smaller skeleton */
+    background: #f0f0f0; /* Skeleton background color */
+    animation: loading 1s infinite;
+    border-radius: 8px;
+    margin-right: 16px; /* Add margin for spacing */
+  }
+  
+  .skeleton-image {
+    height: 100%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1s infinite;
+  }
+  
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }

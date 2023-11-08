@@ -1,0 +1,42 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+body {
+    background-color: #2a0505; /* Set your desired background color */
+  }
+
+.toggle-options {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+  
+.toggle-options button {
+    width: 100px; /* Set a fixed width for both buttons */
+    background-color: #ffffff;
+    color: #881337;
+    padding: 10px 0; /* Adjust padding to vertically center text */
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+    font-weight: bold;
+}
+  
+.toggle-options button.active {
+    background-color: #ffffff;
+    color: #881337
+}
+  
+.toggle-options button:not(.active) {
+    background-color: #ffffff;
+    color: #881337
+}
+  
+.toggle-options button:hover {
+    background-color: #d9d2d4;
+}
+  

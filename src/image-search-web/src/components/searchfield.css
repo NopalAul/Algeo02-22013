@@ -1,0 +1,53 @@
+/* Style the custom file input and label to match the button's style */
+.custom-file-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.custom-file-input {
+  background-color: #881337; /* Match the background color with bg-pink-500 */
+  color: #f6f0f0; /* Match the text color with text-white */
+  padding: 0.625rem 1.5rem; /* Adjust padding to match the button */
+  border: none;
+  border-radius: 5px 0px 0px 5px; /* Match the rounded-br */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+  width: 300px;
+}
+
+.custom-file-input:hover {
+  background-color: #ac9aa1; /* Change background color on hover */
+}
+
+/* Style the file input to match button's style */
+input[type="file"] {
+  display: none;
+}
+
+/* Style the label text to match the button's style */
+input[type="file"] + label::after {
+  content: "Choose a file"; /* Customize the label text */
+  margin-left: 10px;
+  color: white; /* Match the text color with text-white */
+  font-weight: bold;
+}
+
+/* Style the "Upload & Search" button */
+.upload-search-button {
+  background-color: #6c102c; /* Match the background color with bg-pink-500 */
+  color: white; /* Match the text color with text-white */
+  padding: 0.625rem 1.5rem; /* Adjust padding to match the button */
+  border: none;
+  border-radius: 0px 5px 5px 0px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+  width: auto; /* Set width to 'auto' to make it adjust to content */
+  text-align: center; /* Center the text within the button */
+  width: 200px;
+}
+
+.upload-search-button:hover {
+  background-color: #ac9aa1; /* Change background color on hover */
+}
