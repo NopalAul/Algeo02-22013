@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { ImageContext } from "../App";
-import "./searchfield.css"; // Import your CSS file with the custom styles
+import "./searchfield.css";
 
 const SearchField = () => {
     const [uploadedImage, setUploadedImage] = useState(null);
@@ -27,8 +27,8 @@ const SearchField = () => {
     }
 
     return (
-        <div className="custom-file-input-container">
-            <label htmlFor="fileInput" className="custom-file-input">Choose a file</label>
+        <div className="custom-file-input-container flex items-center">
+            <label htmlFor="fileInput" className="custom-file-input" style={{ fontFamily: 'Comic Sans MS, cursive'}}>Choose a file</label>
             <input
                 type="file"
                 id="fileInput"
@@ -39,7 +39,7 @@ const SearchField = () => {
                 onClick={handleUploadAndSearch}
                 disabled={!uploadedImage}
                 className="upload-search-button"
-            >
+                style={{ fontFamily: 'Comic Sans MS, cursive'}}>
                 Upload & Search
             </button>
         </div>

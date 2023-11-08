@@ -3,8 +3,11 @@
 @import "tailwindcss/utilities";
 
 body {
-    background-color: #2a0505; /* Set your desired background color */
-  }
+    background-image: url("rsc/doraemon.jpg");
+    background-color: #2a0505;
+    background-size: cover;
+    background-position: center;
+}
 
 .toggle-options {
     display: flex;
@@ -14,10 +17,10 @@ body {
 }
   
 .toggle-options button {
-    width: 100px; /* Set a fixed width for both buttons */
+    width: 100px; 
     background-color: #ffffff;
-    color: #881337;
-    padding: 10px 0; /* Adjust padding to vertically center text */
+    color: #078bf7;
+    padding: 10px 0;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -28,12 +31,12 @@ body {
   
 .toggle-options button.active {
     background-color: #ffffff;
-    color: #881337
+    color: #078bf7;
 }
   
 .toggle-options button:not(.active) {
     background-color: #ffffff;
-    color: #881337
+    color: #078bf7;
 }
   
 .toggle-options button:hover {

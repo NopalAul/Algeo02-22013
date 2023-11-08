@@ -121,7 +121,7 @@ def CBIR_tekstur(image1, image2):
 
 #******** TES HITUNGAN/RUMUS BENER OR GA W/ BUILT-IN FUNCTIONS ********#
 
-image2 = cv2.imread('img/contoh2/4478.jpg')
+image2 = cv2.imread('img/contoh2/meng.jpg')
 
 glcm_matrix2_sudut0 = matrixGLCM(image2, d=1)
 symmetric_glcm2_sudut0 = symmetricGLCM(glcm_matrix2_sudut0)
@@ -136,12 +136,12 @@ print("Energy:", energy2_sudut0)
 print("Correlation:", correlation2_sudut0)
 print(" ")
 
-image2x = cv2.imread('img/contoh2/4478.jpg', cv2.IMREAD_GRAYSCALE)
+image2x = cv2.imread('img/contoh2/meng.jpg', cv2.IMREAD_GRAYSCALE)
 num_levels = np.max(image2x) + 1
 
 glcm = graycomatrix(image2x, 
                     distances=[1], 
-                    angles=[135], 
+                    angles=[0], 
                     levels=num_levels,
                     symmetric=True, 
                     normed=True)

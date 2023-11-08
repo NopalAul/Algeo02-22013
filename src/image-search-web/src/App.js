@@ -39,7 +39,7 @@ function App() {
     <ImageContext.Provider value={value}>
       <Header>
         <ToggleOptions onOptionChange={handleOptionChange} />
-        <SearchField selectedOption={selectedOption} handleFileChange={handleFileChange} />
+        <SearchField selectedOption={selectedOption} handleFileChange={handleFileChange}/>
       </Header>
       <ImagePreview uploadedImage={uploadedImage} />
       <Images />
