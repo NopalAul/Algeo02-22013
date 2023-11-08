@@ -2,8 +2,8 @@ import cv2
 from cosine_similarity import *
 from numpy import array
 
-# gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
-# gambar2 = cv2.imread('../../src/nyoba_nopal/1.jpg')
+gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
+gambar2 = cv2.imread('../../src/nyoba_nopal/hitam.jpg')
 
 def CBIR_warna(image1,image2):
     # Resize image ke ukuran terkecil (for performance purpose)
@@ -162,6 +162,4 @@ def CBIR_warna_33(image1,image2):
     # Return hasil
     return sum/c
 
-# print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
-# print(f"cosine similarity 3x3: {CBIR_warna_33(gambar1,gambar2)}")
-# print(f"cosine similarity 2: {CBIR_warna_noresize(gambar1,gambar2)}")
+print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")

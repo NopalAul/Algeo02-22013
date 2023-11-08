@@ -3,7 +3,7 @@ from cosine_similarity import *
 from numpy import *
 
 gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
-gambar2 = cv2.imread('../../src/nyoba_nopal/1.jpg')
+gambar2 = cv2.imread('../../src/nyoba_nopal/hitam.jpg')
 
 # ########## FOR TEST
 # importing os module   
