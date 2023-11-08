@@ -30,11 +30,11 @@ if __name__ == '__main__':
     target_images = imageInFolder(target_folder)
 
     # inisialisasi pool multiprocessing dengan jumlah prosesor yang tersedia
-    num_processors = 8 # prosesor denise
+    num_processors = 12 # prosesor denise
     pool = Pool(processes=num_processors)
 
     # bandingkan gambar referensi dengan gambar target secara paralel
-    similarities = pool.starmap(compareImages, [(reference_image, loadImage(image_path)) for image_path in target_images])
+    similarities = pool.starmap(CBIR_warna, [(reference_image, loadImage(image_path)) for image_path in target_images])
 
     # close pool multiprocessing
     pool.close()
