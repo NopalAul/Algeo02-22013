@@ -93,9 +93,9 @@ def bgr_to_rgb(image):
     image_rgb[:, :, 2] = image[:, :, 0]
     return image_rgb
 
-img = cv2.imread('src/nyoba/hitamdoang.jpg')
+img = cv2.imread('../../src/nyoba/hitamdoang.jpg')
 img = bgr_to_rgb(img)
-img1 = cv2.imread('src/nyoba/mobilmerah.jpg')
+img1 = cv2.imread('../../src/nyoba/mobilmerah.jpg')
 img1 = bgr_to_rgb(img1)
 
 # resize image
