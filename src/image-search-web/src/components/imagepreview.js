@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import './skeleton.css';
 
 const ImagePreview = ({ uploadedImage }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (uploadedImage) {
+      const image = new Image();
+      image.src = URL.createObjectURL(uploadedImage);
+
+      image.onload = () => {
+        setLoading(false);
+      };
+    } else {
+      setLoading(false);
+    }
+  }, [uploadedImage]);
+
   return (
     <div className="image-preview">
+      <div className={loading ? 'skeleton' : ''} />
       {uploadedImage && (
         <img
           src={URL.createObjectURL(uploadedImage)}
-          alt="Uploaded"
-          width="200" // Adjust the width as needed
-          height="200" // Adjust the height as needed
+          alt="Preview"
+          style={{ width: '100%', height: 'auto' }}
         />
       )}
     </div>

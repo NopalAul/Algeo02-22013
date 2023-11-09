@@ -89,7 +89,7 @@ def extract_texture(glcm_matrix):
     return contrast_result, homogeneity_result, entropy_result, dissimilarity_result, energy_result, correlation_result
 
 ########## COSINE SIMILARITY ##########
-def createVector(a, b, c, d, e, f,):
+def createVector(a, b, c, d, e, f):
     vector = np.array([a, b, c, d, e, f])
 
     return vector
@@ -121,41 +121,61 @@ def CBIR_tekstur(image1, image2):
 
 #******** TES HITUNGAN/RUMUS BENER OR GA W/ BUILT-IN FUNCTIONS ********#
 
-image2 = cv2.imread('img/contoh2/meng.jpg')
+image2 = cv2.imread('img/contoh2/0.jpg')
 
 glcm_matrix2_sudut0 = matrixGLCM(image2, d=1)
 symmetric_glcm2_sudut0 = symmetricGLCM(glcm_matrix2_sudut0)
 normalized_glcm2_sudut0 = normalizeGLCM(symmetric_glcm2_sudut0)
 contrast2_sudut0, homogeneity2_sudut0, entropy2_sudut0, dissimilarity2_sudut0, energy2_sudut0, correlation2_sudut0 = extract_texture(normalized_glcm2_sudut0)
+vector2 = createVector(contrast2_sudut0, homogeneity2_sudut0, entropy2_sudut0, dissimilarity2_sudut0, energy2_sudut0, correlation2_sudut0)
 
-print("FUNCTION BIKIN SENDIRI")
-print("Contrast:", contrast2_sudut0)
-print("Homogeneity:", homogeneity2_sudut0)
-print("Dissimilarity:", dissimilarity2_sudut0)
-print("Energy:", energy2_sudut0)
-print("Correlation:", correlation2_sudut0)
+# print("FUNCTION BIKIN SENDIRI")
+print("Contrast 1:", contrast2_sudut0)
+print("Homogeneity 1:", homogeneity2_sudut0)
+print("Dissimilarity 1:", dissimilarity2_sudut0)
+print("Energy 1:", energy2_sudut0)
+print("Correlation 1:", correlation2_sudut0)
+print("VECTOR 1: ", vector2)
 print(" ")
 
-image2x = cv2.imread('img/contoh2/meng.jpg', cv2.IMREAD_GRAYSCALE)
-num_levels = np.max(image2x) + 1
+image1 = cv2.imread('img/contoh2/1.jpg')
 
-glcm = graycomatrix(image2x, 
-                    distances=[1], 
-                    angles=[0], 
-                    levels=num_levels,
-                    symmetric=True, 
-                    normed=True)
+glcm_matrix1_sudut0 = matrixGLCM(image1, d=1)
+symmetric_glcm1_sudut0 = symmetricGLCM(glcm_matrix1_sudut0)
+normalized_glcm1_sudut0 = normalizeGLCM(symmetric_glcm1_sudut0)
+contrast1_sudut0, homogeneity1_sudut0, entropy1_sudut0, dissimilarity1_sudut0, energy1_sudut0, correlation1_sudut0 = extract_texture(normalized_glcm1_sudut0)
+vector1 = createVector(contrast1_sudut0, homogeneity1_sudut0, entropy1_sudut0, dissimilarity1_sudut0, energy1_sudut0, correlation1_sudut0)
 
-# print(glcm[:,:,0,0])
+# print("FUNCTION BIKIN SENDIRI")
+print("Contrast 2:", contrast1_sudut0)
+print("Homogeneity 2:", homogeneity1_sudut0)
+print("Dissimilarity 2:", dissimilarity1_sudut0)
+print("Energy 2:", energy1_sudut0)
+print("Correlation 2:", correlation1_sudut0)
+print("VECTOR 2: ", vector1)
+print(" ")
+print("Cosine similarity: ", cosine_sim(vector1, vector2))
 
-print("FUNCTION BUILD-IN")
-correlation_test = graycoprops(glcm, prop='correlation')
-dissimilarity_test = graycoprops(glcm, prop='dissimilarity')
-energy_test = graycoprops(glcm, prop='energy')
-contrast_test = graycoprops(glcm, prop='contrast')
-homogeneity_test = graycoprops(glcm, prop='homogeneity')
-print("Contrast:", contrast_test)
-print("Homogeneity:", homogeneity_test)
-print("Dissimilarity:", dissimilarity_test)
-print("Energy:", energy_test)
-print("Correlation:", correlation_test)
+# image2x = cv2.imread('img/contoh2/meng.jpg', cv2.IMREAD_GRAYSCALE)
+# num_levels = np.max(image2x) + 1
+
+# glcm = graycomatrix(image2x, 
+#                     distances=[1], 
+#                     angles=[0], 
+#                     levels=num_levels,
+#                     symmetric=True, 
+#                     normed=True)
+
+# # print(glcm[:,:,0,0])
+
+# print("FUNCTION BUILD-IN")
+# correlation_test = graycoprops(glcm, prop='correlation')
+# dissimilarity_test = graycoprops(glcm, prop='dissimilarity')
+# energy_test = graycoprops(glcm, prop='energy')
+# contrast_test = graycoprops(glcm, prop='contrast')
+# homogeneity_test = graycoprops(glcm, prop='homogeneity')
+# print("Contrast:", contrast_test)
+# print("Homogeneity:", homogeneity_test)
+# print("Dissimilarity:", dissimilarity_test)
+# print("Energy:", energy_test)
+# print("Correlation:", correlation_test)

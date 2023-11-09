@@ -1,11 +1,13 @@
 import React, { createContext, useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
 import SearchField from "./components/searchfield";
 import Images from "./components/images";
 import useAxios from "./hooks/useAxios";
 import ToggleOptions from "./components/toggleoptions";
 import ImagePreview from "./components/imagepreview";
-import "./components/styles.css";
+import DoraButtonPage from "./components/dora-button-page";
+import NobiButtonPage from "./components/nobi-button-page";
 
 export const ImageContext = createContext();
 
@@ -40,14 +42,23 @@ function App() {
   };
 
   return (
-    <ImageContext.Provider value={value}>
-      <Header onButtonClick={handleButtonClick}>
-        <ToggleOptions onOptionChange={handleOptionChange} />
-        <SearchField selectedOption={selectedOption} handleFileChange={handleFileChange}/>
-      </Header>
-      <ImagePreview uploadedImage={uploadedImage} />
-      <Images />
-    </ImageContext.Provider>
+    <Router>
+      <ImageContext.Provider value={value}>
+        <Routes>
+          <Route path="/" element={<Header onButtonClick={handleButtonClick}>
+            <ToggleOptions onOptionChange={handleOptionChange} />
+            <SearchField selectedOption={selectedOption} handleFileChange={handleFileChange}/>
+          </Header>}>
+            <Route index element={<>
+              <ImagePreview uploadedImage={uploadedImage} />
+              <Images />
+            </>} />
+          </Route>
+          <Route path="/buttonpage" element={<DoraButtonPage />} />
+          <Route path="/nobi-button-page" element={<NobiButtonPage />} />
+        </Routes>
+      </ImageContext.Provider>
+    </Router>
   );
 }
 

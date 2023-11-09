@@ -1,10 +1,10 @@
 import React from "react";
-import Skeleton from "./skeleton.css"; // Import the Skeleton component
+import "./skeleton.css";
 
 const ImagePreview = ({ uploadedImage }) => {
   return (
     <div className="image-preview">
-      <Skeleton /> {/* Always show the skeleton */}
+      <div className="skeleton" />
       {uploadedImage && (
         <img
           src={URL.createObjectURL(uploadedImage)}
