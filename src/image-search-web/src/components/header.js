@@ -11,7 +11,7 @@ const Header = ({ children, onButtonClick }) => {
             <NobiButton onClick={() => onButtonClick("nobibuttonpage")} />
             <div className='max-w-md mx-auto w-full' style={{ maxWidth: '700px', width: '80%' }}>
                 <h1 className='text-sky-700 text-center text-5xl font-bold mb-5' style={{ fontFamily: 'Comic Sans MS, cursive', textShadow: '4px 4px 8px white', letterSpacing: '2px' }}>REVERSE IMAGE SEARCH</h1>
-                <img src={text} alt="doraemon text" style={{ width: '300px', height: 'auto', margin: '0 auto' }}/>
+                <img src={text} alt="doraemon text" style={{ width: '400px', height: 'auto', margin: '0 auto' }}/>
                 {children}
             </div>
         </div>

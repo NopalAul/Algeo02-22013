@@ -9,7 +9,7 @@ body {
     background-position: center;
 }
 
-/* button di header */
+/* doraemon */
 .custom-button {
     background: none;
     border: none;
@@ -17,8 +17,8 @@ body {
     position: absolute;
     top: 40px;
     right: 30px;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     margin-right: 20px; /* misahin dari button 2 */
 }
 
@@ -34,9 +34,9 @@ body {
     cursor: pointer;
     position: absolute;
     top: 40px;
-    right: 130px; /* untuk space dari button doraemon */
-    width: 60px;
-    height: 60px;
+    right: 150px; /* untuk space dari button doraemon */
+    width: 80px;
+    height: 80px;
 }
 
 .custom-button-2 img {
