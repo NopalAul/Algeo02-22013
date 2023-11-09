@@ -1,6 +1,8 @@
 .custom-file-input-container {
   display: flex;
   align-items: center;
+  justify-content: center; 
+  height: 10vh;
 }
 
 .custom-file-input {
@@ -16,7 +18,7 @@
 }
 
 .custom-file-input:hover {
-  background-color: #ac9aa1;
+  background-color: #284c85;
 }
 
 input[type="file"] {
@@ -49,5 +51,5 @@ input[type="file"] + label::after {
 }
 
 .upload-search-button:hover {
-  background-color: #ac9aa1;
+  background-color: #1f2d53;
 }

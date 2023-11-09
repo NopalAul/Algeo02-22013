@@ -1,10 +1,10 @@
 .skeleton {
-    width: 100px; /* Adjust the width as needed for a smaller skeleton */
-    height: 100px; /* Adjust the height as needed for a smaller skeleton */
-    background: #f0f0f0; /* Skeleton background color */
+    width: 100px; /* adjust width for a smaller skeleton */
+    height: 100px; /* adjust height as needed for a smaller skeleton */
+    background: #f0f0f0; /* skeleton background color */
     animation: loading 1s infinite;
     border-radius: 8px;
-    margin-right: 16px; /* Add margin for spacing */
+    margin-right: 16px; /* margin for spacing */
   }
   
   .skeleton-image {

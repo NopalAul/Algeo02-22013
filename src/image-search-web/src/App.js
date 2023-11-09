@@ -26,6 +26,10 @@ function App() {
     setUploadedImage(file);
   };
 
+  const handleButtonClick = () => {
+    console.log('Button clicked');
+  }
+
   const value = {
     response,
     isLoading,
@@ -37,7 +41,7 @@ function App() {
 
   return (
     <ImageContext.Provider value={value}>
-      <Header>
+      <Header onButtonClick={handleButtonClick}>
         <ToggleOptions onOptionChange={handleOptionChange} />
         <SearchField selectedOption={selectedOption} handleFileChange={handleFileChange}/>
       </Header>
