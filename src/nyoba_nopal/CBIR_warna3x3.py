@@ -3,7 +3,7 @@ from cosine_similarity import *
 from numpy import *
 
 gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
-gambar2 = cv2.imread('../../src/nyoba_nopal/hitam.jpg')
+gambar2 = cv2.imread('../../src/nyoba_nopal/1.jpg')
 
 # ########## FOR TEST
 # importing os module   
@@ -48,6 +48,7 @@ def coba1(image1, image2):
             img1 = gambar1[int(y):int(y+h), int(x):int(x+w)]
             img2 = gambar2[int(y):int(y+h), int(x):int(x+w)]
             # RGBimage1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+            # cv2.imwrite("inihasil" + str(ih)+str(iw) +  ".png",img1)
             # histogram1 = rgb_to_histogram(img1[ih][iw][0],img1[ih][iw][1],img1[ih][iw][2],histogram1)
             # histogram2 = rgb_to_histogram(img2[ih][iw][0],img2[ih][iw][1],img2[ih][iw][2],histogram2)
 
@@ -94,6 +95,37 @@ def rgb_to_histogram(r,g,b,l):
     v = cmax
     return hsvtohistogram(h,s,v,l)
 
+# Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
+def rgb_to_hsv(r,g,b,l):
+    # normalisasi
+    r = r/255
+    g = g/255
+    b = b/255
+
+    # nilai ekstrim
+    cmax = max(r,g,b)
+    cmin = min(r,g,b)
+    delta = cmax - cmin
+
+    # nilai HSV
+    ## H
+    if cmax == cmin :
+        h = 0
+    elif cmax == r :
+        h = 60*(((g-b)/delta) % 6)
+    elif cmax == g :
+        h = 60*(((b-r)/delta) + 2)
+    else :
+        h = 60*(((r-g)/delta) + 4)
+    ## S
+    if cmax != 0 :
+        s = (delta/cmax)
+    else :
+        s = 0
+    ## V
+    v = cmax
+    return [h,s,v]
+
 # Kuantifikasi nilai HSV
 def quantify_hsv(h,s,v):
     if 360 >= h >= 316:
@@ -139,6 +171,21 @@ def hsvtohistogram(h,s,v,l):
 # print(f"cosine similarity 3x3: {CBIR_warna_33(gambar1,gambar2)}")
 # print(f"cosine similarity 2: {CBIR_warna_noresize(gambar1,gambar2)}")
 
-print(f"cosine similarity : {coba1(gambar1,gambar2)}")
+# print(f"cosine similarity : {coba1(gambar1,gambar2)}")
 # CBIR_warna(gambar1,gambar2)
 # coba1(gambar1,gambar2)
+
+# import cython
+# def printhsv(image):
+#     histogram1 = [0 for i in range(72)]
+
+#     row1, col1 = image.shape[0], image.shape[1]
+#     RGBimage = array(image)
+#     print(RGBimage)
+#     for i in range(0,row1):
+#         for j in range(0,col1):
+#             hsv = rgb_to_hsv(RGBimage[i][j][0],RGBimage[i][j][1],RGBimage[i][j][2],histogram1)
+    
+#     print(hsv)
+
+# printhsv(gambar1)

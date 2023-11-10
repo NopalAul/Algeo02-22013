@@ -26,11 +26,11 @@ if __name__ == '__main__':
     reference_image = cv2.imread('../../img/244/0.jpg')
 
     # list gambar target yang akan dibandingkan
-    target_folder = '../../img/244/'
+    target_folder = '../../img/1/'
     target_images = imageInFolder(target_folder)
 
     # inisialisasi pool multiprocessing dengan jumlah prosesor yang tersedia
-    num_processors = 12 # prosesor denise
+    num_processors = 8 # prosesor denise
     pool = Pool(processes=num_processors)
 
     # bandingkan gambar referensi dengan gambar target secara paralel

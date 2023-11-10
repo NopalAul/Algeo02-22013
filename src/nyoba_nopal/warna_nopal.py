@@ -2,8 +2,8 @@ import cv2
 from cosine_similarity import *
 from numpy import array
 
-gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
-gambar2 = cv2.imread('../../src/nyoba_nopal/hitam.jpg')
+# gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
+# gambar2 = cv2.imread('../../src/nyoba_nopal/1.jpg')
 
 def CBIR_warna(image1,image2):
     # Resize image ke ukuran terkecil (for performance purpose)
@@ -31,8 +31,8 @@ def CBIR_warna(image1,image2):
     histogram2 = [0 for i in range(72)]
 
     # Pencarian histogram global method
-    for i in range(0,row1):
-        for j in range(0,col1):
+    for i in range(0,row1,3):
+        for j in range(0,col1,3):
             histogram1 = rgb_to_histogram(RGBimage1[i][j][0],RGBimage1[i][j][1],RGBimage1[i][j][2],histogram1)
             histogram2 = rgb_to_histogram(RGBimage2[i][j][0],RGBimage2[i][j][1],RGBimage2[i][j][2],histogram2)
 
@@ -162,4 +162,4 @@ def CBIR_warna_33(image1,image2):
     # Return hasil
     return sum/c
 
-print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
+# print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
