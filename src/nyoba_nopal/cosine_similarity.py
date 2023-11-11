@@ -1,5 +1,7 @@
 from math import pow,sqrt
+from numba import jit
 
+@jit(nopython=True)
 def cosine_sim(vector1,vector2):
     # dot product
     dot_prod = 0

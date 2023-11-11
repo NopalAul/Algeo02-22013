@@ -1,6 +1,7 @@
 import cv2
 from cosine_similarity import *
 from numpy import *
+from numba import jit
 
 gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
 gambar2 = cv2.imread('../../src/nyoba_nopal/1.jpg')
@@ -35,9 +36,9 @@ def coba1(image1, image2):
     c = 0
     # Crop out the window and calculate the histogram
     # Number of pieces Horizontally 
-    W_SIZE  = 4 
+    W_SIZE  = 3 
     # Number of pieces Vertically to each Horizontal  
-    H_SIZE = 4
+    H_SIZE = 3
     for ih in range(0, H_SIZE ):
         for iw in range(0, W_SIZE ):
             x = col1/W_SIZE * iw 
@@ -64,6 +65,7 @@ def coba1(image1, image2):
     return sum_cosine/c
 
 # Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
+@jit(nopython=True)
 def rgb_to_histogram(r,g,b,l):
     # normalisasi
     r = r/255
@@ -95,6 +97,7 @@ def rgb_to_histogram(r,g,b,l):
     return hsvtohistogram(h,s,v,l)
 
 # Kuantifikasi nilai HSV
+@jit(nopython=True)
 def quantify_hsv(h,s,v):
     if 360 >= h >= 316:
         h = 0
@@ -127,6 +130,7 @@ def quantify_hsv(h,s,v):
     return [h,s,v]
 
 # Simpan HSV terkuantifikasi ke list l sebagai histogram HSV
+@jit(nopython=True)
 def hsvtohistogram(h,s,v,l):
     [h,s,v] = quantify_hsv(h,s,v)
     index = 24*v + 8*s + h
