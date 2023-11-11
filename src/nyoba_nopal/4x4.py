@@ -3,7 +3,7 @@ from cosine_similarity import *
 from numpy import *
 
 gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
-gambar2 = cv2.imread('../../src/nyoba_nopal/1.jpg')
+gambar2 = cv2.imread('../../src/nyoba_nopal/mobilmerah.jpg')
 
 # ########## FOR TEST
 # importing os module   
@@ -13,58 +13,56 @@ directory = r'C:\Users\Naufal\Documents\003. TAHUN KEDUA\SEMESTER 3\ALGEO\TUBES 
 os.chdir(directory) 
 
 
-def coba1(image1, image2):
+def coba1(image):
     # Resize image ke ukuran terkecil (for performance purpose)
-    row1, col1 = image1.shape[0], image1.shape[1]
-    row2, col2 = image2.shape[0], image2.shape[1]
-
-    if col1*row1 > col2*row2:
-        image1 = cv2.resize(image1, (col2, row2))
-        row1 = row2
-        col1 = col2
-    else:
-        image2 = cv2.resize(image2, (col1, row1))
-        row2 = row1
-        col2 = col1
+    row, col = image.shape[0], image.shape[1]
+    print(row,col)
 
     # Inisialisasi histogram
-    histogram1 = [0 for i in range(72)]
-    histogram2 = [0 for i in range(72)]
+    vector_hsv = [0 for i in range(32)]
 
-    sum_cosine = 0
-    c = 0
     # Crop out the window and calculate the histogram
     # Number of pieces Horizontally 
-    W_SIZE  = 4 
+    W_SIZE  = 4
     # Number of pieces Vertically to each Horizontal  
     H_SIZE = 4
+    s=0
     for ih in range(0, H_SIZE ):
         for iw in range(0, W_SIZE ):
-            x = col1/W_SIZE * iw 
-            y = row1/H_SIZE * ih
-            h = (row1 / H_SIZE)
-            w = (col1 / W_SIZE )
+            vector = [0 for i in range(3)]
+            x = col/W_SIZE * iw 
+            y = row/H_SIZE * ih
+            h = (row / H_SIZE)
+            w = (col / W_SIZE )
             # print(x,y,h,w)
             img1 = gambar1[int(y):int(y+h), int(x):int(x+w)]
-            img2 = gambar2[int(y):int(y+h), int(x):int(x+w)]
             # RGBimage1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
             # cv2.imwrite("inihasil" + str(ih)+str(iw) +  ".png",img1)
-            # histogram1 = rgb_to_histogram(img1[ih][iw][0],img1[ih][iw][1],img1[ih][iw][2],histogram1)
+            # vector_hsv = rgb_to_histogram(img1[ih][iw][0],img1[ih][iw][1],img1[ih][iw][2],vector_hsv)
             # histogram2 = rgb_to_histogram(img2[ih][iw][0],img2[ih][iw][1],img2[ih][iw][2],histogram2)
 
             # loop untuk tiap piksel di 1/9 blocks of image
-            for i in range(0,int(row1/3)):
-                for j in range(0,int(col1/3)):
-                    histogram1 = rgb_to_histogram(img1[i][j][0],img1[i][j][1],img1[i][j][2],histogram1)
-                    histogram2 = rgb_to_histogram(img2[i][j][0],img2[i][j][1],img2[i][j][2],histogram2)
+            print(h,w)
+            for i in range(0,round(h)-2):
+                for j in range(0,round(w)-2):
+                    # if j == 113 or i == 113:
+                    #     print("ono")
+                    vector[0] += rgb_to_histogram(img1[i][j][0],img1[i][j][1],img1[i][j][2])[0]
+                    vector[1] += rgb_to_histogram(img1[i][j][0],img1[i][j][1],img1[i][j][2])[1]
+                    vector[2] += rgb_to_histogram(img1[i][j][0],img1[i][j][1],img1[i][j][2])[2]
+            
+            i += 1
+            j += 1
+            vector[0] /= (i*j)
+            vector[1] /= (i*j)
+            vector[2] /= (i*j)
+            vector_hsv[s:(s+2)] = vector
+            s+=3
 
-                    sum_cosine += cosine_sim(histogram1,histogram2)
-                    c += 1
-
-    return sum_cosine/c
+    return vector_hsv
 
 # Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
-def rgb_to_histogram(r,g,b,l):
+def rgb_to_histogram(r,g,b):
     # normalisasi
     r = r/255
     g = g/255
@@ -92,7 +90,7 @@ def rgb_to_histogram(r,g,b,l):
         s = 0
     ## V
     v = cmax
-    return hsvtohistogram(h,s,v,l)
+    return quantify_hsv(h,s,v)
 
 # Kuantifikasi nilai HSV
 def quantify_hsv(h,s,v):
@@ -127,19 +125,13 @@ def quantify_hsv(h,s,v):
     return [h,s,v]
 
 # Simpan HSV terkuantifikasi ke list l sebagai histogram HSV
-def hsvtohistogram(h,s,v,l):
-    [h,s,v] = quantify_hsv(h,s,v)
-    index = 24*v + 8*s + h
-    l[index] += 1
-    
-    return l
 
 
 # print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
 # print(f"cosine similarity 3x3: {CBIR_warna_33(gambar1,gambar2)}")
 # print(f"cosine similarity 2: {CBIR_warna_noresize(gambar1,gambar2)}")
-
-print(f"cosine similarity : {coba1(gambar1,gambar2)}")
+# coba1(gambar1)
+print(f"cosine : {cosine_sim(coba1(gambar1),coba1(gambar2))}")
 # CBIR_warna(gambar1,gambar2)
 # coba1(gambar1,gambar2)
 
