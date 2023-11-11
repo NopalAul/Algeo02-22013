@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
+import ToggleOptions from "./components/toggleoptions"
 import SearchField from "./components/searchfield";
 import DoraButtonPage from "./components/dora-button-page";
 import NobiButtonPage from "./components/nobi-button-page";
@@ -18,6 +19,7 @@ function App() {
             element={
               <div>
                 <Header onButtonClick={handleButtonClick}>
+                  <ToggleOptions onOptionChange={handleButtonClick}/> {/* sementara aja, harusnya bikin case handle option change */}
                   <SearchField/>
               </Header>
               <Images/>
