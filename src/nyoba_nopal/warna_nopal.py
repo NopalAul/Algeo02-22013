@@ -2,8 +2,8 @@ import cv2
 from cosine_similarity import *
 from numpy import array
 
-gambar1 = cv2.imread('../../src/nyoba_nopal/1000.jpg')
-gambar2 = cv2.imread('../../src/nyoba_nopal/4672.jpg')
+gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
+gambar2 = cv2.imread('../../src/nyoba_nopal/0.jpg')
 
 def CBIR_warna(image1,image2):
     # Resize image ke ukuran terkecil (for performance purpose)
@@ -31,15 +31,12 @@ def CBIR_warna(image1,image2):
     # Pencarian histogram per 3x3 blok gambar
     i = 0
     j = 0
-    for i in range(0,row1):
-        for j in range(0,col1):
+    for i in range(0,512):
+        for j in range(0,512):
             histogram1 = rgb_to_histogram(RGBimage1[i][j][0],RGBimage1[i][j][1],RGBimage1[i][j][2],histogram1)
-            histogram2 = rgb_to_histogram(RGBimage2[i][j][0],RGBimage2[i][j][1],RGBimage2[i][j][2],histogram2)
         
-    print(histogram1)
-    print(histogram2)
     # Komparasi cosine similarity kedua vektor histogram HSV
-    return cosine_sim(histogram1,histogram2)
+    return histogram1
 
 # Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
 def rgb_to_histogram(r,g,b,l):
@@ -52,6 +49,8 @@ def rgb_to_histogram(r,g,b,l):
     cmax = max(r,g,b)
     cmin = min(r,g,b)
     delta = cmax - cmin
+    
+    # print(f"[{g},{b},{delta},{g-b/delta}]", end=" ")
 
     # nilai HSV
     ## H
@@ -70,6 +69,7 @@ def rgb_to_histogram(r,g,b,l):
         s = 0
     ## V
     v = cmax
+    # print(f"[{h},{s},{v}]", end=" ")
     return hsvtohistogram(h,s,v,l)
 
 # Kuantifikasi nilai HSV
@@ -107,11 +107,17 @@ def quantify_hsv(h,s,v):
 # Simpan HSV terkuantifikasi ke list l sebagai histogram HSV
 def hsvtohistogram(h,s,v,l):
     [h,s,v] = quantify_hsv(h,s,v)
+    # print(f"[{h},{s},{v}]", end=" ")
     index = 24*v + 8*s + h
+    if index == 0:
+        print(f"{h} {s} {v} |",end=" ")
+    # print(index,end=" ")
     l[index] += 1
     
     return l
 
 
-print(f"cosine similarity : {CBIR_warna(gambar1,gambar2)}")
+
+print(CBIR_warna(gambar1,gambar2))
+
 # print(f"cosine similarity 2: {CBIR_warna_noresize(gambar1,gambar2)}")
