@@ -41,6 +41,7 @@ const Images = () => {
 
     return (
         <>
+            <h1 className="text-center mt-6 text-2xl text-sky-100"> Result: </h1>
             <div className="flex justify-center items-center">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 my-10 max-w-7xl mx-auto px-4">
                     {isLoading ? (
