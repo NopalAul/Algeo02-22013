@@ -5,7 +5,7 @@ import csv
 import os
 
 output_warna = open("fitur/warna.csv", "w")
-output_tekstur = open("fitur/warna.csv", "w")
+output_tekstur = open("fitur/tekstur.csv", "w")
 
 for imagePath in glob.glob("../../img/dataset/*"):
     imageID = imagePath[imagePath.rfind("/") + 1:]

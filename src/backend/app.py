@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect
+# from flask_cors import CORS
 import cv2
 import os
 import csv
 import shutil
 
 app = Flask(__name__)
+# CORS(app)
 
 @app.route('/')
 def cekawal():
@@ -42,18 +44,18 @@ def search():
     fitur_warna = None # import file .py, panggil fungsinya
     fitur_tekstur = None # import file .py, panggil fungsinya
     search_warna = None('fitur/warna.csv') # pake class, masukkan path .csv
-    search_tekstur = None('fitur/tekstur.csv') # pake class, masukkan path .csv
-    hasil_warna = search_warna.None(fitur_warna) # simpan hasil cosine, panggil fungsi
-    hasil_tekstur = search_tekstur.None(fitur_tekstur) # simpan hasil cosine, panggil fungsi
+    # search_tekstur = None('fitur/tekstur.csv') # pake class, masukkan path .csv
+    # hasil_warna = search_warna.None(fitur_warna) # simpan hasil cosine, panggil fungsi
+    # hasil_tekstur = search_tekstur.None(fitur_tekstur) # simpan hasil cosine, panggil fungsi
 
-    # direktori untuk hasil search
-    os.makedirs('../../img/retrieve') 
+    # # direktori untuk hasil search
+    # os.makedirs('../../img/retrieve') 
 
-    i = 1 # i untuk penamaan
-    for (nilai, IDhasil) in hasil_warna:
-        i += 1
-        hasil = cv2.imread("../../img/dataset/"+IDhasil)
-        simpanRetrieve = cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
+    # i = 1 # i untuk penamaan
+    # for (nilai, IDhasil) in hasil_warna:
+    #     i += 1
+    #     hasil = cv2.imread("../../img/dataset/"+IDhasil)
+    #     simpanRetrieve = cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
     
     return redirect("/home")
 
