@@ -44,6 +44,7 @@ body {
     height: 100%;
 }
 
+/* button color and texture */
 .toggle-options {
     display: flex;
     justify-content: center;
@@ -77,4 +78,24 @@ body {
   
 .toggle-options button:hover {
     background-color: #badfff;
+}
+
+/* upload reference image */
+.ref-img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 10vh;
+  }
+  
+.ref-img {
+    background-color: #078bf7;
+    color: #f6f0f0;
+    padding: 0.625rem 1.5rem;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    width: 200px;
 }

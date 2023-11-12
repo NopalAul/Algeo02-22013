@@ -5,6 +5,7 @@ import SearchField from "./components/searchfield";
 import DoraButtonPage from "./components/dora-button-page";
 import NobiButtonPage from "./components/nobi-button-page";
 import Images from "./components/images";
+import FileInputButton from "./components/fileupload";
 
 function App() {
   const handleButtonClick = () => {
@@ -19,6 +20,7 @@ function App() {
             element={
               <div>
                 <Header onButtonClick={handleButtonClick}>
+                  <FileInputButton/>
                   <ToggleOptions onOptionChange={handleButtonClick}/> {/* sementara aja, harusnya bikin case handle option change */}
                   <SearchField/>
               </Header>
