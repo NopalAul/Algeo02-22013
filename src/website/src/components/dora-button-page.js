@@ -1,5 +1,5 @@
 import React from 'react';
-import './page.css';
+import './styles.css';
 import standingdora from './rsc/dodo_icon.png'; 
 
 const DoraButtonPage = () => {

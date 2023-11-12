@@ -12,17 +12,19 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @app.route('/upload', methods=['POST'])
-def upload_files():
-    files = request.files.getlist('files[]')
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
 
-    for file in files:
-        if file.filename == '':
-            return jsonify({'error': 'No selected file'})
-        
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+
+    if file:
         filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filename)
-
-    return jsonify({'message': 'Files uploaded successfully'})
+        return jsonify({'message': 'File uploaded successfully'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=3005, debug=True)

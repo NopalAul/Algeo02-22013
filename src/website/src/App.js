@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
 import ToggleOptions from "./components/toggleoptions"
-import SearchField from "./components/searchfield";
+import Dataset from "./components/dataset";
 import DoraButtonPage from "./components/dora-button-page";
 import NobiButtonPage from "./components/nobi-button-page";
 import Images from "./components/images";
-import FileInputButton from "./components/fileupload";
+import Search from "./components/search";
 
 function App() {
   const handleButtonClick = () => {
@@ -20,9 +20,9 @@ function App() {
             element={
               <div>
                 <Header onButtonClick={handleButtonClick}>
-                  <FileInputButton/>
+                  <Search/>
                   <ToggleOptions onOptionChange={handleButtonClick}/> {/* sementara aja, harusnya bikin case handle option change */}
-                  <SearchField/>
+                  <Dataset/>
               </Header>
               <Images/>
             </div> }>
