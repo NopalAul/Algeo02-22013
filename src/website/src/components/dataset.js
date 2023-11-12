@@ -14,17 +14,15 @@ const Dataset = () => {
   const handleUpload = () => {
     const formData = new FormData();
     for (let i = 0; i < selectedFile.length; i++) {
-        formData.append(`imagefiles[${i}]`, selectedFile[i]);
+        formData.append(`imagefiles[]`, selectedFile[i]);
       }
 
     axios.post('http://localhost:3005/dataset', formData)
       .then(response => {
         console.log(response.data);
-        // Handle success or update UI as needed
       })
       .catch(error => {
         console.error('Error uploading file', error);
-        // Handle error or update UI accordingly
       });
   };
 
@@ -35,8 +33,8 @@ const Dataset = () => {
             <input
                 type="file"
                 id="datainput"
-                // directory=""
-                // webkitdirectory=""
+                directory=""
+                webkitdirectory=""
                 style={{ display: "none" }}
                 multiple
                 onChange={handleFileChange}
@@ -51,4 +49,4 @@ const Dataset = () => {
     );
 };
 
-export default Dataset; 
+export default Dataset;

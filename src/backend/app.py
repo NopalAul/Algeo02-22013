@@ -12,6 +12,7 @@ CORS(app)
 def cekawal():
 	if os.path.exists('../../img/retrieve') == True :
 		shutil.rmtree('../../img/retrieve') # delete retrieve folder
+        # shutil.rmtree('../../img/uploaded') # delete upload recent image
 		# shutil.rmtree('static/tmp')
 		return redirect('/home')
 	else :
@@ -33,13 +34,23 @@ def home():
 # upload dataset banyak
 @app.route('/dataset', methods=['POST'])
 def upload():
-    images = request.files.getlist('imagefiles')
+    images = request.files.getlist('imagefiles[]')
+    # print('images', images)
+    # print(request.files)
     for image in images:
-        image_path = "../../img/dataset/" + image.filename
+        image_path = "../../img/" + image.filename
         image.save(image_path)
-    
     return redirect("/home")
 
+    # images = request.files.getlist('imagefiles')
+    # for image in images:
+    #     image_path = "../../img/dataset/" + image.filename
+    #     image.save(image_path)
+    
+    # image = request.files['imagefile']
+    # image_path = "../../img/dataset/" + image.filename
+    # image.save(image_path)
+    # return redirect("/home")
 
 # UPLOAD_FOLDER = '../../img/uploaded'
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
