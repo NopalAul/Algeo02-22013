@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import suneo from './rsc/suneo.png'; 
 
 const Images = () => {
     const [images, setImages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const imagesPerPage = 8;
+    const imagesPerPage = 10;
 
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const imagePaths = [
-                    suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo,
-                    suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo,
-                    suneo, suneo
-                ];
-
-                const imageObjects = imagePaths.map((path) => ({ url: path }));
+                const response = await fetch('http://localhost:3005/retrieve-images');
+                const imageUrls = await response.json();
+                const imageObjects = imageUrls.map((url) => ({ url }));
                 setImages(imageObjects);
             } catch (error) {
                 console.error('Error fetching images:', error);
@@ -33,45 +28,85 @@ const Images = () => {
     const indexOfFirstImage = indexOfLastImage - imagesPerPage;
     const currentImages = images.slice(indexOfFirstImage, indexOfLastImage);
 
+    const totalPages = Math.ceil(images.length / imagesPerPage);
+
     const paginate = (pageNumber) => {
-        if (pageNumber > 0 && pageNumber <= Math.ceil(images.length / imagesPerPage)) {
+        if (pageNumber > 0 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
         }
     };
+
+    const getPageNumbers = () => {
+        const pageNumbers = [];
+        const maxPagesToShow = 5;
+
+        if (totalPages <= maxPagesToShow) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
+            let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
+            let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+            if (currentPage <= halfMaxPagesToShow) {
+                startPage = 1;
+                endPage = maxPagesToShow;
+            } else if (currentPage >= totalPages - halfMaxPagesToShow) {
+                startPage = totalPages - maxPagesToShow + 1;
+                endPage = totalPages;
+            }
+
+            if (startPage > 1) {
+                pageNumbers.push(1, '...');
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                pageNumbers.push(i);
+            }
+
+            if (endPage < totalPages) {
+                pageNumbers.push('...', totalPages);
+            }
+        }
+
+        return pageNumbers;
+    };
+
 
     return (
         <>
             <h1 className="text-center mt-6 text-2xl text-sky-100">Result:</h1>
             <h1 className="text-center text-sky-100">{images.length} results</h1>
             <div className="flex justify-center items-center">
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 my-10 max-w-7xl mx-auto px-4">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-10 gap-y-10 my-10 max-w-7xl mx-auto px-4">
                     {isLoading ? (
                         Array(imagesPerPage).fill(null).map((_, index) => (
-                            <Skeleton key={index} height={200} width={'100%'} />
+                            <Skeleton key={index} height={200} width={'100%'} style={{ borderRadius: '10px' }}/>
                         ))
                     ) : (
                         currentImages.map((image, index) => (
-                            <img
-                                key={index}
-                                src={image.url}
-                                alt=""
-                                style={{ width: '80%', height: '100%', objectFit: 'cover' }}
-                            />
+                            <div key={index} className="text-center">
+                                <img
+                                    src={'http://localhost:3005' + image.url}
+                                    alt=""
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                                />
+                                <p className="text-center text-sky-100">{image.url.substring(16, 18) + '.' + image.url.substring(19, 21) + '%'}</p>
+                            </div>
                         ))
                     )}
                 </div>
             </div>
             {/* pagination */}
             <div className='flex justify-center my-4 pb-4'>
-                {Array(Math.ceil(images.length / imagesPerPage))
-                    .fill(null)
-                    .map((_, index) => (
+                {getPageNumbers().map((page, index) => (
                         <button
                             key={index}
-                            onClick={() => paginate(index + 1)}
-                            className={`mx-2 p-2 focus:outline-none rounded-full ${currentPage === index + 1 ? 'bg-sky-800 text-white' : 'bg-sky-200 text-sky-700'}`}
+                            onClick={() => (typeof page === 'number' ? paginate(page) : null)}
+                            className={`mx-2 p-2 focus:outline-none rounded-full ${currentPage === page ? 'bg-sky-800 text-white' : 'bg-sky-200 text-sky-700'}`}
                         >
-                            {index + 1}
+                            {page}
                         </button>
                     ))}
             </div>
