@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import suneo from './rsc/suneo.png'; 
 
 const Images = () => {
     const [images, setImages] = useState([]);
@@ -11,13 +10,9 @@ const Images = () => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const imagePaths = [
-                    suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo,
-                    suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo, suneo,
-                    suneo, suneo
-                ];
-
-                const imageObjects = imagePaths.map((path) => ({ url: path }));
+                const response = await fetch('http://localhost:3005/retrieve-images');
+                const imageUrls = await response.json();
+                const imageObjects = imageUrls.map((path) => ({ url:path }));
                 setImages(imageObjects);
             } catch (error) {
                 console.error('Error fetching images:', error);

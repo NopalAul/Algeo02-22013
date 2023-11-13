@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_cors import CORS
+import taichi as ti
 import cv2
 import os
 import csv
@@ -75,7 +76,8 @@ def search():
 
     # Choose the appropriate image path based on the selected option
     if selected_option == 'texture':
-        os.makedirs('../../img/uploaded')
+        os.makedirs('../../img/uploaded', exist_ok=True)
+        # os.makedirs('../../img/uploaded')
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
 
@@ -83,7 +85,7 @@ def search():
         fitur_tekstur = CBIR_tekstur(imageInput)
         hasil_tekstur = find(fitur_tekstur,selected_option)
 
-        os.makedirs('../../img/retrieve') 
+        os.makedirs('../../img/retrieve', exist_ok=True) 
         i = 1 # i untuk penamaan
         for (nilai, IDhasil) in hasil_tekstur:
             i += 1
@@ -93,8 +95,8 @@ def search():
         return redirect("/home")
 
     elif selected_option == 'color':
-        # os.makedirs(app.config['../../img/uploaded'], exist_ok=True)
-        os.makedirs('../../img/uploaded')
+        os.makedirs('../../img/uploaded', exist_ok=True)
+        # os.makedirs('../../img/uploaded')
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
     
@@ -102,7 +104,7 @@ def search():
         fitur_tekstur = satu_warna(imageInput)
         hasil_tekstur = find(fitur_tekstur,selected_option)
         
-        os.makedirs('../../img/retrieve') 
+        os.makedirs('../../img/retrieve', exist_ok=True) 
         i = 1 # i untuk penamaan
         for (nilai, IDhasil) in hasil_tekstur:
             i += 1
@@ -110,6 +112,18 @@ def search():
             simpanRetrieve = cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
         
         return redirect("/home")
+
+
+@app.route('/retrieve-images')
+def retrieve_images():
+    retrieve_folder = "../../img/retrieve/"
+    image_urls = []
+
+    for filename in os.listdir(retrieve_folder):
+        if filename.endswith(".jpeg"):
+            image_urls.append(f'{retrieve_folder}/{filename}')
+
+    return jsonify(image_urls)
 
 
     # # baca gambar yang diupload BISA GINI GA YA
