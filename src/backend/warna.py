@@ -164,8 +164,11 @@ def satu_warna(image):
     coba1(image,hist)
     return hist
 
+def fitur(image):
+    hist = satu_warna(image)
+    return hist
 
-# warna_csv()
+warna_csv()
 # image = cv2.imread('../../img/dataset/0.jpg')
 # print(satu_warna(image))
 

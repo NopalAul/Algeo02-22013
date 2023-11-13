@@ -99,13 +99,14 @@ def search():
         image.save(image_path)
     
         imageInput = cv2.imread("../../img/uploaded/"+image.filename)
-        fitur_tekstur = satu_warna(imageInput)
+        fitur_tekstur = fitur(imageInput)
         hasil_tekstur = find(fitur_tekstur,selected_option)
         
         os.makedirs('../../img/retrieve') 
         i = 1 # i untuk penamaan
         for (nilai, IDhasil) in hasil_tekstur:
             i += 1
+            print(nilai,IDhasil) # delete
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
             simpanRetrieve = cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
         
