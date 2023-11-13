@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import './styles.css';
+import "./styles.css";
 
 const ToggleOptions = ({ onOptionChange }) => {
-  const [selectedOption, setSelectedOption] = useState("texture");
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
@@ -12,13 +12,13 @@ const ToggleOptions = ({ onOptionChange }) => {
   return (
     <div className="toggle-options">
       <button
-        className={selectedOption === "texture" ? "active" : ""}
+        className={`toggle-button ${selectedOption === "texture" ? "active" : ""}`}
         onClick={() => handleOptionChange("texture")}
       >
         Texture
       </button>
       <button
-        className={selectedOption === "color" ? "active" : ""}
+        className={`toggle-button ${selectedOption === "color" ? "active" : ""}`}
         onClick={() => handleOptionChange("color")}
       >
         Color

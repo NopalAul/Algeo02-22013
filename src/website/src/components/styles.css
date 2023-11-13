@@ -67,8 +67,8 @@ body {
 }
   
 .toggle-options button.active {
-    background-color: #ffffff;
-    color: #056dc2;
+    background-color: #293c6f;
+    color: #ffffff;
 }
   
 .toggle-options button:not(.active) {
