@@ -20,7 +20,7 @@ def cekawal():
 
 @app.route('/home', methods=['GET'])
 def home():
-    dataset = os.listdir('../../img/dataset')
+    # dataset = os.listdir('../../img/dataset')
     
     if os.path.exists('../../img/retrieve') == True:
         nilai_gambar = os.listdir('../../img/retrieve')
@@ -61,10 +61,21 @@ def upload():
 def search():
     image = request.files['imagefile']
     # filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
-    image_path = "../../img/uploaded/" + image.filename
-    image.save(image_path)
-        
+    # image_path = "../../img/uploaded/" + image.filename
+    # image.save(image_path)
 
+    data = request.get_json()
+    if 'selectedOption' in data:
+        selectedOption = data['selectedOption']
+
+        if selectedOption == 'texture':
+            image_path = "../../img/uploaded/" + image.filename
+            image.save(image_path)
+        elif selectedOption == 'color':
+            image_path = "../../img/condicolor/" + image.filename
+            image.save(image_path)
+        
+    
     # # baca gambar yang diupload BISA GINI GA YA
     # imageFind = cv2.imread(f'../../img/uploaded/{image.filename}')
 

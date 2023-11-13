@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import ToggleOptions from './toggleoptions';
 import './styles.css'
 
 const Search = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleUpload = () => {
+  const handleUpload = (selectedOption) => {
+    if (selectedOption === 'texture') {
+      // texture
+    } else if (selectedOption === 'color') {
+      // color
+    }
+
     const formData = new FormData();
     formData.append('imagefile', selectedFile); //nama imagefile harus sama dgn app.py
 
-    axios.post('http://localhost:3005/search', formData)
+    axios.post('http://localhost:3005/search', formData, {selectedOption})
       .then(response => {
         console.log(response.data);
         setImageUrl(URL.createObjectURL(selectedFile));
@@ -29,6 +36,7 @@ const Search = () => {
 
   return (
     <div>
+      <ToggleOptions onOptionChange={setSelectedOption} />
       <div className="ref-img-container">
         <label htmlFor="fileInput" className="ref-img" style={{ fontFamily: 'Comic Sans MS, cursive'}}>
           Insert an Image
