@@ -12,17 +12,13 @@ const Search = () => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleUpload = (selectedOption) => {
-    if (selectedOption === 'texture') {
-      // texture
-    } else if (selectedOption === 'color') {
-      // color
-    }
+  const handleUpload = () => {
 
     const formData = new FormData();
     formData.append('imagefile', selectedFile); //nama imagefile harus sama dgn app.py
+    formData.append('selectedOption', selectedOption);
 
-    axios.post('http://localhost:3005/search', formData, {selectedOption})
+    axios.post('http://localhost:3005/search', formData)
       .then(response => {
         console.log(response.data);
         setImageUrl(URL.createObjectURL(selectedFile));

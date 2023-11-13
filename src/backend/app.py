@@ -59,22 +59,34 @@ def upload():
 # upload gambar yang mau dicari 
 @app.route('/search', methods=['POST'])
 def search():
-    image = request.files['imagefile']
+    # image = request.files['imagefile']
     # filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
     # image_path = "../../img/uploaded/" + image.filename
     # image.save(image_path)
 
-    data = request.get_json()
-    if 'selectedOption' in data:
-        selectedOption = data['selectedOption']
+    # data = request.get_json()
+    # if 'selectedOption' in data:
+    #     selectedOption = data['selectedOption']
 
-        if selectedOption == 'texture':
-            image_path = "../../img/uploaded/" + image.filename
-            image.save(image_path)
-        elif selectedOption == 'color':
-            image_path = "../../img/condicolor/" + image.filename
-            image.save(image_path)
-        
+    #     if selectedOption == 'texture':
+    #         image_path = "../../img/uploaded/" + image.filename
+    #         image.save(image_path)
+    #     elif selectedOption == 'color':
+    #         image_path = "../../img/condicolor/" + image.filename
+    #         image.save(image_path)
+    # Access image file from form data
+    image = request.files['imagefile']
+
+    # Access selected option from form data
+    selected_option = request.form['selectedOption']
+
+    # Choose the appropriate image path based on the selected option
+    if selected_option == 'texture':
+        image_path = "../../img/uploaded/" + image.filename
+        image.save(image_path)
+    elif selected_option == 'color':
+        image_path = "../../img/condicolor/" + image.filename
+        image.save(image_path)
     
     # # baca gambar yang diupload BISA GINI GA YA
     # imageFind = cv2.imread(f'../../img/uploaded/{image.filename}')
