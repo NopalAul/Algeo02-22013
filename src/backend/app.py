@@ -20,7 +20,7 @@ def cekawal():
 
 @app.route('/home', methods=['GET'])
 def home():
-    dataset = os.listdir('../../img/dataset')
+    # dataset = os.listdir('../../img/dataset')
     
     if os.path.exists('../../img/retrieve') == True:
         nilai_gambar = os.listdir('../../img/retrieve')

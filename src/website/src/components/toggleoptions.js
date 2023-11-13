@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './styles.css';
 
 const ToggleOptions = ({ onOptionChange }) => {
-  const [selectedOption, setSelectedOption] = useState("texture");
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
