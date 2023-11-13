@@ -13,15 +13,6 @@ from warna import *
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def cekawal():
-	if os.path.exists('../../img/retrieve') == True :
-		shutil.rmtree('../../img/retrieve') # delete retrieve folder
-        # shutil.rmtree('../../img/uploaded') # delete upload recent image
-		# shutil.rmtree('static/tmp')
-		return redirect('/home')
-	else :
-		return redirect('/home')
 
 @app.route('/home', methods=['GET'])
 def home():
@@ -47,34 +38,20 @@ def upload():
         image.save(image_path)
     return redirect("/home")
 
-    # images = request.files.getlist('imagefiles')
-    # for image in images:
-    #     image_path = "../../img/dataset/" + image.filename
-    #     image.save(image_path)
-    
-    # image = request.files['imagefile']
-    # image_path = "../../img/dataset/" + image.filename
-    # image.save(image_path)
-    # return redirect("/home")
 
-# UPLOAD_FOLDER = '../../img/uploaded'
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# # Ensure the 'uploads' folder exists
-# os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # upload gambar yang mau dicari 
 @app.route('/search', methods=['POST'])
 def search():
-    # image = request.files['imagefile']
-    # # filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
-    # image_path = "../../img/uploaded/" + image.filename
-    # image.save(image_path)
-    
-    # Access image file from form data
+    # Bersihkan direktori
+    if os.path.exists('../../img/retrieve') == True :
+        shutil.rmtree('../../img/retrieve')
+        shutil.rmtree('../../img/uploaded')
+
+    # Akses image file dan selected option dari  form data
     image = request.files['imagefile']
-    # Access selected option from form data
     selected_option = request.form['selectedOption']
 
-    # Choose the appropriate image path based on the selected option
+    # Opsi
     if selected_option == 'texture':
         os.makedirs('../../img/uploaded', exist_ok=True)
         # os.makedirs('../../img/uploaded')
@@ -120,7 +97,8 @@ def retrieve_images():
     retrieve_folder = "../../img/retrieve/"
     image_urls = []
 
-    for filename in os.listdir(retrieve_folder):
+    # Sort nilai image di folder dari yang tertinggi
+    for filename in sorted(os.listdir(retrieve_folder), reverse=True):
         if filename.endswith(".jpeg"):
             image_urls.append(f'/img/retrieve/{filename}')
 
