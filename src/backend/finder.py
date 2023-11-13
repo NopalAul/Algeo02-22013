@@ -28,7 +28,7 @@ output_warna = 'fitur/warna.csv'
 
 def find(inputFeature, option):
     results = {}
-    if option == "texture":
+    if option == 'texture':
         with open(output_tekstur) as f:
             reader = csv.reader(f)
 
@@ -38,7 +38,7 @@ def find(inputFeature, option):
                 results[row[0]] = d
 
             f.close()
-    elif option == "color":
+    elif option == 'color':
         with open(output_warna) as f:
             reader = csv.reader(f)
 
