@@ -5,6 +5,7 @@ import './styles.css'
 
 const Search = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -17,6 +18,7 @@ const Search = () => {
     axios.post('http://localhost:3005/search', formData)
       .then(response => {
         console.log(response.data);
+        setImageUrl(response.data.filename);
         // Handle success or update UI as needed
       })
       .catch(error => {

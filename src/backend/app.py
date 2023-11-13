@@ -12,7 +12,7 @@ CORS(app)
 def cekawal():
 	if os.path.exists('../../img/retrieve') == True :
 		shutil.rmtree('../../img/retrieve') # delete retrieve folder
-		# shutil.rmtree('static/tmp')
+		shutil.rmtree('../../img/uploaded') # delete uploaded recent image
 		return redirect('/home')
 	else :
 		return redirect('/home')
@@ -24,7 +24,7 @@ def home():
     if os.path.exists('../../img/retrieve') == True:
         nilai_gambar = os.listdir('../../img/retrieve')
         similar = sorted(os.listdir('../../img/retrieve'))[0]
-        imageFind = os.listdir('../../img/uploaded')
+        imageFind = os.listdir('../../img/uploaded') # udah gaperlu, dah didisplay 
 
         return render_template('index.html', nilai_gambar = sorted(nilai_gambar), imageFind = (imageFind), similar = (similar), page_status = 1) # page status, untuk nandain berubah tampilan
     else :
@@ -33,9 +33,9 @@ def home():
 # upload dataset banyak
 @app.route('/dataset', methods=['POST'])
 def upload():
-    images = request.files.getlist('imagefiles')
+    images = request.files.getlist('imagefiles[]')
     for image in images:
-        image_path = "../../img/dataset/" + image.filename
+        image_path = "../../img/" + image.filename
         image.save(image_path)
     
     return redirect("/home")
