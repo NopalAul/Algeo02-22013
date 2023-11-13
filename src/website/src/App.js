@@ -20,7 +20,7 @@ function App() {
             element={
               <div>
                 <Header onButtonClick={handleButtonClick}>
-                  <ToggleOptions onOptionChange={handleButtonClick}/> {/* sementara aja, harusnya bikin case handle option change */}
+                  {/* <ToggleOptions onOptionChange={handleButtonClick}/> sementara aja, harusnya bikin case handle option change */}
                   <Search/>
                   <Dataset/>
               </Header>
