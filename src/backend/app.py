@@ -5,6 +5,7 @@ import cv2
 import os
 import csv
 import shutil
+import glob
 
 from tekstur import *
 from finder import *
@@ -27,19 +28,34 @@ def home():
     else :
         return render_template("index.html", page_status = 2)
 
-# upload dataset banyak
+
+# Upload dataset (folder)
 @app.route('/dataset', methods=['POST'])
 def upload():
     images = request.files.getlist('imagefiles[]')
-    # print('images', images)
-    # print(request.files)
     for image in images:
         image_path = "../../img/" + image.filename
         image.save(image_path)
+
+    # Ekstrak tekstur
+    output_tekstur = open("fitur/tekstur.csv", "w")
+    for imagePath in glob.glob("../../img/dataset/*"):
+        imageID = imagePath[imagePath.rfind("\\") + 1:]
+        image = cv2.imread(imagePath)
+
+        fitur_tekstur = CBIR_tekstur(image) # ekstraksi tekstur per gambar
+        fitur_tekstur = [str(f) for f in fitur_tekstur]
+        output_tekstur.write("%s,%s\n" % (imageID, ",".join(fitur_tekstur)))
+
+    output_tekstur.close()
+    # Ekstrak warna
+    warna_csv()
+
+    print("Ekstraksi selesai!") # delete
     return redirect("/home")
 
 
-# upload gambar yang mau dicari 
+# Upload gambar yang mau dicari 
 @app.route('/search', methods=['POST'])
 def search():
     # Bersihkan direktori
@@ -54,7 +70,6 @@ def search():
     # Opsi
     if selected_option == 'texture':
         os.makedirs('../../img/uploaded', exist_ok=True)
-        # os.makedirs('../../img/uploaded')
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
 
@@ -67,13 +82,12 @@ def search():
         for (nilai, IDhasil) in hasil_tekstur:
             i += 1
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
-            simpanRetrieve = cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
+            cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
         
         return redirect("/home")
 
     elif selected_option == 'color':
         os.makedirs('../../img/uploaded', exist_ok=True)
-        # os.makedirs('../../img/uploaded')
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
     
@@ -87,11 +101,11 @@ def search():
             i += 1
             print(nilai,IDhasil) # delete
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
-            simpanRetrieve = cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
+            cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
         
         return redirect("/home")
 
-
+# Mengembalikan similar image ke frontend
 @app.route('/retrieve-images')
 def retrieve_images():
     retrieve_folder = "../../img/retrieve/"
@@ -108,28 +122,6 @@ def retrieve_images():
 def send_report(path):
     return send_from_directory('../../img', path)
 
-
-    # # baca gambar yang diupload BISA GINI GA YA
-    # imageFind = cv2.imread(f'../../img/uploaded/{image.filename}')
-
-    # # ekstraksi fitur gambar
-    # fitur_warna = None # import file .py, panggil fungsinya
-    # fitur_tekstur = None # import file .py, panggil fungsinya
-    # search_warna = None('fitur/warna.csv') # pake class, masukkan path .csv
-    # search_tekstur = None('fitur/tekstur.csv') # pake class, masukkan path .csv
-    # hasil_warna = search_warna.None(fitur_warna) # simpan hasil cosine, panggil fungsi
-    # hasil_tekstur = search_tekstur.None(fitur_tekstur) # simpan hasil cosine, panggil fungsi
-
-    # # direktori untuk hasil search
-    # os.makedirs('../../img/retrieve') 
-
-    # i = 1 # i untuk penamaan
-    # for (nilai, IDhasil) in hasil_warna:
-    #     i += 1
-    #     hasil = cv2.imread("../../img/dataset/"+IDhasil)
-    #     simpanRetrieve = cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
-    
-    # return redirect("/home")
 
     
 

@@ -144,10 +144,10 @@ def coba1(gambar1:image1, hist : histogram):
 # Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
 
 # print(coba1(gambar1))
-output_warna = open("fitur/warna.csv", "w")
 # output_tekstur = open("fitur/tekstur.csv", "w")
 
 def warna_csv():
+    output_warna = open("fitur/warna.csv", "w")
     for imagePath in glob.glob("../../img/dataset/*"):
         imageID = imagePath[imagePath.rfind("\\") + 1:]
         image = cv2.imread(imagePath)
@@ -168,7 +168,7 @@ def fitur(image):
     hist = satu_warna(image)
     return hist
 
-warna_csv()
+# warna_csv()
 # image = cv2.imread('../../img/dataset/0.jpg')
 # print(satu_warna(image))
 
