@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, send_from_directory
 from flask_cors import CORS
 import taichi as ti
 import cv2
@@ -121,9 +121,13 @@ def retrieve_images():
 
     for filename in os.listdir(retrieve_folder):
         if filename.endswith(".jpeg"):
-            image_urls.append(f'{retrieve_folder}/{filename}')
+            image_urls.append(f'/img/retrieve/{filename}')
 
     return jsonify(image_urls)
+
+@app.route('/img/<path:path>')
+def send_report(path):
+    return send_from_directory('../../img', path)
 
 
     # # baca gambar yang diupload BISA GINI GA YA
@@ -152,4 +156,4 @@ def retrieve_images():
 
 
 if __name__ == '__main__':
-    app.run(port=3005, debug=True)  
+    app.run(port=3005, debug=True, threaded=False)

@@ -3,7 +3,7 @@ import axios from 'axios';
 import ToggleOptions from './toggleoptions';
 import './styles.css'
 
-const Search = () => {
+const Search = ({ onSearchComplete }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
@@ -23,6 +23,7 @@ const Search = () => {
         console.log(response.data);
         setImageUrl(URL.createObjectURL(selectedFile));
         // Handle success or update UI as needed
+        onSearchComplete();
       })
       .catch(error => {
         console.error('Error uploading file', error);

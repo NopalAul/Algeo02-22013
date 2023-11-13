@@ -5,7 +5,7 @@ from numpy import array,zeros
 from timeit import default_timer as timer
 
 start = timer()
-ti.init(arch = ti.cpu)
+ti.init(arch=ti.cpu)
 
 def bacaimage(path):
     return cv2.imread(path)

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useState } from 'react';
 import Header from "./components/header";
-import ToggleOptions from "./components/toggleoptions"
 import Dataset from "./components/dataset";
 import DoraButtonPage from "./components/dora-button-page";
 import NobiButtonPage from "./components/nobi-button-page";
@@ -12,24 +12,30 @@ function App() {
     console.log('Button clicked');
   }
 
+  const [searchCompleted, setSearchCompleted] = useState(false);
+
+  const handleSearchComplete = () => {
+    setSearchCompleted(true);
+  };
+
   return (
     <Router>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <div>
-                <Header onButtonClick={handleButtonClick}>
-                  {/* <ToggleOptions onOptionChange={handleButtonClick}/> sementara aja, harusnya bikin case handle option change */}
-                  <Search/>
-                  <Dataset/>
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <div>
+              <Header onButtonClick={handleButtonClick}>
+                <Search onSearchComplete={handleSearchComplete} />
+                <Dataset />
               </Header>
-              <Images/>
-            </div> }>
-          </Route>
-          <Route path="/buttonpage" element={<DoraButtonPage />} />
-          <Route path="/nobi-button-page" element={<NobiButtonPage />} />
-        </Routes>
+              {searchCompleted && <Images />}
+            </div>
+          }
+        />
+        <Route path="/buttonpage" element={<DoraButtonPage />} />
+        <Route path="/nobi-button-page" element={<NobiButtonPage />} />
+      </Routes>
     </Router>
   );
 }
