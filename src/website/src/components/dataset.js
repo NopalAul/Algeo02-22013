@@ -20,11 +20,9 @@ const Dataset = () => {
     axios.post('http://localhost:3005/dataset', formData)
       .then(response => {
         console.log(response.data);
-        // Handle success or update UI as needed
       })
       .catch(error => {
         console.error('Error uploading file', error);
-        // Handle error or update UI accordingly
       });
   };
 
@@ -51,4 +49,4 @@ const Dataset = () => {
     );
 };
 
-export default Dataset; 
+export default Dataset;
