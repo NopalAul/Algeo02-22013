@@ -6,6 +6,8 @@ import os
 import csv
 import shutil
 import glob
+from timeit import default_timer as timer
+
 
 from tekstur import *
 from finder import *
@@ -39,20 +41,8 @@ def upload():
     for image in images:
         image_path = "../../img/" + image.filename
         image.save(image_path)
-
-    # # Ekstrak tekstur
-    # output_tekstur = open("fitur/tekstur.csv", "w")
-    # for imagePath in glob.glob("../../img/dataset/*"):
-    #     imageID = imagePath[imagePath.rfind("\\") + 1:]
-    #     image = cv2.imread(imagePath)
-
-    #     fitur_tekstur = CBIR_tekstur(image) # ekstraksi tekstur per gambar
-    #     fitur_tekstur = [str(f) for f in fitur_tekstur]
-    #     output_tekstur.write("%s,%s\n" % (imageID, ",".join(fitur_tekstur)))
-
-    # output_tekstur.close()
-    # Ekstrak warna
-    # warna_csv()
+    
+    # Ekstraksi fitur image dataset
     command = "python init.py"
     subprocess.run(command, shell=True)
 
@@ -63,6 +53,7 @@ def upload():
 # Upload gambar yang mau dicari 
 @app.route('/search', methods=['POST'])
 def search():
+    start = timer()
     # Bersihkan direktori
     if os.path.exists('../../img/retrieve') == True :
         shutil.rmtree('../../img/retrieve')
@@ -89,31 +80,20 @@ def search():
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
             cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
         
-        return redirect("/home")
 
     elif selected_option == 'color':
         os.makedirs('../../img/uploaded', exist_ok=True)
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
 
-        command = "python warna.py"
+        command = "python warna_individual.py"
         subprocess.run(command, shell=True)
-        # imageInput = cv2.imread("../../img/uploaded/"+image.filename)
-        # fitur(imageInput) # masih error
-        # command = "python warna.py"
-        # subprocess.run(command, shell=True)
-
-        # hasil_tekstur = find(fitur_tekstur,selected_option)
-        
-        # os.makedirs('../../img/retrieve', exist_ok=True) 
-        # i = 1 # i untuk penamaan
-        # for (nilai, IDhasil) in hasil_tekstur:
-        #     i += 1
-        #     print(nilai,IDhasil) # delete
-        #     hasil = cv2.imread("../../img/dataset/"+IDhasil)
-        #     cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
-        
-        return redirect("/home")
+    
+    # Timer
+    end = timer()
+    durasi = end - start
+    print("durasi: ", durasi)
+    return redirect("/home")
 
 # Mengembalikan similar image ke frontend
 @app.route('/retrieve-images')

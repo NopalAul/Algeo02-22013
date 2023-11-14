@@ -114,6 +114,8 @@ ih = ti.i32
 iw = ti.i32
 @ti.kernel
 def coba1(gambar1:image1, hist : histogram):
+    for k in range(1152):
+        hist[k] = 0
     # Resize gambar1 ke ukuran terkecil (for performance purpose)
     h,w = gambar1.shape
     row, col = h,w
@@ -154,6 +156,7 @@ def warna_csv():
     for imagePath in glob.glob("../../img/dataset/*"):
         imageID = imagePath[imagePath.rfind("\\") + 1:]
         image = cv2.imread(imagePath)
+        # image = cv2.imread("../../img/dataset/10.jpg") # delete
         coba1(image,hist)
 
         # ekstraksi fitur gambar
@@ -172,20 +175,23 @@ def fitur():
         image = cv2.imread(imagePath)
         # coba1(image,hist)
 
+    coba1(image,hist)
     selected_option = 'color'
-    fitur_tekstur = satu_warna(image)
+    # fitur_tekstur = satu_warna(image)
+    fitur_tekstur = [float(f) for f in hist]
     # print(fitur_tekstur[5]) # delete
     hasil_tekstur = find(fitur_tekstur,selected_option)
         
     os.makedirs('../../img/retrieve', exist_ok=True) 
-    i = 1 # i untuk penamaan
+    # i = 1 # i untuk penamaan
     for (nilai, IDhasil) in hasil_tekstur:
-        i += 1
+        # i += 1
         # print(nilai,IDhasil) # delete
         hasil = cv2.imread("../../img/dataset/"+IDhasil)
-        cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
+        if(nilai >= 0.6):
+            cv2.imwrite("../../img/retrieve/" + str(nilai) + ".jpeg", hasil)
 
-fitur()
+# fitur()
 # warna_csv()
 # image = cv2.imread('../../img/dataset/0.jpg')
 # print(satu_warna(image))
