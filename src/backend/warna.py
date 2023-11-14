@@ -1,7 +1,10 @@
+import os
 import cv2
 import taichi as ti
 import glob
 from numpy import array,zeros
+from finder import *
+
 from timeit import default_timer as timer
 
 start = timer()
@@ -164,10 +167,25 @@ def satu_warna(image):
     coba1(image,hist)
     return hist
 
-def fitur(image):
-    hist = satu_warna(image)
-    return hist
+def fitur():
+    for imagePath in glob.glob("../../img/uploaded/*"):
+        image = cv2.imread(imagePath)
+        # coba1(image,hist)
 
+    selected_option = 'color'
+    fitur_tekstur = satu_warna(image)
+    # print(fitur_tekstur[5]) # delete
+    hasil_tekstur = find(fitur_tekstur,selected_option)
+        
+    os.makedirs('../../img/retrieve', exist_ok=True) 
+    i = 1 # i untuk penamaan
+    for (nilai, IDhasil) in hasil_tekstur:
+        i += 1
+        # print(nilai,IDhasil) # delete
+        hasil = cv2.imread("../../img/dataset/"+IDhasil)
+        cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
+
+fitur()
 # warna_csv()
 # image = cv2.imread('../../img/dataset/0.jpg')
 # print(satu_warna(image))

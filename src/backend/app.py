@@ -9,7 +9,9 @@ import glob
 
 from tekstur import *
 from finder import *
-from warna import *
+# from warna import *
+
+import subprocess
 
 app = Flask(__name__)
 CORS(app)
@@ -20,13 +22,14 @@ def home():
     # dataset = os.listdir('../../img/dataset')
     
     if os.path.exists('../../img/retrieve') == True:
-        nilai_gambar = os.listdir('../../img/retrieve')
-        similar = sorted(os.listdir('../../img/retrieve'))[0]
-        imageFind = os.listdir('../../img/uploaded') # udah gaperlu, dah didisplay 
+        # nilai_gambar = os.listdir('../../img/retrieve')
+        # similar = sorted(os.listdir('../../img/retrieve'))[0]
+        # imageFind = os.listdir('../../img/uploaded') # udah gaperlu, dah didisplay 
 
-        return render_template('index.html', nilai_gambar = sorted(nilai_gambar), imageFind = (imageFind), similar = (similar), page_status = 1) # page status, untuk nandain berubah tampilan
+        return render_template('index.html') # page status, untuk nandain berubah tampilan
     else :
         return render_template("index.html", page_status = 2)
+    
 
 
 # Upload dataset (folder)
@@ -37,19 +40,21 @@ def upload():
         image_path = "../../img/" + image.filename
         image.save(image_path)
 
-    # Ekstrak tekstur
-    output_tekstur = open("fitur/tekstur.csv", "w")
-    for imagePath in glob.glob("../../img/dataset/*"):
-        imageID = imagePath[imagePath.rfind("\\") + 1:]
-        image = cv2.imread(imagePath)
+    # # Ekstrak tekstur
+    # output_tekstur = open("fitur/tekstur.csv", "w")
+    # for imagePath in glob.glob("../../img/dataset/*"):
+    #     imageID = imagePath[imagePath.rfind("\\") + 1:]
+    #     image = cv2.imread(imagePath)
 
-        fitur_tekstur = CBIR_tekstur(image) # ekstraksi tekstur per gambar
-        fitur_tekstur = [str(f) for f in fitur_tekstur]
-        output_tekstur.write("%s,%s\n" % (imageID, ",".join(fitur_tekstur)))
+    #     fitur_tekstur = CBIR_tekstur(image) # ekstraksi tekstur per gambar
+    #     fitur_tekstur = [str(f) for f in fitur_tekstur]
+    #     output_tekstur.write("%s,%s\n" % (imageID, ",".join(fitur_tekstur)))
 
-    output_tekstur.close()
+    # output_tekstur.close()
     # Ekstrak warna
-    warna_csv()
+    # warna_csv()
+    command = "python init.py"
+    subprocess.run(command, shell=True)
 
     print("Ekstraksi selesai!") # delete
     return redirect("/home")
@@ -90,18 +95,23 @@ def search():
         os.makedirs('../../img/uploaded', exist_ok=True)
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
-    
-        imageInput = cv2.imread("../../img/uploaded/"+image.filename)
-        fitur_tekstur = fitur(imageInput)
-        hasil_tekstur = find(fitur_tekstur,selected_option)
+
+        command = "python warna.py"
+        subprocess.run(command, shell=True)
+        # imageInput = cv2.imread("../../img/uploaded/"+image.filename)
+        # fitur(imageInput) # masih error
+        # command = "python warna.py"
+        # subprocess.run(command, shell=True)
+
+        # hasil_tekstur = find(fitur_tekstur,selected_option)
         
-        os.makedirs('../../img/retrieve', exist_ok=True) 
-        i = 1 # i untuk penamaan
-        for (nilai, IDhasil) in hasil_tekstur:
-            i += 1
-            print(nilai,IDhasil) # delete
-            hasil = cv2.imread("../../img/dataset/"+IDhasil)
-            cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
+        # os.makedirs('../../img/retrieve', exist_ok=True) 
+        # i = 1 # i untuk penamaan
+        # for (nilai, IDhasil) in hasil_tekstur:
+        #     i += 1
+        #     print(nilai,IDhasil) # delete
+        #     hasil = cv2.imread("../../img/dataset/"+IDhasil)
+        #     cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
         
         return redirect("/home")
 
