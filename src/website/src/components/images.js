@@ -92,7 +92,7 @@ const Images = () => {
                                     alt=""
                                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
                                 />
-                                <p className="text-center text-sky-100">{image.url.substring(16, 18) + '.' + image.url.substring(19, 21) + '%'}</p>
+                                <p className="text-center text-sky-100">{image.url.substring(14, 19) + '%'}</p>
                             </div>
                         ))
                     )}

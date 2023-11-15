@@ -11,6 +11,8 @@ from timeit import default_timer as timer
 
 from tekstur import *
 from finder import *
+from warna_individual import *
+from init import *
 # from warna import *
 
 import subprocess
@@ -43,8 +45,10 @@ def upload():
         image.save(image_path)
     
     # Ekstraksi fitur image dataset
-    command = "python init.py"
+    command = "python3 init.py"
     subprocess.run(command, shell=True)
+    # warna_csv()
+    # tekstur_csv()
 
     print("Ekstraksi selesai!") # delete
     return redirect("/home")
@@ -86,9 +90,10 @@ def search():
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
 
-        command = "python warna_individual.py"
+        command = "python3 warna_individual.py"
         subprocess.run(command, shell=True)
-    
+        # fitur()
+
     # Timer
     end = timer()
     durasi = end - start

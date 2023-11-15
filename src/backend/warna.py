@@ -175,21 +175,21 @@ def fitur():
         image = cv2.imread(imagePath)
         # coba1(image,hist)
 
-    coba1(image,hist)
-    selected_option = 'color'
-    # fitur_tekstur = satu_warna(image)
-    fitur_tekstur = [float(f) for f in hist]
-    # print(fitur_tekstur[5]) # delete
-    hasil_tekstur = find(fitur_tekstur,selected_option)
-        
-    os.makedirs('../../img/retrieve', exist_ok=True) 
-    # i = 1 # i untuk penamaan
-    for (nilai, IDhasil) in hasil_tekstur:
-        # i += 1
-        # print(nilai,IDhasil) # delete
-        hasil = cv2.imread("../../img/dataset/"+IDhasil)
-        if(nilai >= 0.6):
-            cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
+        coba1(image,hist)
+        selected_option = 'color'
+        # fitur_tekstur = satu_warna(image)
+        fitur_tekstur = [float(f) for f in hist]
+        # print(fitur_tekstur[5]) # delete
+        hasil_tekstur = find(fitur_tekstur,selected_option)
+            
+        os.makedirs('../../img/retrieve', exist_ok=True) 
+        # i = 1 # i untuk penamaan
+        for (nilai, IDhasil) in hasil_tekstur:
+            # i += 1
+            # print(nilai,IDhasil) # delete
+            hasil = cv2.imread("../../img/dataset/"+IDhasil)
+            if(nilai >= 0.6):
+                cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
 
 # fitur()
 # warna_csv()
