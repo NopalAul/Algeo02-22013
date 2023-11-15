@@ -43,6 +43,8 @@ def upload():
         image.save(image_path)
     
     # Ekstraksi fitur image dataset
+    command = "python3 init.py"
+    subprocess.run(command, shell=True)
     command = "python init.py"
     subprocess.run(command, shell=True)
 
