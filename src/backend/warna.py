@@ -189,7 +189,7 @@ def fitur():
         # print(nilai,IDhasil) # delete
         hasil = cv2.imread("../../img/dataset/"+IDhasil)
         if(nilai >= 0.6):
-            cv2.imwrite("../../img/retrieve/" + str(nilai) + ".jpeg", hasil)
+            cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
 
 # fitur()
 # warna_csv()

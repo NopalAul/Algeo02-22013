@@ -74,11 +74,11 @@ def search():
         hasil_tekstur = find(fitur_tekstur,selected_option)
 
         os.makedirs('../../img/retrieve', exist_ok=True) 
-        i = 1 # i untuk penamaan
+        # i = 1 # i untuk penamaan
         for (nilai, IDhasil) in hasil_tekstur:
-            i += 1
+            # i += 1
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
-            cv2.imwrite("../../img/retrieve/" + str(nilai) + str(i) + ".jpeg", hasil)
+            cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
         
 
     elif selected_option == 'color':
