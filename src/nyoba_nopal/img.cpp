@@ -7,10 +7,11 @@
 #include <array>
 #include "math.h"
 using namespace std;
+#include <time.h>
 
 vector<int> quantify_hsv(double h,double s,double v){
     vector<int> l;
-    if (h <= 25){
+    if (0 < h && h <= 25){
         h = 1;
     }
     else if (25 < h && h <= 40){
@@ -31,7 +32,7 @@ vector<int> quantify_hsv(double h,double s,double v){
     else if (295 < h && h < 316){
         h = 7;
     }
-    else if (h>= 316){
+    else if (h>= 316 || h == 0){
         h = 0;
     }
     if (s < 0.2){
@@ -62,7 +63,7 @@ vector<int> quantify_hsv(double h,double s,double v){
 int rgb_to_histogram(double r,double g,double b){
     // normalisasi
     int index;
-    double delta,h,s,v;
+    double delta,h,s,v,k;
     r = r/255;
     g = g/255;
     b = b/255;
@@ -72,12 +73,18 @@ int rgb_to_histogram(double r,double g,double b){
     double minim = min(r,g);
     minim = min(minim,b);
     delta = maks - minim;
+
+    if (g-b<0){
+        k = b-g;
+    } else {
+        k = g-b;
+    }
     // cout << "[" << g <<","<< b <<","<< delta<<","<< g-b/delta <<"]"<< " ";
     if (maks == minim){
         h = 0;
     }
     else if (maks == r){
-        h = 60*remainder(((g-b)/delta),6);
+        h = 60*remainder(((k)/delta),6);
     }
     else if (maks == g){
         h = 60*(((b-r)/delta) + 2);
@@ -92,6 +99,10 @@ int rgb_to_histogram(double r,double g,double b){
         s = 0;
     }
     v = maks;
+    // if (maks == 0 && minim == 0){
+    //     cout << "a" << " ";
+    //     cout << h << s << v << " ";
+    // }
     vector<int> l_hsv;
     // cout << "[" << h << "," << s << "," << v << "]" << " ";
     l_hsv = quantify_hsv(h,s,v);
@@ -122,18 +133,19 @@ double cosine_sim(array<int,72> vector1,array<int,72> vector2){
 }
 
 
+bool valid(int x){
+    return x >= 0 && x <=72;
+}
+
 array<int,72> matrixToHistogram(vector<int> m){
     int i = 0;
     array<int,72> histogram = {};
-    cout << m.size() << "\n";
+    // cout << m.size() << "\n";
     // Pencarian histogram per 3x3 blok gambar
-    for (i=0;i<m.size();i+=3){
-        if (rgb_to_histogram(m[i],m[i+1], m[i+2]) == 0){
-            cout << "a\n";
-        }
-        // cout << rgb_to_histogram(m[i],m[i+1], m[i+2]) << " ";
+    for (i=0;i<m.size();i+=9){
         histogram[rgb_to_histogram(m[i],m[i+1], m[i+2])]++;
     }
+    // cout << i << " ";
     return histogram;
 }
 
@@ -159,11 +171,31 @@ vector<int> imagetoarray(const char* filename){
 }
 
 int main(){
+    clock_t start, end;
+    double cpu_time_used;
+     
+    start = clock();
     array<int,72> histogram1, histogram2;
+    int sum = 0;
     histogram1 = matrixToHistogram(imagetoarray("0.jpg"));
     histogram2 = matrixToHistogram(imagetoarray("1.jpg"));
-    cout << cosine_sim(histogram1,histogram2);
+    cout << cosine_sim(histogram1,histogram2) << "\n";
     // for (int i = 0; i < histogram1.size(); i++) {
-    //     cout << histogram1[i] << " ";
+    //     sum += histogram2[i];
+    //     cout << histogram2[i] << " ";
     // }
+    // cout << "\n";
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    cout << cpu_time_used;
 }
+// 0 slime
+// 1 knight
+// 3 ymir
+// 4 berserker
+// 5 berserker
+// 6 vam queen
+// 7 assassin guy
+// 8 troll
+// 9 jugger
+// 10 elemental

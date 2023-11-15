@@ -1,11 +1,17 @@
 import cv2
+# from numba import njit
 from numpy import array
 from math import sqrt, pow
 from timeit import default_timer as timer
 
 start = timer()
-gambar1 = cv2.imread('../../src/nyoba_nopal/0.jpg')
-gambar2 = cv2.imread('../../src/nyoba_nopal/1.jpg')
+gambar1 = cv2.imread('../../src/nyoba_nopal/dataset/0.jpg')
+gambar2 = cv2.imread('../../src/nyoba_nopal/dataset/1.jpg')
+
+# print(gambar1,end=' djdjdjd')
+# print(gambar2)
+# gambar1 = array(gambar1)
+# gambar2 = array(gambar2)
 
 def cosine_sim(vector1,vector2):
     # dot product
@@ -24,15 +30,40 @@ def cosine_sim(vector1,vector2):
     
     return dot_prod/mag_total
 
-
+def coba1(image):
+    # Resize image ke ukuran terkecil (for performance purpose)
+    row, col = image.shape[0], image.shape[1]
+    histogram = [0 for i in range(72*16)]
+    # Crop out the window and calculate the histogram
+    # Number of pieces Horizontally 
+    W_SIZE  = 4
+    # Number of pieces Vertically to each Horizontal  
+    H_SIZE = 4
+    c = 0
+    for ih in range(0, H_SIZE ):
+        for iw in range(0, W_SIZE ):
+            vector = [0 for i in range(3)]
+            x = col/W_SIZE * iw 
+            y = row/H_SIZE * ih
+            h = (row / H_SIZE)
+            w = (col / W_SIZE )
+            # print(x,y,h,w)
+            img1 = image[int(y):int(y+h), int(x):int(x+w)]
+            # print(h,w)
+            for i in range(0,round(h)):
+                for j in range(0,round(w)):
+                    index = (ih*4+iw)*72 + rgb_to_index(img1[i][j][0],img1[i][j][1],img1[i][j][2])
+                    # print(rgb_to_index(img1[i][j][0],img1[i][j][1],img1[i][j][2]),end=" ")
+                    histogram[index]+=1
+                    c+=1
+    return histogram
 
 # Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
-def rgb_to_histogram(r,g,b):
+def rgb_to_index(r,g,b):
     # normalisasi
     r = r/255
     g = g/255
     b = b/255
-
     # nilai ekstrim
     cmax = max(r,g,b)
     cmin = min(r,g,b)
@@ -94,43 +125,9 @@ def rgb_to_histogram(r,g,b):
     
     return index
 
-def CBIR_warna(image1):
-    # Resize image ke ukuran terkecil (for performance purpose)
-    row1, col1 = image1.shape[0], image1.shape[1]
-    # row2, col2 = image2.shape[0], image2.shape[1]
-
-    # if col1*row1 > col2*row2:
-    #     image1 = cv2.resize(image1, (col2, row2))
-    #     row1 = row2
-    #     col1 = col2
-    # else:
-    #     image2 = cv2.resize(image2, (col1, row1))
-    #     row2 = row1
-        # col2 = col1
-
-    # Ekstraksi image ke komponen RGB-nya
-    # RGBimage1 = array(cv2.cvtColor(image1, cv2.COLOR_BGR2RGB))
-    # RGBimage2 = array(cv2.cvtColor(image2, cv2.COLOR_BGR2RGB))
-    RGBimage1 = array(image1)
-    # RGBimage2 = array(image2)
-    # print(RGBimage1)
-
-    # Inisialisasi histogram
-    histogram1 = [0 for i in range(72)]
-    # histogram2 = [0 for i in range(72)]
-
-    # Pencarian histogram global method
-    for i in range(0,row1,3):
-        for j in range(0,col1,3):
-            histogram1 [rgb_to_histogram(RGBimage1[i][j][0],RGBimage1[i][j][1],RGBimage1[i][j][2])]+=1
-            # histogram2 [rgb_to_histogram(RGBimage2[i][j][0],RGBimage2[i][j][1],RGBimage2[i][j][2])]+=1
-
-    # print(histogram1)
-    # print(histogram2)
-    
-    # Komparasi cosine similarity kedua vektor histogram HSV
-    return histogram1
-
-print(CBIR_warna(gambar1))
+print(coba1(gambar1))
+print(coba1(gambar2))
+# print(gambar1.shape)
+# print(cosine_sim(coba1(gambar1),coba1(gambar2)))
 end = timer()
 print(end - start)
