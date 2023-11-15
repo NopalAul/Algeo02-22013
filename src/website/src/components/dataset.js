@@ -6,9 +6,12 @@ import axios from 'axios';
 const Dataset = () => {
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [extractionStatus, setExtractionStatus] = useState(null);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files);
+    setExtractionStatus(null);
   };
 
   const handleUpload = () => {
@@ -16,14 +19,29 @@ const Dataset = () => {
     for (let i = 0; i < selectedFile.length; i++) {
         formData.append(`imagefiles[]`, selectedFile[i]);
       }
+    
+    setLoading(true);
 
     axios.post('http://localhost:3005/dataset', formData)
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Error uploading file', error);
-      });
+        .then(response => {
+            console.log(response.data);
+            setExtractionStatus(response.data.message);
+            // Automatically hide the extractionStatus after 3000 milliseconds (3 seconds)
+            setTimeout(() => {
+              setExtractionStatus(null);
+          }, 3000);
+        })
+        .catch(error => {
+            console.error('Error uploading file', error);
+            setExtractionStatus('Error during extraction');
+            // Automatically hide the extractionStatus after 3000 milliseconds (3 seconds)
+            setTimeout(() => {
+              setExtractionStatus(null);
+          }, 3000);
+        })
+        .finally(() => {
+            setLoading(false);
+        });
   };
 
 
@@ -42,9 +60,16 @@ const Dataset = () => {
             <button
                 className="upload-search-button"
                 style={{ fontFamily: 'Comic Sans MS, cursive'}}
-                onClick={handleUpload}>
-                Upload Dataset
+                onClick={handleUpload}
+                disabled={loading} // Disable the button while loading
+            >
+                {loading ? 'Uploading...' : 'Upload Dataset'}
             </button>
+            {extractionStatus && (
+                <p style={{ marginLeft: '10px', fontFamily: 'Comic Sans MS, cursive'}}>
+                    {extractionStatus}
+                </p>
+            )}
         </div>
     );
 };

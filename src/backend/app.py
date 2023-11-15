@@ -11,12 +11,12 @@ from timeit import default_timer as timer
 
 from tekstur import *
 from finder import *
-# from warna import *
 
 import subprocess
 
 app = Flask(__name__)
 CORS(app)
+# app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024 # delete
 
 
 @app.route('/home', methods=['GET'])
@@ -44,11 +44,12 @@ def upload():
     
     # Ekstraksi fitur image dataset
     command = "python3 init.py"
+    subprocess.run(command, shell=True)
     command = "python init.py"
     subprocess.run(command, shell=True)
 
     print("Ekstraksi selesai!") # delete
-    return redirect("/home")
+    return jsonify(message="Dataset selesai diekstrak")
 
 
 # Upload gambar yang mau dicari 
@@ -88,6 +89,7 @@ def search():
         image.save(image_path)
 
         command = "python3 warna_individual.py"
+        subprocess.run(command, shell=True)
         command = "python warna_individual.py"
         subprocess.run(command, shell=True)
     
@@ -95,7 +97,7 @@ def search():
     end = timer()
     durasi = end - start
     print("durasi: ", durasi)
-    return redirect("/home")
+    return jsonify({'durasi': durasi})
 
 # Mengembalikan similar image ke frontend
 @app.route('/retrieve-images')
@@ -108,7 +110,7 @@ def retrieve_images():
         return int(''.join(filter(str.isdigit, filename)))
 
     # Sort nilai image di folder dari yang tertinggi
-    for filename in sorted(os.listdir(retrieve_folder), key=get_numeric_part, reverse=False):
+    for filename in sorted(os.listdir(retrieve_folder), key=lambda x: int(x.split('.')[0]), reverse=True):
         if filename.endswith(".jpeg"):
             image_urls.append(f'/img/retrieve/{filename}')
 
