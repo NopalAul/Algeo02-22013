@@ -7,9 +7,18 @@
     <body>
         <h1>CBIR Dummy Page</h1>
 
-        <form action='/', method="post" enctype="multipart/form-data">
-            <input type="file" name="imagefile">
+        <h2>SEARCH: </h2>
+        <form action='/search', method="post" enctype="multipart/form-data">
+            <input type="file" name="imagefile" multiple>
             <input type="submit" value="Upload Image">
         </form>
+
+        <h2>DATASET: </h2>
+        <form action='/dataset', method="post" enctype="multipart/form-data">
+            <input type="file" name="imagefiles" multiple>
+            <input type="submit" value="Upload Datset">
+        </form>
+
+        <!-- <img src="{{ user_image }}"> -->
     </body>
 </html>
