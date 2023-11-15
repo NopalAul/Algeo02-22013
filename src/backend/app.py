@@ -44,7 +44,6 @@ def upload():
     
     # Ekstraksi fitur image dataset
     command = "python3 init.py"
-    subprocess.run(command, shell=True)
     command = "python init.py"
     subprocess.run(command, shell=True)
 
@@ -88,6 +87,7 @@ def search():
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
 
+        command = "python3 warna_individual.py"
         command = "python warna_individual.py"
         subprocess.run(command, shell=True)
     
@@ -103,8 +103,12 @@ def retrieve_images():
     retrieve_folder = "../../img/retrieve/"
     image_urls = []
 
+    def get_numeric_part(filename):
+        # Extracts the numeric part of the filename
+        return int(''.join(filter(str.isdigit, filename)))
+
     # Sort nilai image di folder dari yang tertinggi
-    for filename in sorted(os.listdir(retrieve_folder), reverse=True):
+    for filename in sorted(os.listdir(retrieve_folder), key=get_numeric_part, reverse=False):
         if filename.endswith(".jpeg"):
             image_urls.append(f'/img/retrieve/{filename}')
 
