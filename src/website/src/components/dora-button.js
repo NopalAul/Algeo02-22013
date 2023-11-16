@@ -12,8 +12,9 @@ const DoraButton = ({ onClick }) => {
     };
 
     return (
-        <button className="custom-button" onClick={handleClick}>
+        <button className="custom-button text-sky-800" onClick={handleClick}>
             <img src={doraemon} alt="Button 1" />
+            About us
         </button>
     );
 }

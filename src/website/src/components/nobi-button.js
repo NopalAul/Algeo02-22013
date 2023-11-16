@@ -12,8 +12,9 @@ const NobiButton = ({ onClick }) => {
     };
 
     return (
-        <button className="custom-button-2" onClick={handleClick}>
+        <button className="custom-button-2 text-sky-800" onClick={handleClick}>
             <img src={nobita} alt="Button 1" />
+            How to Use
         </button>
     );
 }
