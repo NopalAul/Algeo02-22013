@@ -53,10 +53,11 @@ def upload():
 
 
 # Upload gambar yang mau dicari 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['POST', 'GET'])
 def search():
     start = timer()
     # Bersihkan direktori
+    # if request.method == 'POST':
     if os.path.exists('../../img/retrieve') == True :
         shutil.rmtree('../../img/retrieve')
         shutil.rmtree('../../img/uploaded')
@@ -95,9 +96,27 @@ def search():
     
     # Timer
     end = timer()
-    durasi = end - start
-    print("durasi: ", durasi)
-    return jsonify({'durasi': durasi})
+    durasi = round((end - start), 2)
+    print("durasi: ", durasi) # delete
+
+    # Durasi csv
+    os.makedirs('durasi', exist_ok=True)
+    output_durasi = open("durasi/durasi.csv", "w")
+    output_durasi.write("%s\n"%durasi)
+    output_durasi.close()
+    # return jsonify({'durasi': durasi})
+    return redirect('/durasi')
+
+# Mengembalikan durasi
+@app.route('/durasi')
+def durasi():
+    output_durasi = "durasi/durasi.csv"
+    with open(output_durasi) as f:
+        reader = csv.reader(f)
+        data = [row for row in reader]
+    waktu = (data[0])[0]
+    print("dudur: ", (data[0])[0]) # delete
+    return jsonify({'data': waktu})
 
 # Mengembalikan similar image ke frontend
 @app.route('/retrieve-images')
