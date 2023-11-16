@@ -44,6 +44,7 @@ const Dataset = () => {
 
 
     return (
+      <>
         <div className="custom-file-input-container flex items-center">
             <label htmlFor="datainput" className="custom-file-input" style={{ fontFamily: 'Comic Sans MS, cursive'}}>Choose a folder</label>
             <input
@@ -63,12 +64,15 @@ const Dataset = () => {
             >
                 {loading ? 'Uploading...' : 'Upload Dataset'}
             </button>
-            {extractionStatus && (
+            
+        </div>
+        <h1 className="text-center text-red-600">{extractionStatus && (
                 <p style={{ marginLeft: '10px', fontFamily: 'Comic Sans MS, cursive'}}>
                     {extractionStatus}
                 </p>
             )}
-        </div>
+        </h1>
+      </>
     );
 };
 
