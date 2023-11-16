@@ -8,7 +8,7 @@ const DoraButton = ({ onClick }) => {
 
     const handleClick = () => {
         navigate('/buttonpage');
-        onClick(); // Call the onClick function passed as prop
+        onClick();
     };
 
     return (

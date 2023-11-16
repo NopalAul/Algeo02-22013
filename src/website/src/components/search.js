@@ -6,6 +6,7 @@ import './styles.css'
 const Search = ({ onSearchComplete }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -16,19 +17,22 @@ const Search = ({ onSearchComplete }) => {
   const handleUpload = () => {
 
     const formData = new FormData();
-    formData.append('imagefile', selectedFile); //nama imagefile harus sama dgn app.py
+    formData.append('imagefile', selectedFile);
     formData.append('selectedOption', selectedOption);
+
+    setLoading(true);
 
     axios.post('http://localhost:3005/search', formData)
       .then(response => {
         console.log(response.data);
         setImageUrl(URL.createObjectURL(selectedFile));
-        // Handle success or update UI as needed
         onSearchComplete();
       })
       .catch(error => {
         console.error('Error uploading file', error);
-        // Handle error or update UI accordingly
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -48,8 +52,10 @@ const Search = ({ onSearchComplete }) => {
         <button
             className="search-button"
             style={{ fontFamily: 'Comic Sans MS, cursive'}}
-            onClick={handleUpload}>
-            Search
+            onClick={handleUpload}
+            disabled={loading}
+        >
+            {loading ? 'Searching...' : 'Search'}
         </button>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50px' }}>

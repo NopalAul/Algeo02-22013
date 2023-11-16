@@ -1,44 +1,31 @@
-from flask import Flask, render_template, request, redirect, jsonify, send_from_directory, url_for, session
+#--------- File app.py: proses utama (main) ---------#
+# Import library
+from flask import Flask, request, redirect, jsonify, send_from_directory
 from flask_cors import CORS
-import taichi as ti
 import cv2
 import os
 import csv
 import shutil
-import glob
+import subprocess
 from timeit import default_timer as timer
 
-
+# Import dari file
 from tekstur import *
 from finder import *
 
-import subprocess
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 CORS(app)
-# app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024 # delete
 
 
-@app.route('/home', methods=['GET'])
-def home():
-    # dataset = os.listdir('../../img/dataset')
-    
-    if os.path.exists('../../img/retrieve') == True:
-        # nilai_gambar = os.listdir('../../img/retrieve')
-        # similar = sorted(os.listdir('../../img/retrieve'))[0]
-        # imageFind = os.listdir('../../img/uploaded') # udah gaperlu, dah didisplay 
-
-        return render_template('index.html') # page status, untuk nandain berubah tampilan
-    else :
-        return render_template("index.html", page_status = 2)
-    
-
-
-# Upload dataset (folder)
+########## Upload dataset (folder) ##########
 @app.route('/dataset', methods=['POST'])
 def upload():
-    # print('test')
-    # try:
+    # Reset dataset
+    if os.path.exists('../../img/dataset') == True :
+        shutil.rmtree('../../img/dataset')
+        os.makedirs('../../img/dataset')
+
     images = request.files.getlist('imagefiles[]')
     for image in images:
         print(f"File size: {len(image.read())} bytes")
@@ -61,13 +48,12 @@ def upload():
     return redirect("/home")
 
 
-# Upload gambar yang mau dicari 
+########## Upload gambar yang mau dicari ##########
 @app.route('/search', methods=['POST', 'GET'])
 def search():
-    session['start_time'] = timer()
     start = timer()
+
     # Bersihkan direktori
-    # if request.method == 'POST':
     if os.path.exists('../../img/retrieve') == True :
         shutil.rmtree('../../img/retrieve')
         shutil.rmtree('../../img/uploaded')
@@ -77,6 +63,7 @@ def search():
     selected_option = request.form['selectedOption']
 
     # Opsi
+    # Membandingkan cosine similarity tekstur gambar query dengan dataset
     if selected_option == 'texture':
         os.makedirs('../../img/uploaded', exist_ok=True)
         image_path = "../../img/uploaded/" + image.filename
@@ -87,13 +74,12 @@ def search():
         hasil_tekstur = find(fitur_tekstur,selected_option)
 
         os.makedirs('../../img/retrieve', exist_ok=True) 
-        # i = 1 # i untuk penamaan
         for (nilai, IDhasil) in hasil_tekstur:
-            # i += 1
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
             cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
         
 
+    # Membandingkan cosine similarity warna gambar query dengan dataset
     elif selected_option == 'color':
         os.makedirs('../../img/uploaded', exist_ok=True)
         image_path = "../../img/uploaded/" + image.filename
@@ -117,10 +103,9 @@ def search():
     output_durasi = open("durasi/durasi.csv", "w")
     output_durasi.write("%s\n"%durasi)
     output_durasi.close()
-    # return jsonify({'durasi': durasi})
     return redirect('/durasi')
 
-# Mengembalikan durasi
+########## Mengembalikan durasi pencarian ##########
 @app.route('/durasi')
 def durasi():
     output_durasi = "durasi/durasi.csv"
@@ -131,25 +116,11 @@ def durasi():
     print("dudur: ", (data[0])[0]) # delete
     return jsonify({'data': waktu})
 
-@app.route('/retrieve-duration')
-def retrieve_duration():
-    durasi = session.get('durasi', None)
-    print("durasi from session: ", durasi)
-    if durasi is not None:
-        response_data = {'durasi': durasi}
-        return jsonify(response_data)
-    else:
-        return 'Durasi not found in the session.'
-
-# Mengembalikan similar image ke frontend
+########## Mengembalikan similar image ke frontend ##########
 @app.route('/retrieve-images')
 def retrieve_images():
     retrieve_folder = "../../img/retrieve/"
     image_urls = []
-
-    def get_numeric_part(filename):
-        # Extracts the numeric part of the filename
-        return int(''.join(filter(str.isdigit, filename)))
 
     # Sort nilai image di folder dari yang tertinggi
     for filename in sorted(os.listdir(retrieve_folder), key=lambda x: int(x.split('.')[0]), reverse=True):
@@ -163,6 +134,5 @@ def send_report(path):
     return send_from_directory('../../img', path)
 
 
-    
 if __name__ == '__main__':
     app.run(port=3005, debug=True, threaded=False)

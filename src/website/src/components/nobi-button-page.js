@@ -1,10 +1,27 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import standingdora from './rsc/dodo_icon.png'; 
 
 const NobiButtonPage = () => {
+    const navigate = useNavigate();
+
+    const handleBackClick = () => {
+      navigate('/'); // home page
+    };
+
+    const handleDoraemon = () => {
+      navigate('/buttonpage');
+    };
+
     return (
       <div className="button-page-container">
+        <button className="back-button" onClick={handleBackClick}>
+          Home
+        </button>
+        <button className="back-dora-button" onClick={handleDoraemon}>
+          About us
+        </button>
         <h2 className="page-title">ABOUT THIS WEBSITE</h2>
         <p className="page-content">
           Website ini adalah sebuah web sistem temu balik gambar yang diimplementasikan menggunakan pendekatan 
