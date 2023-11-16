@@ -13,10 +13,10 @@ const NobiButtonPage = () => {
           Image Retrieval atau CBIR), di mana sistem temu balik gambar bekerja dengan mengidentifikasi gambar 
           berdasarkan konten visualnya, seperti <strong> warna</strong> dan <strong>tekstur</strong>.
         </p>
-        <h4 className="page-title">CARA KERJA</h4>
+        <h4 className="page-title">CARA PENGGUNAAN</h4>
         <p className="page-content">
-        <strong>1. </strong>Pengguna terlebih dahulu memasukkan dataset gambar dalam bentuk folder yang berisi kumpulan gambar.
-        Dataset gambar ini diperlukan sebelum proses searching agar ada perbandingan untuk gambar yang ingin dicari. </p>
+        <strong>1. </strong>Pengguna terlebih dahulu memasukkan dataset gambar dalam bentuk folder 'dataset' yang berisi kumpulan gambar.
+        Dataset gambar ini diperlukan sebelum proses searching agar terdapat pembanding untuk gambar yang ingin dicari. </p>
         <p className="page-content"> 
         <strong>2. </strong>Setelah dataset sudah dimasukkan, pengguna memasukkan sebuah gambar yang ingin di-search dari dataset. </p>
         <p className="page-content"> 
