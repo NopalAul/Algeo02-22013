@@ -11,13 +11,13 @@ from timeit import default_timer as timer
 
 from tekstur import *
 from finder import *
-# from warna import *
 
 import subprocess
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 CORS(app)
-app.config['MAX_CONTENT_LENGTH'] = 10000 * 10000 * 10000
+# app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024 # delete
+
 
 @app.route('/home', methods=['GET'])
 def home():
@@ -48,6 +48,8 @@ def upload():
     # except:
     #     traceback.print_stack() # delete
     # Ekstraksi fitur image dataset
+    command = "python3 init.py"
+    subprocess.run(command, shell=True)
     command = "python init.py"
     subprocess.run(command, shell=True)
     command = "python3 init.py"
@@ -58,23 +60,14 @@ def upload():
     print("Ekstraksi selesai!") # delete
     return redirect("/home")
 
-@app.before_request
-def before_request():
-    # This function will be called before each request
-    # Calculate the duration and store it in the session
-    if 'durasi' not in session:
-        start_time = session.get('start_time', None)
-        if start_time is not None:
-            end_time = timer()
-            durasi = end_time - start_time
-            session['durasi'] = durasi
 
 # Upload gambar yang mau dicari 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['POST', 'GET'])
 def search():
     session['start_time'] = timer()
     start = timer()
     # Bersihkan direktori
+    # if request.method == 'POST':
     if os.path.exists('../../img/retrieve') == True :
         shutil.rmtree('../../img/retrieve')
         shutil.rmtree('../../img/uploaded')
@@ -106,6 +99,8 @@ def search():
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
 
+        command = "python3 warna_individual.py"
+        subprocess.run(command, shell=True)
         command = "python warna_individual.py"
         subprocess.run(command, shell=True)
         command = "python3 warna_individual.py"
@@ -114,10 +109,27 @@ def search():
 
     # Timer
     end = timer()
-    durasi = end - start
-    session['durasi'] = durasi # simpen di session
-    print("durasi: ", durasi)
-    return redirect("/home")
+    durasi = round((end - start), 2)
+    print("durasi: ", durasi) # delete
+
+    # Durasi csv
+    os.makedirs('durasi', exist_ok=True)
+    output_durasi = open("durasi/durasi.csv", "w")
+    output_durasi.write("%s\n"%durasi)
+    output_durasi.close()
+    # return jsonify({'durasi': durasi})
+    return redirect('/durasi')
+
+# Mengembalikan durasi
+@app.route('/durasi')
+def durasi():
+    output_durasi = "durasi/durasi.csv"
+    with open(output_durasi) as f:
+        reader = csv.reader(f)
+        data = [row for row in reader]
+    waktu = (data[0])[0]
+    print("dudur: ", (data[0])[0]) # delete
+    return jsonify({'data': waktu})
 
 @app.route('/retrieve-duration')
 def retrieve_duration():
