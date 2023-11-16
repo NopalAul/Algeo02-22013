@@ -223,6 +223,16 @@ body {
     font-weight: bold;
   }
   
+  /* try again? */
+
+  .try-again-button {
+    transition: #1f2d53 0.8s ease;
+  }
+  
+  .try-again-button:hover {
+    background-color: #1f2d53;
+    color:#ffffff;
+  }
   
   
   

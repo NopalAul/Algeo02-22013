@@ -4,6 +4,7 @@ import ToggleOptions from './toggleoptions';
 import './styles.css'
 
 const Search = ({ onSearchComplete }) => {
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);

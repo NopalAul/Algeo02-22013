@@ -4,10 +4,8 @@ import taichi as ti
 import glob
 from numpy import array,zeros
 from finder import *
-
 from timeit import default_timer as timer
 
-start = timer()
 ti.init(arch=ti.cpu)
 
 def bacaimage(path):
@@ -22,30 +20,6 @@ hist = zeros(72*16)
 
 
 @ti.func
-def cosine_sim(vector1 : histogram, vector2 : histogram):
-    # dot product
-    dot_prod = 0
-    ti.loop_config(parallelize=2, block_dim=1)
-    for i in range(len(vector1)):
-        dot_prod += vector1[i]*vector2[i]
-    # vector magnitude
-    mag_vector1 = 0
-    mag_vector2 = 0
-
-    ti.loop_config(parallelize=2, block_dim=1)
-    for i in range(len(vector1)):
-        mag_vector1 += ti.math.pow(vector1[i],2)
-    
-    ti.loop_config(parallelize=2, block_dim=1)
-    for i in range(len(vector2)):
-        mag_vector2 += ti.math.pow(vector2[i],2)
-    
-    mag_total = ti.math.sqrt(mag_vector1)*ti.math.sqrt(mag_vector2)
-    # result
-    
-    result =  dot_prod/mag_total
-
-@ti.func
 def rgb_to_index(r : ti.f32,g : ti.f32, b : ti.f32):
     # normalisasi
     h = r/255
@@ -55,11 +29,8 @@ def rgb_to_index(r : ti.f32,g : ti.f32, b : ti.f32):
     cmax = ti.max(h,s,v)
     cmin = ti.min(h,s,v)
     delta = cmax - cmin
-    # print(f"[{g},{b},{delta},{g-b/delta}]", end=" ")
-
     # nilai HSV
     ## H
-    # s = 0
     if cmax == cmin :
         h = 0
     elif cmax == r :
@@ -105,35 +76,31 @@ def rgb_to_index(r : ti.f32,g : ti.f32, b : ti.f32):
         hsv[2] = 1
     elif v >= 0.7:
         hsv[2] = 2
-    # [h,s,v] = quantify_hsv(h,s,v)
-    # print(f"[{h},{s},{v}]", end=" ")
+
     index[None] = 24*hsv[2] + 8*hsv[1] + hsv[0]
-    # print(index,end=" "
 
 ih = ti.i32
 iw = ti.i32
 @ti.kernel
-def coba1(gambar1:image1, hist : histogram):
+def rgb_to_histogram(gambar1:image1, hist : histogram):
+    # Inisialisasi histogram
     for k in range(1152):
         hist[k] = 0
-    # Resize gambar1 ke ukuran terkecil (for performance purpose)
+
+    # Height & weight
     h,w = gambar1.shape
     row, col = h,w
-    # Crop out the window and calculate the histogram
-    # Number of pieces Horizontally 
-    W_SIZE  = 4
-    # Number of pieces Vertically to each Horizontal  
-    H_SIZE = 4
+
+    # Ekstrak warna dari 4x4 blok gambar
+    weight_size  = 4
+    height_size = 4
     ti.loop_config(serialize=True)
-    for ih in range(0, H_SIZE ):
-        for iw in range(0, W_SIZE ):
-            x = col/W_SIZE * iw 
-            y = row/H_SIZE * ih
-            t = (row / H_SIZE)
-            l = (col / W_SIZE )
-            # print(x,y,h,w)
-            # img1 = gambar1[int(y):int(y+h), int(x):int(x+w)]
-            # print(h,w)
+    for ih in range(0, height_size ):
+        for iw in range(0, weight_size ):
+            x = col/weight_size * iw 
+            y = row/height_size * ih
+            t = (row / height_size)
+            l = (col / weight_size )
             y = ti.math.round(y,dtype = ti.i32)
             x = ti.math.round(x,dtype = ti.i32)
 
@@ -143,50 +110,34 @@ def coba1(gambar1:image1, hist : histogram):
                     b = ti.i32(j+x)
                     rgb_to_index(gambar1[a,b][0],gambar1[a,b][1],gambar1[a,b][2])
                     idx = (ih*4 + iw)*72 + index[None]
-                    # print(ih,iw,end=" ")
                     hist[idx] += 1
 
-# Konversi RGB space ke HSV space, lalu ke histogram (kuantifikasi)
-
-# print(coba1(gambar1))
-# output_tekstur = open("fitur/tekstur.csv", "w")
 
 def warna_csv():
     output_warna = open("fitur/warna.csv", "w")
     for imagePath in glob.glob("../../img/dataset/*"):
         imageID = imagePath[imagePath.rfind("\\") + 1:]
         image = cv2.imread(imagePath)
-        # image = cv2.imread("../../img/dataset/10.jpg") # delete
-        coba1(image,hist)
-
-        # ekstraksi fitur gambar
-        fitur_warna = None # import file .py, panggil fungsinya
-        fitur_tekstur = None # import file .py, panggil fungsinya
+        rgb_to_histogram(image,hist)
 
         features = [str(f) for f in hist]
         output_warna.write("%s,%s\n" % (imageID, ",".join(features)))
 
 def satu_warna(image):
-    coba1(image,hist)
+    rgb_to_histogram(image,hist)
     return hist
 
 def fitur():
     for imagePath in glob.glob("../../img/uploaded/*"):
         image = cv2.imread(imagePath)
-        # coba1(image,hist)
 
-        coba1(image,hist)
+        rgb_to_histogram(image,hist)
         selected_option = 'color'
-        # fitur_tekstur = satu_warna(image)
-        fitur_tekstur = [float(f) for f in hist]
-        # print(fitur_tekstur[5]) # delete
-        hasil_tekstur = find(fitur_tekstur,selected_option)
+        fitur_warna = [float(f) for f in hist]
+        hasil_warna = find(fitur_warna,selected_option)
             
         os.makedirs('../../img/retrieve', exist_ok=True) 
-        # i = 1 # i untuk penamaan
-        for (nilai, IDhasil) in hasil_tekstur:
-            # i += 1
-            # print(nilai,IDhasil) # delete
+        for (nilai, IDhasil) in hasil_warna:
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
             if(nilai >= 0.6):
                 cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
@@ -197,10 +148,10 @@ def fitur():
 # print(satu_warna(image))
 
 # output_warna.write("%s,%s\n" % (1, ",".join(features)))
-# coba1(gambar1,hist)
+# rgb_to_histogram(gambar1,hist)
 # for i in hist:
 #     if i != 0:
 #         print(i)
 # print(hist)
-end = timer()
-print(end - start)
+# end = timer()
+# print(end - start) # delete

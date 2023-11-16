@@ -29,7 +29,7 @@ function App() {
                 <Search onSearchComplete={handleSearchComplete} />
                 <Dataset />
               </Header>
-              {searchCompleted && <Images />}
+              {searchCompleted && <Images/>}
             </div>
           }
         />

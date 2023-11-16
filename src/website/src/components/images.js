@@ -6,6 +6,8 @@ const Images = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const imagesPerPage = 10;
+    const [imagesLoaded, setImagesLoaded] = useState(false);
+    const [time, setTime] = useState(null);
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -18,10 +20,12 @@ const Images = () => {
                 console.error('Error fetching images:', error);
             } finally {
                 setIsLoading(false);
+                setImagesLoaded(true);
             }
         };
 
         fetchImages();
+        
     }, []);
 
     const indexOfLastImage = currentPage * imagesPerPage;
@@ -73,11 +77,16 @@ const Images = () => {
         return pageNumbers;
     };
 
+    const handleHomeRedirect = () => {
+        window.location.reload();
+      };
+
 
     return (
         <>
             <h1 className="text-center mt-6 text-2xl text-sky-100">Result:</h1>
             <h1 className="text-center text-sky-100">{images.length} results</h1>
+            {/* <h1 className="text-center text-sky-100">{time !== null ? `Time: ${time} seconds` : 'Loading time...'}</h1> */}
             <div className="flex justify-center items-center">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-10 gap-y-10 my-10 max-w-7xl mx-auto px-4">
                     {isLoading ? (
@@ -110,6 +119,17 @@ const Images = () => {
                         </button>
                     ))}
             </div>
+            {/* render button only if images are loaded (try again?) */}
+            {imagesLoaded && (
+                <div className="flex justify-center my-4 pb-4">
+                <button
+                    onClick={handleHomeRedirect}
+                    className="mx-2 p-2 focus:outline-none rounded-full bg-sky-200 text-sky-700 try-again-button"
+                >
+                    Try again?
+                </button>
+                </div>
+            )}
         </>
     );
 };
