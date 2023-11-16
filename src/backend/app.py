@@ -11,12 +11,12 @@ from timeit import default_timer as timer
 
 from tekstur import *
 from finder import *
-# from warna import *
 
 import subprocess
 
 app = Flask(__name__)
 CORS(app)
+# app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024 # delete
 
 
 @app.route('/home', methods=['GET'])
@@ -49,14 +49,15 @@ def upload():
     subprocess.run(command, shell=True)
 
     print("Ekstraksi selesai!") # delete
-    return redirect("/home")
+    return jsonify(message="Dataset selesai diekstrak")
 
 
 # Upload gambar yang mau dicari 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['POST', 'GET'])
 def search():
     start = timer()
     # Bersihkan direktori
+    # if request.method == 'POST':
     if os.path.exists('../../img/retrieve') == True :
         shutil.rmtree('../../img/retrieve')
         shutil.rmtree('../../img/uploaded')
@@ -88,14 +89,34 @@ def search():
         image_path = "../../img/uploaded/" + image.filename
         image.save(image_path)
 
+        command = "python3 warna_individual.py"
+        subprocess.run(command, shell=True)
         command = "python warna_individual.py"
         subprocess.run(command, shell=True)
     
     # Timer
     end = timer()
-    durasi = end - start
-    print("durasi: ", durasi)
-    return redirect("/home")
+    durasi = round((end - start), 2)
+    print("durasi: ", durasi) # delete
+
+    # Durasi csv
+    os.makedirs('durasi', exist_ok=True)
+    output_durasi = open("durasi/durasi.csv", "w")
+    output_durasi.write("%s\n"%durasi)
+    output_durasi.close()
+    # return jsonify({'durasi': durasi})
+    return redirect('/durasi')
+
+# Mengembalikan durasi
+@app.route('/durasi')
+def durasi():
+    output_durasi = "durasi/durasi.csv"
+    with open(output_durasi) as f:
+        reader = csv.reader(f)
+        data = [row for row in reader]
+    waktu = (data[0])[0]
+    print("dudur: ", (data[0])[0]) # delete
+    return jsonify({'data': waktu})
 
 # Mengembalikan similar image ke frontend
 @app.route('/retrieve-images')
@@ -103,8 +124,12 @@ def retrieve_images():
     retrieve_folder = "../../img/retrieve/"
     image_urls = []
 
+    def get_numeric_part(filename):
+        # Extracts the numeric part of the filename
+        return int(''.join(filter(str.isdigit, filename)))
+
     # Sort nilai image di folder dari yang tertinggi
-    for filename in sorted(os.listdir(retrieve_folder), reverse=True):
+    for filename in sorted(os.listdir(retrieve_folder), key=lambda x: int(x.split('.')[0]), reverse=True):
         if filename.endswith(".jpeg"):
             image_urls.append(f'/img/retrieve/{filename}')
 
