@@ -26,7 +26,6 @@ const Dataset = () => {
         .then(response => {
             console.log(response.data);
             setExtractionStatus(response.data.message);
-            // Automatically hide the extractionStatus after 3000 milliseconds (3 seconds)
             setTimeout(() => {
               setExtractionStatus(null);
           }, 3000);
@@ -34,7 +33,6 @@ const Dataset = () => {
         .catch(error => {
             console.error('Error uploading file', error);
             setExtractionStatus('Error during extraction');
-            // Automatically hide the extractionStatus after 3000 milliseconds (3 seconds)
             setTimeout(() => {
               setExtractionStatus(null);
           }, 3000);
@@ -61,7 +59,7 @@ const Dataset = () => {
                 className="upload-search-button"
                 style={{ fontFamily: 'Comic Sans MS, cursive'}}
                 onClick={handleUpload}
-                disabled={loading} // Disable the button while loading
+                disabled={loading}
             >
                 {loading ? 'Uploading...' : 'Upload Dataset'}
             </button>
