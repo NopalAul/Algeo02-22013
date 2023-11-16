@@ -69,7 +69,8 @@ def search():
         os.makedirs('../../img/retrieve', exist_ok=True) 
         for (nilai, IDhasil) in hasil_tekstur:
             hasil = cv2.imread("../../img/dataset/"+IDhasil)
-            cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
+            if(nilai >= 0.6):
+                cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
         
 
     # Membandingkan cosine similarity warna gambar query dengan dataset
