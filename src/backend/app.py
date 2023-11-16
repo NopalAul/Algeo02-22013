@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify, send_from_directory, url_for
+from flask import Flask, render_template, request, redirect, jsonify, send_from_directory, url_for, session
 from flask_cors import CORS
 import taichi as ti
 import cv2
@@ -14,9 +14,8 @@ from finder import *
 # from warna import *
 
 import subprocess
-import traceback
-
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 10000 * 10000 * 10000
 
@@ -59,10 +58,21 @@ def upload():
     print("Ekstraksi selesai!") # delete
     return redirect("/home")
 
+@app.before_request
+def before_request():
+    # This function will be called before each request
+    # Calculate the duration and store it in the session
+    if 'durasi' not in session:
+        start_time = session.get('start_time', None)
+        if start_time is not None:
+            end_time = timer()
+            durasi = end_time - start_time
+            session['durasi'] = durasi
 
 # Upload gambar yang mau dicari 
 @app.route('/search', methods=['POST'])
 def search():
+    session['start_time'] = timer()
     start = timer()
     # Bersihkan direktori
     if os.path.exists('../../img/retrieve') == True :
@@ -105,12 +115,19 @@ def search():
     # Timer
     end = timer()
     durasi = end - start
+    session['durasi'] = durasi # simpen di session
     print("durasi: ", durasi)
-    return redirect(url_for('retrieve_duration', var=durasi))
+    return redirect("/home")
 
-@app.route('/retrieve_duration/<var>')
-def retrieve_duration(var):
-    return jsonify({'durasi' : var})
+@app.route('/retrieve-duration')
+def retrieve_duration():
+    durasi = session.get('durasi', None)
+    print("durasi from session: ", durasi)
+    if durasi is not None:
+        response_data = {'durasi': durasi}
+        return jsonify(response_data)
+    else:
+        return 'Durasi not found in the session.'
 
 # Mengembalikan similar image ke frontend
 @app.route('/retrieve-images')
@@ -135,7 +152,5 @@ def send_report(path):
 
 
     
-
-
 if __name__ == '__main__':
     app.run(port=3005, debug=True, threaded=False)

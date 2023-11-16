@@ -25,6 +25,18 @@ const Images = () => {
         };
 
         fetchImages();
+
+        const fetchTime = async () => {
+            try {
+                const responseTime = await fetch('http://localhost:3005/retrieve-duration');
+                const duration = await responseTime.json();
+                setTime(duration.durasi);
+            } catch (error) {
+                console.error('Error fetching time:', error);
+            }
+        };
+
+        fetchTime();
         
     }, []);
 
@@ -86,7 +98,7 @@ const Images = () => {
         <>
             <h1 className="text-center mt-6 text-2xl text-sky-100">Result:</h1>
             <h1 className="text-center text-sky-100">{images.length} results</h1>
-            {/* <h1 className="text-center text-sky-100">{time !== null ? `Time: ${time} seconds` : 'Loading time...'}</h1> */}
+            <h1 className="text-center text-sky-100">{time !== null ? `Time: ${time} seconds` : 'Loading time...'}</h1>
             <div className="flex justify-center items-center">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-10 gap-y-10 my-10 max-w-7xl mx-auto px-4">
                     {isLoading ? (
