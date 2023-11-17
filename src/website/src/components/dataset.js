@@ -2,6 +2,8 @@ import "./styles.css";
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dataset = () => {
 
@@ -25,6 +27,7 @@ const Dataset = () => {
     axios.post('http://localhost:3005/dataset', formData)
         .then(response => {
             console.log(response.data);
+            toast.success('Upload process completed!');
             setExtractionStatus(response.data.message);
             setTimeout(() => {
               setExtractionStatus(null);
@@ -32,6 +35,7 @@ const Dataset = () => {
         })
         .catch(error => {
             console.error('Error uploading file', error);
+            toast.error('Error during upload :(');
             setExtractionStatus('Error during extraction');
             setTimeout(() => {
               setExtractionStatus(null);
@@ -72,6 +76,11 @@ const Dataset = () => {
                 </p>
             )}
         </h1>
+        <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            className="toast-container-custom"
+            bodyClassName="toast-content-custom"/>
       </>
     );
 };

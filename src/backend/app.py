@@ -45,7 +45,7 @@ def upload():
     # tekstur_csv()
 
     print("Ekstraksi selesai!") # delete
-    return redirect("/home")
+    return ('Ekstraksi selesai!')
 
 
 ########## Upload gambar yang mau dicari ##########

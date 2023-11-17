@@ -252,7 +252,7 @@ body {
     background-color: #0056b3;
   }
 
-   /* back to doraemon*/
+  /* back to page */
    .back-dora-button {
     background-color: #0c4a6e;;
     color: #fff; 
@@ -268,3 +268,14 @@ body {
   .back-dora-button:hover {
     background-color: #0056b3;
   }
+
+/* toast */
+
+.toast-container-custom {
+  border-radius: 20px;
+  /* background-color: #0056b3; */
+  color: #fff;
+}
+.toast-content-custom {
+  border-radius: 20px;
+}
