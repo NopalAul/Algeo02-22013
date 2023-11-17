@@ -37,51 +37,17 @@ Sistem temu balik gambar memungkinkan kita untuk dengan mudah mencari, mengakses
 
 ## Setup
 1. Buka terminal
-2. Clone repository ini dengan `git clone https://github.com/NopalAul/Algeo02-22013`
-3. Install dahulu requierements dengan melakukan <code>pip install -r requirements.txt</code>
+2. Clone repository ini dengan 
+    ```
+    git clone https://github.com/NopalAul/Algeo02-22013
+    ```
+3. Install dahulu requierements dengan melakukan 
+    ```
+    pip install -r requirements.txt
+    ```
 4. Pindah ke direktori *backend* dengan `cd src/backend`
 5. Jalankan file python dengan <code>python app.py</code>
 6. Pindah ke direktori *website* dengan `cd src/website`
 7. Install requierements website dengan command <code>npm install</code>
 8. Jalankan website dengan <code>npm start</code>
 9. buka <code>http://localhost:3000</code> pada peramban dan website sudah dapat digunakan
-
-## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
-
-`write-your-code-here`
-
-
-## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
-
-
-## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
-
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
-
-To do:
-- Feature to be added 1
-- Feature to be added 2
-
-
-## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
-
-
-## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
-
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
