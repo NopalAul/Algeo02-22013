@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import axios from 'axios';
 
 const Images = () => {
     const [images, setImages] = useState([]);
@@ -12,8 +13,8 @@ const Images = () => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await fetch('http://localhost:3005/retrieve-images');
-                const imageUrls = await response.json();
+                const response = await axios.get('http://localhost:3005/retrieve-images');
+                const imageUrls = response.data;
                 const imageObjects = imageUrls.map((url) => ({ url }));
                 setImages(imageObjects);
             } catch (error) {
@@ -26,8 +27,8 @@ const Images = () => {
 
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:3005/durasi');
-                const result = await response.json();
+                const response = await axios.get('http://localhost:3005/durasi');
+                const result = response.data;
                 setData(result.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
