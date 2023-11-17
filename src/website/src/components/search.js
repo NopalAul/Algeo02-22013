@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ToggleOptions from './toggleoptions';
+import { toast } from 'react-toastify';
 import './styles.css'
 
 const Search = ({ onSearchComplete }) => {
@@ -15,6 +16,16 @@ const Search = ({ onSearchComplete }) => {
   };
 
   const handleUpload = () => {
+
+    if (!selectedOption || selectedOption.length === 0) {
+      toast.error('Select texture/color first!');
+      return;
+    }
+
+    if (!selectedFile || selectedFile.length === 0) {
+      toast.error('Please upload a file before searching!');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('imagefile', selectedFile);

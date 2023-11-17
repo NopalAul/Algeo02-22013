@@ -237,36 +237,38 @@ body {
   
   /* back */
   .back-button {
-    background-color: #0c4a6e;;
+    background-color: #0f5f8d;
     color: #fff; 
     padding: 10px 15px;
     font-size: 16px;
     border: none;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 20px 20px 20px 20px;
     cursor: pointer;
     margin-top: 25px; 
     margin-left: 40px; 
   }
   
   .back-button:hover {
-    background-color: #0056b3;
+    background-color: #bae6fd;
+    color: #0f5f8d; 
   }
 
   /* back to page */
    .back-dora-button {
-    background-color: #0c4a6e;;
+    background-color: #0f5f8d;
     color: #fff; 
     padding: 10px 15px;
     font-size: 16px;
     border: none;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 20px 20px 20px 20px;
     cursor: pointer;
     margin-top: 25px; 
     margin-left: 20px; 
   }
   
   .back-dora-button:hover {
-    background-color: #0056b3;
+    background-color: #bae6fd;
+    color: #0f5f8d; 
   }
 
 /* toast */

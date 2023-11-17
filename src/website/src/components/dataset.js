@@ -9,14 +9,18 @@ const Dataset = () => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [extractionStatus, setExtractionStatus] = useState(null);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files);
-    setExtractionStatus(null);
   };
 
   const handleUpload = () => {
+
+    if (!selectedFile || selectedFile.length === 0) {
+      toast.error('Please choose a file before uploading');
+      return;
+    }
+
     const formData = new FormData();
     for (let i = 0; i < selectedFile.length; i++) {
         formData.append(`imagefiles[]`, selectedFile[i]);
@@ -28,18 +32,10 @@ const Dataset = () => {
         .then(response => {
             console.log(response.data);
             toast.success('Upload process completed!');
-            setExtractionStatus(response.data.message);
-            setTimeout(() => {
-              setExtractionStatus(null);
-          }, 3000);
         })
         .catch(error => {
             console.error('Error uploading file', error);
             toast.error('Error during upload :(');
-            setExtractionStatus('Error during extraction');
-            setTimeout(() => {
-              setExtractionStatus(null);
-          }, 3000);
         })
         .finally(() => {
             setLoading(false);
@@ -70,12 +66,6 @@ const Dataset = () => {
             </button>
             
         </div>
-        <h1 className="text-center text-red-600">{extractionStatus && (
-                <p style={{ marginLeft: '10px', fontFamily: 'Comic Sans MS, cursive'}}>
-                    {extractionStatus}
-                </p>
-            )}
-        </h1>
         <ToastContainer
             position="top-center"
             autoClose={5000}

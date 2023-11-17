@@ -14,7 +14,6 @@ from tekstur import *
 from finder import *
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
 CORS(app)
 
 
@@ -28,8 +27,6 @@ def upload():
 
     images = request.files.getlist('imagefiles[]')
     for image in images:
-        print(f"File size: {len(image.read())} bytes")
-        image.seek(0)  # Reset the file pointer to the beginning
         image_path = "../../img/" + image.filename
         image.save(image_path)
     # except:
@@ -45,7 +42,7 @@ def upload():
     # tekstur_csv()
 
     print("Ekstraksi selesai!") # delete
-    return ('Ekstraksi selesai!')
+    return jsonify(message="Upload process completed!")
 
 
 ########## Upload gambar yang mau dicari ##########
