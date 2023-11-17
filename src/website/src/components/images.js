@@ -94,6 +94,14 @@ const Images = () => {
         window.location.reload();
       };
 
+    const handleDownloadPDF = async () => {
+        try {
+            await axios.get('http://localhost:3005/generate-pdf');
+            // Optionally, you can add logic to trigger a download from the frontend.
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+        }
+    };
 
     return (
         <>
@@ -145,6 +153,12 @@ const Images = () => {
                     className="mx-2 p-2 focus:outline-none rounded-full bg-sky-200 text-sky-700 try-again-button"
                 >
                     Try again?
+                </button>
+                <button
+                    onClick={handleDownloadPDF}
+                    className="mx-2 p-2 focus:outline-none rounded-full bg-sky-200 text-sky-700 try-again-button"
+                >
+                    Download Result as PDF
                 </button>
                 </div>
             )}
