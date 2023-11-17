@@ -1,11 +1,7 @@
+#--------- File tekstur.py: algoritma ekstraksi fitur tekstur dari gambar --------###
+# Import library
 import numpy as np
-import math
-# from skimage.feature import graycomatrix, graycoprops # buat ngecek aja
-from finder import cosine_sim
-import time
-import os
-from multiprocessing import Pool
-import cv2
+
 
 ########## CONVERT WARNA TO GRAYSCALE ##########
 def toGrayscale(image):
@@ -38,8 +34,6 @@ def matrixGLCM(image, d=1):
                     pixel1 = image[x1, y1]
                     pixel2 = image[x2, y2]
                     framework_matrix[pixel1, pixel2] += 1
-                    # print("framework matrix:")
-                    # print(framework_matrix)
 
     return framework_matrix
 
@@ -107,44 +101,3 @@ def CBIR_tekstur(image):
     vector = createVector(contrast_sudut0, homogeneity_sudut0, entropy_sudut0, dissimilarity_sudut0, energy_sudut0, correlation_sudut0)
 
     return vector
-
-# ########## MENGAMBIL SEMUA GAMBAR DALAM SATU FOLDER ##########
-# def imageInFolder(folder_path):
-#     image_files = [os.path.join(folder_path, filename) for filename in os.listdir(folder_path) if filename.endswith('.jpg')]
-#     return image_files
-
-##########***** TES *****##########
-
-# if __name__ == '__main__':
-#     start_time = time.time()
-
-#     # list gambar target yang akan dibandingkan
-#     target_folder = 'img/dataset/'
-#     target_images = imageInFolder(target_folder)
-
-#     # baca semua gambar langsung terus simpen ke list, jadi ga ulang ulang cv2 imreadnya
-#     target_images_list = [cv2.imread(image_path) for image_path in target_images]
-
-#     # inisialisasi pool multiprocessing dengan jumlah prosesor yang tersedia
-#     num_processors = 8 # sesuaikan dengan jumlah prosesor yang tersedia
-#     pool = Pool(processes=num_processors)
-
-#     # bandingkan gambar referensi dengan gambar target secara paralel
-#     vectors = pool.starmap(CBIR_tekstur, [(image,) for image in target_images_list])
-
-#     # close pool multiprocessing
-#     pool.close()
-#     pool.join()
-
-#     # Hasil kesamaan citra
-#     for i, vektor in enumerate(vectors):
-#         # print(f"Kesamaan dengan gambar-{i+1}: {similarity * 100:.5f}%")
-#         print(f"vektor gambar-{i+1}: {vektor}%")
-
-#     end_time = time.time()
-
-#     execution_time = end_time - start_time
-#     print(f"Program selesai dalam {execution_time:.2f} detik")
-
-
-

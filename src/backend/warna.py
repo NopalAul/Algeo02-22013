@@ -1,3 +1,5 @@
+#--------- File warna.py: algoritma ekstraksi fitur warna dari gambar ---------#
+# Import library
 import os
 import cv2
 import taichi as ti
@@ -6,11 +8,8 @@ from numpy import array,zeros
 from finder import *
 from timeit import default_timer as timer
 
+########## Inisialisasi kebutuhan taichi untuk optimasi ##########
 ti.init(arch=ti.cpu)
-
-def bacaimage(path):
-    return cv2.imread(path)
-
 image1 = ti.types.ndarray(dtype = ti.math.vec3,ndim=2)
 histogram = ti.types.ndarray(dtype=ti.i32,ndim=1)
 index = ti.field(ti.i32, shape=())
@@ -18,7 +17,7 @@ hsv = ti.field(ti.i32, shape=(3))
 dst = zeros(72,dtype=int)
 hist = zeros(72*16)
 
-
+########## Konversi RGB space ke HSV space ##########
 @ti.func
 def rgb_to_index(r : ti.f32,g : ti.f32, b : ti.f32):
     # normalisasi
@@ -79,6 +78,7 @@ def rgb_to_index(r : ti.f32,g : ti.f32, b : ti.f32):
 
     index[None] = 24*hsv[2] + 8*hsv[1] + hsv[0]
 
+########## Konversi RGB ke histogram HSV ##########
 ih = ti.i32
 iw = ti.i32
 @ti.kernel
@@ -112,8 +112,9 @@ def rgb_to_histogram(gambar1:image1, hist : histogram):
                     idx = (ih*4 + iw)*72 + index[None]
                     hist[idx] += 1
 
-
+########## Untuk file init.py ##########
 def warna_csv():
+    os.remove('fitur/warna.csv')                    # Reset warna.csv saat upload dataset baru
     output_warna = open("fitur/warna.csv", "w")
     for imagePath in glob.glob("../../img/dataset/*"):
         imageID = imagePath[imagePath.rfind("\\") + 1:]
@@ -123,11 +124,9 @@ def warna_csv():
         features = [str(f) for f in hist]
         output_warna.write("%s,%s\n" % (imageID, ",".join(features)))
 
-def satu_warna(image):
-    rgb_to_histogram(image,hist)
-    return hist
-
+########## Untuk file warna_individual.py ##########
 def fitur():
+    # Membandingkan cosine similarity gambar query dengan dataset
     for imagePath in glob.glob("../../img/uploaded/*"):
         image = cv2.imread(imagePath)
 
@@ -141,17 +140,3 @@ def fitur():
         hasil = cv2.imread("../../img/dataset/"+IDhasil)
         if(nilai >= 0.6):
             cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
-
-# fitur()
-# warna_csv()
-# image = cv2.imread('../../img/dataset/0.jpg')
-# print(satu_warna(image))
-
-# output_warna.write("%s,%s\n" % (1, ",".join(features)))
-# rgb_to_histogram(gambar1,hist)
-# for i in hist:
-#     if i != 0:
-#         print(i)
-# print(hist)
-# end = timer()
-# print(end - start) # delete
