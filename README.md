@@ -39,7 +39,7 @@ Sistem temu balik gambar memungkinkan kita untuk dengan mudah mencari, mengakses
     ```
     python -m venv myenv
     ```
-3. Aktivasi virtual environtment dengan
+3. Aktivasi virtual environment dengan
     - Windows:
         ```
         myenv\Scripts\activate
@@ -55,6 +55,6 @@ Sistem temu balik gambar memungkinkan kita untuk dengan mudah mencari, mengakses
 5. Pindah ke direktori *website* dengan `cd src/website`
 6. Install requierements website dengan command <code>npm install</code>
 7. Jalankan website dengan <code>npm start</code>
-8. Buka terminal baru, aktivasi lagi virtual environtment, pindah ke direktori *backend* dengan `cd src/backend`
+8. Buka terminal baru, aktivasi lagi virtual environment, pindah ke direktori *backend* dengan `cd src/backend`
 9. Jalankan file python dengan <code>python app.py</code>
 10. Buka <code>http://localhost:3000</code> pada peramban dan website sudah dapat digunakan
