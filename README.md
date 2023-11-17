@@ -4,12 +4,8 @@
 - Muhammad Naufal Aulia	    13522074
 - Abdullah Mubarak	        13522101
 
-## Website Sistem Temu Balik Gambar
-> Sistem temu balik gambar berbasis website yang diimplementasikan menggunakan pendekatan klasifikasi berbasis konten dengan aljabar vektor.
-<!-- > Live demo [_here_](https://www.example.com).If you have the project hosted somewhere, include the link here. -->
-
 ## Table of Contents
-* [General Info](#general-information)
+* [Tentang Website](#website-sistem-temu-balik-gambar)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
@@ -20,6 +16,12 @@
 * [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
 <!-- * [License](#license) -->
+
+## Website Sistem Temu Balik Gambar
+> Sistem temu balik gambar berbasis website yang diimplementasikan menggunakan pendekatan klasifikasi berbasis konten dengan aljabar vektor.
+<!-- > Live demo [_here_](https://www.example.com).If you have the project hosted somewhere, include the link here. -->
+
+
 
 
 ## General Information
