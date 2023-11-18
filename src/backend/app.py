@@ -8,6 +8,14 @@ import csv
 import shutil
 import subprocess
 from timeit import default_timer as timer
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from PIL import Image
+
+c = canvas.Canvas("hello.pdf")
+c.drawString(100, 100, "Welcome to Reportlab!")
+c.showPage()
+c.save()
 
 # Import dari file
 from tekstur import *
@@ -130,6 +138,69 @@ def retrieve_images():
 @app.route('/img/<path:path>')
 def send_report(path):
     return send_from_directory('../../img', path)
+
+# generate pdf
+
+pdf_counter = 1
+
+def get_next_pdf_filename():
+    global pdf_counter
+    pdf_filename = f"../../img/pdf/result-{pdf_counter}.pdf"
+    pdf_counter += 1
+    return pdf_filename
+
+def resize_image(image_path, width, height):
+    img = Image.open(image_path)
+    img = img.resize((width, height), Image.ANTIALIAS)
+    
+    resized_image_path = image_path.replace(".jpeg", "_resized.jpeg")
+    img.save(resized_image_path, "JPEG")
+    
+    return resized_image_path
+
+@app.route('/generate-pdf')
+def generate_pdf():
+    retrieve_folder = "../../img/retrieve/"
+
+    # next unique PDF filename
+    pdf_filename = get_next_pdf_filename()
+
+    # create new PDF document
+    c = canvas.Canvas(pdf_filename, pagesize=letter)
+
+    # title to the first page
+    c.setFont("Helvetica", 16)
+    c.drawString(100, 750, "Search Result")
+
+    y_position = 500  # initial y position
+    page_number = 1
+
+    for filename in sorted(os.listdir(retrieve_folder), key=lambda x: int(x.split('.')[0]), reverse=True):
+        if filename.endswith(".jpeg"):
+            image_path = os.path.join(retrieve_folder, filename)
+
+            # check if the current y position exceeds the page height
+            if y_position <= 50:
+                # create new page
+                c.showPage()
+                page_number += 1
+                y_position = 500  # reset y position for the new page
+
+            # resize image
+            resized_image_path = resize_image(image_path, width=200, height=150)
+
+            # percentage
+            percentage = filename[0:5]
+
+            # add resize image to page
+            c.drawImage(resized_image_path, 100, y_position, width=200, height=150)
+            c.drawString(150, y_position - 20, f"{percentage}%")
+
+            y_position -= 200
+
+    c.save()
+
+    return send_from_directory('../../img/pdf/', f'result-{pdf_counter-1}.pdf')
 
 
 if __name__ == '__main__':

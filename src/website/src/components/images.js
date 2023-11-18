@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Images = () => {
     const [images, setImages] = useState([]);
@@ -94,6 +96,15 @@ const Images = () => {
         window.location.reload();
       };
 
+    const handleDownloadPDF = async () => {
+        try {
+            await axios.get('http://localhost:3005/generate-pdf');
+            toast.success('PDF generated successfully!', { position: 'top-center', autoClose: 3000 });
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            toast.error('Error generating PDF. Please try again.', { position: 'top-center', autoClose: 3000 });
+        }
+    };
 
     return (
         <>
@@ -145,6 +156,12 @@ const Images = () => {
                     className="mx-2 p-2 focus:outline-none rounded-full bg-sky-200 text-sky-700 try-again-button"
                 >
                     Try again?
+                </button>
+                <button
+                    onClick={handleDownloadPDF}
+                    className="mx-2 p-2 focus:outline-none rounded-full bg-sky-200 text-sky-700 try-again-button"
+                >
+                    Download Result as PDF
                 </button>
                 </div>
             )}
