@@ -25,18 +25,23 @@ CORS(app)
 @app.route('/dataset', methods=['POST'])
 def upload():
     # Reset dataset
+    images = request.files.getlist('imagefiles[]')
+    dirName = images[0].filename.split('/')[0]
     if os.path.exists('../../img/dataset') == True :
         shutil.rmtree('../../img/dataset')
-        os.makedirs('../../img/dataset')
-    else:
-        os.makedirs('../../img/dataset')
 
-    images = request.files.getlist('imagefiles[]')
+    # Buat direktori baru
+    os.makedirs('../../img/' + dirName)
+
+    print(dirName) # delete
     for image in images:
         image_path = "../../img/" + image.filename
         image.save(image_path)
-    # except:
-    #     traceback.print_stack() # delete
+    
+    source_path = os.path.abspath('../../img/' + dirName)
+    destination_path = os.path.abspath('../../img/dataset')
+    os.rename(source_path, destination_path)
+
     # Ekstraksi fitur image dataset
     command = "python3 init.py"
     subprocess.run(command, shell=True)
@@ -44,8 +49,6 @@ def upload():
     subprocess.run(command, shell=True)
     command = "python3 init.py"
     subprocess.run(command, shell=True)
-    # warna_csv()
-    # tekstur_csv()
 
     print("Ekstraksi selesai!") # delete
     return jsonify(message="Upload process completed!")
