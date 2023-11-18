@@ -21,7 +21,6 @@ from finder import *
 app = Flask(__name__)
 CORS(app)
 
-
 ########## Upload dataset (folder) ##########
 @app.route('/dataset', methods=['POST'])
 def upload():
