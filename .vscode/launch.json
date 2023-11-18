@@ -3,28 +3,13 @@
   "configurations": [
     {
       "name": "C/C++ Runner: Debug Session",
-      "type": "lldb",
+      "type": "cppvsdbg",
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug"
-    }
-  ]
-}
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "cppdbg",
-      "request": "launch",
-      "args": [],
-      "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug"
+      "console": "externalTerminal",
+      "cwd": "c:/Users/abdul/OneDrive/Documents/GitHub/Algeo02-22013/src/nyoba_nopal",
+      "program": "c:/Users/abdul/OneDrive/Documents/GitHub/Algeo02-22013/src/nyoba_nopal/build/Debug/outDebug"
     }
   ]
 }

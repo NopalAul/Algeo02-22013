@@ -6,7 +6,10 @@ import cv2
 import os
 import csv
 import shutil
+import urllib.request 
 import subprocess
+import requests
+from bs4 import BeautifulSoup
 from timeit import default_timer as timer
 
 # Import dari file
@@ -123,7 +126,42 @@ def retrieve_images():
 def send_report(path):
     return send_from_directory('../../img', path)
 
+def getdata(url):  
+    r = requests.get(url)  
+    return r.text  
 
+@app.route('/scrape', methods=['POST'])
+def scrape():
+    if os.path.exists('../../img/dataset') == True :
+        shutil.rmtree('../../img/dataset')
+        os.makedirs('../../img/dataset')
+
+    if 'url' not in request.form:
+        print("0 ")
+        return "No URL provided."
+    
+    url = request.form['url']
+    print(url)
+    r = requests.get(url)
+
+    soup = BeautifulSoup(r.content, "html5lib")
+    links = soup.select('div img')
+
+    x = 0
+    for f in links:
+        print(f["src"])
+        img_data = requests.get(f['src']).content
+        with open('../../img/dataset/' + str(x) + '.jpg', 'wb') as handler: 
+            handler.write(img_data)
+        x+=1
+
+    command = "python3 init.py"
+    subprocess.run(command, shell=True)
+    command = "python init.py"
+    subprocess.run(command, shell=True)
+
+    print("Ekstraksi selesai!") # delete
+    return jsonify(message="Dataset selesai diekstrak")
 
 if __name__ == '__main__':
     app.run(port=3005, debug=True, threaded=False)

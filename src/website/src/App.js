@@ -6,6 +6,7 @@ import DoraButtonPage from "./components/dora-button-page";
 import NobiButtonPage from "./components/nobi-button-page";
 import Images from "./components/images";
 import Search from "./components/search";
+import Scraping from "./components/scraping";
 
 function App() {
   const handleButtonClick = () => {
@@ -28,6 +29,7 @@ function App() {
               <Header onButtonClick={handleButtonClick}>
                 <Search onSearchComplete={handleSearchComplete} />
                 <Dataset />
+                <Scraping />
               </Header>
               {searchCompleted && <Images />}
             </div>
