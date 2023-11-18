@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Images = () => {
     const [images, setImages] = useState([]);
@@ -97,9 +99,10 @@ const Images = () => {
     const handleDownloadPDF = async () => {
         try {
             await axios.get('http://localhost:3005/generate-pdf');
-            // Optionally, you can add logic to trigger a download from the frontend.
+            toast.success('PDF generated successfully!', { position: 'top-center', autoClose: 3000 });
         } catch (error) {
             console.error('Error generating PDF:', error);
+            toast.error('Error generating PDF. Please try again.', { position: 'top-center', autoClose: 3000 });
         }
     };
 

@@ -140,10 +140,30 @@ def send_report(path):
     return send_from_directory('../../img', path)
 
 # generate pdf
+
+pdf_counter = 1
+
+def get_next_pdf_filename():
+    global pdf_counter
+    pdf_filename = f"../../img/pdf/result-{pdf_counter}.pdf"
+    pdf_counter += 1
+    return pdf_filename
+
+def resize_image(image_path, width, height):
+    img = Image.open(image_path)
+    img = img.resize((width, height), Image.ANTIALIAS)
+    
+    resized_image_path = image_path.replace(".jpeg", "_resized.jpeg")
+    img.save(resized_image_path, "JPEG")
+    
+    return resized_image_path
+
 @app.route('/generate-pdf')
 def generate_pdf():
     retrieve_folder = "../../img/retrieve/"
-    pdf_filename = "../../img/result.pdf"
+
+    # next unique PDF filename
+    pdf_filename = get_next_pdf_filename()
 
     # create new PDF document
     c = canvas.Canvas(pdf_filename, pagesize=letter)
@@ -164,7 +184,7 @@ def generate_pdf():
                 # create new page
                 c.showPage()
                 page_number += 1
-                y_position = 500  # reset Y position for the new page
+                y_position = 500  # reset y position for the new page
 
             # resize image
             resized_image_path = resize_image(image_path, width=200, height=150)
@@ -180,16 +200,7 @@ def generate_pdf():
 
     c.save()
 
-    return send_from_directory('../../img', 'result.pdf')
-
-def resize_image(image_path, width, height):
-    img = Image.open(image_path)
-    img = img.resize((width, height), Image.ANTIALIAS)
-    
-    resized_image_path = image_path.replace(".jpeg", "_resized.jpeg")
-    img.save(resized_image_path, "JPEG")
-    
-    return resized_image_path
+    return send_from_directory('../../img/pdf/', f'result-{pdf_counter-1}.pdf')
 
 
 if __name__ == '__main__':
