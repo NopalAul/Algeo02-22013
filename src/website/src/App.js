@@ -7,6 +7,7 @@ import NobiButtonPage from "./components/nobi-button-page";
 import Images from "./components/images";
 import Search from "./components/search";
 import Scraping from "./components/scraping";
+import Kamera from "./components/kamera";
 
 function App() {
   const handleButtonClick = () => {
@@ -30,6 +31,7 @@ function App() {
                 <Search onSearchComplete={handleSearchComplete} />
                 <Dataset />
                 <Scraping />
+                <Kamera />
               </Header>
               {searchCompleted && <Images/>}
             </div>

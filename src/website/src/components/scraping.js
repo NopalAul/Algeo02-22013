@@ -29,7 +29,7 @@ const Scraping = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh', marginBottom: '50px'}}>
       <div>
         <h1 className='scrape-title'>Image Scraping</h1>
         <form onSubmit={handleSubmit}>

@@ -29,6 +29,15 @@ const NobiButtonPage = () => {
           menggambarkan dan menganalisis data menggunakan pendekatan klasifikasi berbasis konten (Content-Based 
           Image Retrieval atau CBIR), di mana sistem temu balik gambar bekerja dengan mengidentifikasi gambar 
           berdasarkan konten visualnya, seperti <strong> warna</strong> dan <strong>tekstur</strong>.
+          <br></br> <br></br>
+          <li>
+            Warna: <br></br>
+            Ekstraksi fitur warna (RGB) → Ubah ke HSV → Kuantifikasi ke histogram → Bandingkan histogram dua gambar dengan cosine similarity.
+          </li>
+          <li>
+            Tekstur: <br></br>
+            Ekstraksi fitur warna (RGB) → Ubah ke grayscale → Co-occurence matrix → Ekstraksi tekstur → Bandingkan vektor tekstur dengan cosine similarity.
+          </li>
         </p>
         <h4 className="page-title">CARA PENGGUNAAN</h4>
         <p className="page-content">

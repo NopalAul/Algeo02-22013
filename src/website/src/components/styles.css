@@ -283,7 +283,7 @@ body {
 
 /* scraping */
 .custom-file-input::placeholder {
-  color: #ffffff; /* Change the color to your desired value */
+  color: #ffffff; /* change the color to your desired value */
 }
 
 .scrape-container {
@@ -299,4 +299,24 @@ body {
   color: #075985;
   padding-bottom: 10px;
   letter-spacing: 2px;
+  margin-bottom: 30px;
+}
+
+/* camera button*/
+.cam-button {
+  background-color: #056dc2;
+  color: white;
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: 5px 5px 5px 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+  width: auto;
+  text-align: center;
+  width: 200px;
+}
+
+.cam-button:hover {
+  background-color: #1f2d53;
 }

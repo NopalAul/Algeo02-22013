@@ -8,6 +8,8 @@ import csv
 import shutil
 import subprocess
 import requests
+import base64
+import urllib.request
 from bs4 import BeautifulSoup
 from timeit import default_timer as timer
 from reportlab.pdfgen import canvas
@@ -239,6 +241,25 @@ def scrape():
 
     print("Ekstraksi selesai!") # delete
     return jsonify(message="Dataset selesai diekstrak")
+
+@app.route('/camera', methods=['POST'])
+def capture():
+    # Bersihkan direktori
+    if os.path.exists('../../img/retrieve') == True :
+        shutil.rmtree('../../img/retrieve')
+        shutil.rmtree('../../img/uploaded')
+
+    if os.path.exists('../../img/uploaded') == True :
+        shutil.rmtree('../../img/uploaded')
+    
+    # Akses image file
+    image = request.files['image']
+
+    os.makedirs('../../img/uploaded', exist_ok=True)
+    image_path = "../../img/uploaded/" + "ganteng.jpg"
+    image.save(image_path)
+
+    return jsonify(message="Image has successfully uploaded")
 
 if __name__ == '__main__':
     app.run(port=3005, debug=True, threaded=False)
