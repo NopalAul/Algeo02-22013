@@ -11,7 +11,7 @@ from tekstur import *
 from warna import warna_csv
 
 def ekstrak_tekstur(imagePath):
-    imageID = imagePath[imagePath.rfind("\\") + 1:]
+    imageID = os.path.basename(imagePath)
     image = cv2.imread(imagePath)
     fitur_tekstur = CBIR_tekstur(image)
     fitur_tekstur = [str(f) for f in fitur_tekstur]

@@ -117,7 +117,7 @@ def warna_csv():
     os.remove('fitur/warna.csv')                    # Reset warna.csv saat upload dataset baru
     output_warna = open("fitur/warna.csv", "w")
     for imagePath in glob.glob("img/dataset/*"):
-        imageID = imagePath[imagePath.rfind("\\") + 1:]
+        imageID = os.path.basename(imagePath)
         image = cv2.imread(imagePath)
         rgb_to_histogram(image,hist)
 
