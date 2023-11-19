@@ -8,6 +8,7 @@ import csv
 import shutil
 import urllib.request 
 import subprocess
+import base64
 import requests
 from bs4 import BeautifulSoup
 from timeit import default_timer as timer
@@ -54,6 +55,8 @@ def search():
         shutil.rmtree('../../img/retrieve')
         shutil.rmtree('../../img/uploaded')
 
+    if os.path.exists('../../img/uploaded') == True :
+        shutil.rmtree('../../img/uploaded')
     # Akses image file dan selected option dari  form data
     image = request.files['imagefile']
     selected_option = request.form['selectedOption']
@@ -162,6 +165,26 @@ def scrape():
 
     print("Ekstraksi selesai!") # delete
     return jsonify(message="Dataset selesai diekstrak")
+
+@app.route('/camera', methods=['POST'])
+def capture():
+    # Bersihkan direktori
+    if os.path.exists('../../img/retrieve') == True :
+        shutil.rmtree('../../img/retrieve')
+        shutil.rmtree('../../img/uploaded')
+
+    if os.path.exists('../../img/uploaded') == True :
+        shutil.rmtree('../../img/uploaded')
+    
+    # Akses image file
+    image = request.files['image']
+
+    os.makedirs('../../img/uploaded', exist_ok=True)
+    image_path = "../../img/uploaded/" + "ganteng.jpg"
+    image.save(image_path)
+
+    return jsonify(message="Foto telah diupload")
+
 
 if __name__ == '__main__':
     app.run(port=3005, debug=True, threaded=False)
