@@ -9,8 +9,6 @@ import shutil
 import subprocess
 import requests
 import glob
-import base64
-import urllib.request
 from bs4 import BeautifulSoup
 from timeit import default_timer as timer
 from reportlab.pdfgen import canvas
@@ -45,8 +43,6 @@ def upload():
     os.rename(source_path, destination_path)
 
     # Ekstraksi fitur image dataset
-    command = "python3 init.py"
-    subprocess.run(command, shell=True)
     command = "python init.py"
     subprocess.run(command, shell=True)
     command = "python3 init.py"
@@ -86,13 +82,10 @@ def search():
 
         # Membandingkan cosine similarity warna gambar query dengan dataset
         elif selected_option == 'color':
-            command = "python3 warna_individual.py"
-            subprocess.run(command, shell=True)
             command = "python warna_individual.py"
             subprocess.run(command, shell=True)
             command = "python3 warna_individual.py"
             subprocess.run(command, shell=True)
-            # fitur()
 
     else:    
         image = request.files['imagefile']
@@ -120,8 +113,6 @@ def search():
             image_path = "../../img/uploaded/" + image.filename
             image.save(image_path)
 
-            command = "python3 warna_individual.py"
-            subprocess.run(command, shell=True)
             command = "python warna_individual.py"
             subprocess.run(command, shell=True)
             command = "python3 warna_individual.py"
@@ -218,7 +209,7 @@ def generate_pdf():
     c.save()
 
     return send_from_directory('../../img/pdf/', f'result-{pdf_counter-1}.pdf')
- 
+
 def getdata(url):  
     r = requests.get(url)  
     return r.text  
@@ -229,10 +220,6 @@ def scrape():
     if os.path.exists('../../img/dataset') == True :
         shutil.rmtree('../../img/dataset')
         os.makedirs('../../img/dataset')
-
-    if 'url' not in request.form:
-        print("0 ")
-        return "No URL provided."
     
     url = request.form['url']
     print(url)
@@ -254,7 +241,6 @@ def scrape():
     command = "python init.py"
     subprocess.run(command, shell=True)
 
-    print("Ekstraksi selesai!")
     return jsonify(message="Dataset selesai diekstrak")
 
 ########## Camera ##########

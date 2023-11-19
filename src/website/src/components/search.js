@@ -42,7 +42,6 @@ const Search = ({ onSearchComplete }) => {
       .then(response => {
         console.log(response.data);
         setImageUrl(URL.createObjectURL(selectedFile));
-        // onSearchComplete();
       })
       .catch(error => {
         console.error('Error uploading file', error);
