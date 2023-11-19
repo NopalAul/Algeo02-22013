@@ -3,6 +3,7 @@ import axios from 'axios';
 import ToggleOptions from './toggleoptions';
 import { toast } from 'react-toastify';
 import './styles.css'
+import Kamera from './kamera';
 
 const Search = ({ onSearchComplete }) => {
 
@@ -10,6 +11,7 @@ const Search = ({ onSearchComplete }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isCaptured, setIsCaptured] = useState(false);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -22,12 +24,15 @@ const Search = ({ onSearchComplete }) => {
       return;
     }
 
-    if (!selectedFile || selectedFile.length === 0) {
-      toast.error('Please upload a file before searching!');
-      return;
+    if (isCaptured === false) {
+      if (!selectedFile || selectedFile.length === 0) {
+        toast.error('Please upload a file before searching!');
+        return;
+      }
     }
 
     const formData = new FormData();
+    formData.append('isCaptured', isCaptured);
     formData.append('imagefile', selectedFile);
     formData.append('selectedOption', selectedOption);
 
@@ -37,13 +42,14 @@ const Search = ({ onSearchComplete }) => {
       .then(response => {
         console.log(response.data);
         setImageUrl(URL.createObjectURL(selectedFile));
-        onSearchComplete();
+        // onSearchComplete();
       })
       .catch(error => {
         console.error('Error uploading file', error);
       })
       .finally(() => {
         setLoading(false);
+        onSearchComplete();
       });
   };
 
@@ -69,6 +75,10 @@ const Search = ({ onSearchComplete }) => {
             {loading ? 'Searching...' : 'Search'}
         </button>
       </div>
+      <div>
+        <h1 className='scrape-title'>or</h1>
+      </div>
+      <Kamera onStopCapture={setIsCaptured}/>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50px' }}>
         {selectedFile && <p>{selectedFile.name}</p>}
       </div>

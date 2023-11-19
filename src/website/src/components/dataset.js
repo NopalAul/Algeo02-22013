@@ -45,6 +45,9 @@ const Dataset = () => {
 
     return (
       <>
+      <div>
+        <h1 className='scrape-title'>Upload Dataset</h1>
+      </div>
         <div className="custom-file-input-container flex items-center">
             <label htmlFor="datainput" className="custom-file-input" style={{ fontFamily: 'Comic Sans MS, cursive'}}>Choose a folder</label>
             <input

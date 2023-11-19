@@ -8,7 +8,7 @@ const NobiButton = ({ onClick }) => {
 
     const handleClick = () => {
         navigate('/nobi-button-page');
-        onClick(); // call on click
+        onClick();
     };
 
     return (

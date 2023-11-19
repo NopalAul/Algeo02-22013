@@ -8,6 +8,7 @@ import csv
 import shutil
 import subprocess
 import requests
+import glob
 import base64
 import urllib.request
 from bs4 import BeautifulSoup
@@ -35,7 +36,6 @@ def upload():
     # Buat direktori baru
     os.makedirs('../../img/' + dirName)
 
-    print(dirName) # delete
     for image in images:
         image_path = "../../img/" + image.filename
         image.save(image_path)
@@ -52,7 +52,6 @@ def upload():
     command = "python3 init.py"
     subprocess.run(command, shell=True)
 
-    print("Ekstraksi selesai!") # delete
     return jsonify(message="Upload process completed!")
 
 
@@ -67,45 +66,70 @@ def search():
         shutil.rmtree('../../img/uploaded')
 
     # Akses image file dan selected option dari  form data
-    image = request.files['imagefile']
-    selected_option = request.form['selectedOption']
+    isCaptured = request.form['isCaptured']
+    if isCaptured == 'true':
+        selected_option = request.form['selectedOption']
+        # Opsi
+        # Membandingkan cosine similarity tekstur gambar query dengan dataset
+        if selected_option == 'texture':
+            for imagePath in glob.glob("../../img/uploaded/*"):
+                imageInput = cv2.imread(imagePath)
 
-    # Opsi
-    # Membandingkan cosine similarity tekstur gambar query dengan dataset
-    if selected_option == 'texture':
-        os.makedirs('../../img/uploaded', exist_ok=True)
-        image_path = "../../img/uploaded/" + image.filename
-        image.save(image_path)
+            fitur_tekstur = CBIR_tekstur(imageInput)
+            hasil_tekstur = find(fitur_tekstur,selected_option)
 
-        imageInput = cv2.imread("../../img/uploaded/"+image.filename)
-        fitur_tekstur = CBIR_tekstur(imageInput)
-        hasil_tekstur = find(fitur_tekstur,selected_option)
+            os.makedirs('../../img/retrieve', exist_ok=True) 
+            for (nilai, IDhasil) in hasil_tekstur:
+                hasil = cv2.imread("../../img/dataset/"+IDhasil)
+                if(nilai >= 0.6):
+                    cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
 
-        os.makedirs('../../img/retrieve', exist_ok=True) 
-        for (nilai, IDhasil) in hasil_tekstur:
-            hasil = cv2.imread("../../img/dataset/"+IDhasil)
-            if(nilai >= 0.6):
-                cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
-        
+        # Membandingkan cosine similarity warna gambar query dengan dataset
+        elif selected_option == 'color':
+            command = "python3 warna_individual.py"
+            subprocess.run(command, shell=True)
+            command = "python warna_individual.py"
+            subprocess.run(command, shell=True)
+            command = "python3 warna_individual.py"
+            subprocess.run(command, shell=True)
+            # fitur()
 
-    # Membandingkan cosine similarity warna gambar query dengan dataset
-    elif selected_option == 'color':
-        os.makedirs('../../img/uploaded', exist_ok=True)
-        image_path = "../../img/uploaded/" + image.filename
-        image.save(image_path)
+    else:    
+        image = request.files['imagefile']
+        selected_option = request.form['selectedOption']
+        # Opsi
+        # Membandingkan cosine similarity tekstur gambar query dengan dataset
+        if selected_option == 'texture':
+            os.makedirs('../../img/uploaded', exist_ok=True)
+            image_path = "../../img/uploaded/" + image.filename
+            image.save(image_path)
 
-        command = "python3 warna_individual.py"
-        subprocess.run(command, shell=True)
-        command = "python warna_individual.py"
-        subprocess.run(command, shell=True)
-        command = "python3 warna_individual.py"
-        subprocess.run(command, shell=True)
-        # fitur()
+            imageInput = cv2.imread("../../img/uploaded/"+image.filename)
+            fitur_tekstur = CBIR_tekstur(imageInput)
+            hasil_tekstur = find(fitur_tekstur,selected_option)
+
+            os.makedirs('../../img/retrieve', exist_ok=True) 
+            for (nilai, IDhasil) in hasil_tekstur:
+                hasil = cv2.imread("../../img/dataset/"+IDhasil)
+                if(nilai >= 0.6):
+                    cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
+            
+        # Membandingkan cosine similarity warna gambar query dengan dataset
+        elif selected_option == 'color':
+            os.makedirs('../../img/uploaded', exist_ok=True)
+            image_path = "../../img/uploaded/" + image.filename
+            image.save(image_path)
+
+            command = "python3 warna_individual.py"
+            subprocess.run(command, shell=True)
+            command = "python warna_individual.py"
+            subprocess.run(command, shell=True)
+            command = "python3 warna_individual.py"
+            subprocess.run(command, shell=True)
 
     # Timer
     end = timer()
     durasi = round((end - start), 2)
-    print("durasi: ", durasi) # delete
 
     # Durasi csv
     os.makedirs('durasi', exist_ok=True)
@@ -122,7 +146,6 @@ def durasi():
         reader = csv.reader(f)
         data = [row for row in reader]
     waktu = (data[0])[0]
-    print("dudur: ", (data[0])[0]) # delete
     return jsonify({'data': waktu})
 
 ########## Mengembalikan similar image ke frontend ##########
@@ -142,8 +165,7 @@ def retrieve_images():
 def send_report(path):
     return send_from_directory('../../img', path)
 
-# generate pdf
-
+########## Generate PDF ##########
 pdf_counter = 1
 
 def get_next_pdf_filename():
@@ -165,37 +187,29 @@ def resize_image(image_path, width, height):
 def generate_pdf():
     retrieve_folder = "../../img/retrieve/"
 
-    # next unique PDF filename
     pdf_filename = get_next_pdf_filename()
 
-    # create new PDF document
     c = canvas.Canvas(pdf_filename, pagesize=letter)
 
-    # title to the first page
     c.setFont("Helvetica", 16)
     c.drawString(100, 750, "Search Result")
 
-    y_position = 500  # initial y position
+    y_position = 500
     page_number = 1
 
     for filename in sorted(os.listdir(retrieve_folder), key=lambda x: int(x.split('.')[0]), reverse=True):
         if filename.endswith(".jpeg"):
             image_path = os.path.join(retrieve_folder, filename)
 
-            # check if the current y position exceeds the page height
             if y_position <= 50:
-                # create new page
                 c.showPage()
                 page_number += 1
-                y_position = 500  # reset y position for the new page
+                y_position = 500
 
-            # resize image
             resized_image_path = resize_image(image_path, width=200, height=150)
 
-            # percentage
             percentage = filename[0:5]
 
-            # add resize image to page
             c.drawImage(resized_image_path, 100, y_position, width=200, height=150)
             c.drawString(150, y_position - 20, f"{percentage}%")
 
@@ -209,6 +223,7 @@ def getdata(url):
     r = requests.get(url)  
     return r.text  
 
+########## Image Scraping ##########
 @app.route('/scrape', methods=['POST'])
 def scrape():
     if os.path.exists('../../img/dataset') == True :
@@ -239,9 +254,10 @@ def scrape():
     command = "python init.py"
     subprocess.run(command, shell=True)
 
-    print("Ekstraksi selesai!") # delete
+    print("Ekstraksi selesai!")
     return jsonify(message="Dataset selesai diekstrak")
 
+########## Camera ##########
 @app.route('/camera', methods=['POST'])
 def capture():
     # Bersihkan direktori
@@ -252,7 +268,7 @@ def capture():
     if os.path.exists('../../img/uploaded') == True :
         shutil.rmtree('../../img/uploaded')
     
-    # Akses image file
+    # akses image file
     image = request.files['image']
 
     os.makedirs('../../img/uploaded', exist_ok=True)
