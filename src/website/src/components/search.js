@@ -10,6 +10,7 @@ const Search = ({ onSearchComplete }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isCaptured, setIsCaptured] = useState(null);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -22,12 +23,16 @@ const Search = ({ onSearchComplete }) => {
       return;
     }
 
+    // if (isCaptured === false) {}
     if (!selectedFile || selectedFile.length === 0) {
       toast.error('Please upload a file before searching!');
       return;
     }
 
+    
+
     const formData = new FormData();
+    formData.append('isCaptured', isCaptured);
     formData.append('imagefile', selectedFile);
     formData.append('selectedOption', selectedOption);
 

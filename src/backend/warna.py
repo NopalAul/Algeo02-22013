@@ -130,6 +130,7 @@ def fitur():
     for imagePath in glob.glob("../../img/uploaded/*"):
         image = cv2.imread(imagePath)
 
+    print(image) # delete
     rgb_to_histogram(image,hist)
     selected_option = 'color'
     fitur_warna = [float(f) for f in hist]

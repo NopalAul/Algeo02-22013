@@ -15,8 +15,10 @@
 ## Website Sistem Temu Balik Gambar <a href="website-sistem-temu-balik-gambar"></a>
 Website Reverse Image Search
 > Sistem temu balik gambar berbasis website yang diimplementasikan menggunakan pendekatan klasifikasi berbasis konten dengan aljabar vektor.
-<!-- > Live demo [_here_](https://www.example.com).If you have the project hosted somewhere, include the link here. -->
 Sistem temu balik gambar memungkinkan kita untuk dengan mudah mencari, mengakses, dan mengelola koleksi gambar. Kita dapat mengeksplorasi informasi visual yang tersimpan di berbagai platform, termasuk pencarian gambar pribadi, analisis gambar medis untuk diagnosis, pencarian ilustrasi ilmiah, hingga mencari produk.
+<!-- > Live demo [_here_](https://www.example.com).If you have the project hosted somewhere, include the link here. -->
+Berikut video mengenai website:
+[nonton ini dulu ga sih](https://youtu.be/kTaZdwUF400?si=oeym0EgkqAKwQucP)
 
 
 ## Dependencies <a href="dependencies"></a>

@@ -67,6 +67,8 @@ def search():
         shutil.rmtree('../../img/uploaded')
 
     # Akses image file dan selected option dari  form data
+    isCaptured = request.form['isCaptured']
+    print(isCaptured) # delete
     image = request.files['imagefile']
     selected_option = request.form['selectedOption']
 
@@ -216,7 +218,6 @@ def scrape():
         os.makedirs('../../img/dataset')
 
     if 'url' not in request.form:
-        print("0 ")
         return "No URL provided."
     
     url = request.form['url']
