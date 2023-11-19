@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     with Pool() as pool:
         warna_csv()                                     # Ekstrak warna
-        image_path = glob.glob("../../img/dataset/*")   
+        image_path = glob.glob("img/dataset/*")   
         results = pool.map(ekstrak_tekstur, image_path) # Ekstrak tekstur
 
     # Tulis hasil ekstraksi fitur ke csv

@@ -116,7 +116,7 @@ def rgb_to_histogram(gambar1:image1, hist : histogram):
 def warna_csv():
     os.remove('fitur/warna.csv')                    # Reset warna.csv saat upload dataset baru
     output_warna = open("fitur/warna.csv", "w")
-    for imagePath in glob.glob("../../img/dataset/*"):
+    for imagePath in glob.glob("img/dataset/*"):
         imageID = imagePath[imagePath.rfind("\\") + 1:]
         image = cv2.imread(imagePath)
         rgb_to_histogram(image,hist)
@@ -127,7 +127,7 @@ def warna_csv():
 ########## Untuk file warna_individual.py ##########
 def fitur():
     # Membandingkan cosine similarity gambar query dengan dataset
-    for imagePath in glob.glob("../../img/uploaded/*"):
+    for imagePath in glob.glob("img/uploaded/*"):
         image = cv2.imread(imagePath)
 
     rgb_to_histogram(image,hist)
@@ -135,8 +135,8 @@ def fitur():
     fitur_warna = [float(f) for f in hist]
     hasil_warna = find(fitur_warna,selected_option)
         
-    os.makedirs('../../img/retrieve', exist_ok=True) 
+    os.makedirs('img/retrieve', exist_ok=True) 
     for (nilai, IDhasil) in hasil_warna:
-        hasil = cv2.imread("../../img/dataset/"+IDhasil)
+        hasil = cv2.imread("img/dataset/"+IDhasil)
         if(nilai >= 0.6):
-            cv2.imwrite("../../img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
+            cv2.imwrite("img/retrieve/" + str(nilai*100) + ".jpeg", hasil)
